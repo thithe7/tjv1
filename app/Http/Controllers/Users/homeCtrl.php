@@ -15,7 +15,7 @@ class homeCtrl extends usersCtrl {
 
     use ParentCtrl;
 
-    function getdate() {
+    public function getdate() {
         return $this->getdateParent();
     }
 

@@ -171,7 +171,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="{{ URL::asset('assets/plugins/bootbox/bootbox.js') }}"></script>
         <script src="{{ URL::asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
         <!-- include tinymce js-->
-        <script src="{{ URL::asset('assets/plugins/tinymce/js/tinymce/tinymce.min.js') }}"></script>
 
         <!-- iCheck 1.0.1 -->
         <script src="{{ URL::asset('theme/admin/plugins/iCheck/icheck.min.js') }}"></script>

@@ -10,7 +10,6 @@ $router->group(['middleware' => ['auth:web_vendor']], function ($router) {
     $router->get('/deletephoto/{id}', 'HotelCtrl@deletePhotos');
     $router->get('/photo/{id}', 'HotelCtrl@getPhotos');
 
-
     //room
 	$router->get('/room/list-room', 'roomCtrl@index');
     $router->get('/room/do_Tabel', 'roomCtrl@do_Tabel');

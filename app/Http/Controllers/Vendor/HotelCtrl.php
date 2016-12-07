@@ -92,7 +92,7 @@ class HotelCtrl extends Controller{
     */
     function getHotel() {
         $query = DB::table('m_vendor');
-        $query->select(DB::raw('m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_vendor.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_vendor.valid_from as valid_from, m_contract_vendor.valid_to as valid_to'));
+        $query->select(DB::raw('m_vendor.point_back, m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_vendor.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_vendor.valid_from as valid_from, m_contract_vendor.valid_to as valid_to'));
         $query->join('m_contract_vendor','m_contract_vendor.vendor','=','m_vendor.id');
         $query->join('m_area','m_area.id','=','m_vendor.area');
         $query->join('m_city','m_city.id','=','m_area.city');
@@ -126,6 +126,7 @@ class HotelCtrl extends Controller{
         DB::beginTransaction();
         try {
             $data = array(
+                "point_back"    => $request->input('point_back'),
                 "phone"         => $request->input('telephone_hotel'),
                 "email"         => $request->input('email_hotel'),
                 "cp_phone"      => $request->input('cp_phone'),
@@ -138,14 +139,14 @@ class HotelCtrl extends Controller{
                 "email"     => $request->input('email_hotel'),
                 "updated_at"=> date('Y-m-d H:i:s'),
             );
-            DB::table('m_vendor_user')->where('hotel', $id)->update($data2);
+            DB::table('m_vendor_user')->where('vendor', $id)->update($data2);
 
             if ($request->hasFile('hotel_photo')){
                 $file = $request->file('hotel_photo');
-                $destinationPath = 'assets/hotel_img';
+                $destinationPath = 'assets/images';
                 $filename = $file->getClientOriginalName().date("ymdHis").$file->getClientOriginalExtension();
                 Input::file('hotel_photo')->move($destinationPath, $filename);
-                $photo=array('hotel'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
+                $photo=array('vendor'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
                 DB::table('m_photo')->insert($photo);
             }
             DB::commit();
@@ -167,7 +168,7 @@ class HotelCtrl extends Controller{
     */
     public function deletePhotos($id=null){
         $photo=DB::table('m_photo')->where('id','=', $id)->first();
-        File::delete('assets/hotel_img/'.$photo->photo);
+        File::delete('assets/images/'.$photo->photo);
         DB::table('m_photo')->where('id','=', $id)->delete();
 
         $return["msgServer"] = "Photo has been deleted";
@@ -220,7 +221,7 @@ class HotelCtrl extends Controller{
 
                 $records["aaData"][] = array(
                     $no,
-                    '<img style="height: 80px; display: block;" src="'. URL::to('/assets/hotel_img/'.$Fields->photo).'">',
+                    '<img style="height: 80px; display: block;" src="'. URL::to('/assets/images/'.$Fields->photo).'">',
                     
                     '<center>'
                     . '<button type="button" class="btn-delphoto" data-name-photo="'.$Fields->photo.'" data-id-photo="'.$Fields->id_photo.'"><i class="fa fa-trash-o" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Delete '.$Fields->photo.'"></i></button>'
@@ -239,8 +240,8 @@ class HotelCtrl extends Controller{
     function getPhoto($criteria = "", $keyword = "", $sort = "", $dir = "", $start = "", $limit = "", $id=""){
         $query = DB::table('m_photo');
         $query->select(DB::raw('m_photo.photo, m_vendor.id as id_hotel, m_photo.id as id_photo'));
-        $query->join('m_vendor','m_vendor.id','=','m_photo.hotel');
-        $query->where('m_photo.hotel','=',$id );
+        $query->join('m_vendor','m_vendor.id','=','m_photo.vendor');
+        $query->where('m_photo.vendor','=',$id );
         if ($criteria && $keyword) {
             $query->where('m_photo.'.$criteria, 'ilike', '%'.$keyword.'%');
         }
@@ -263,8 +264,8 @@ class HotelCtrl extends Controller{
     function getCountPhoto($criteria = "", $keyword = "", $id=""){
         $query = DB::table('m_photo');
         $query->select(DB::raw('m_photo.photo, m_vendor.id as id_hotel, m_photo.id as id_photo'));
-        $query->join('m_vendor','m_vendor.id','=','m_photo.hotel');
-        $query->where('m_photo.hotel','=',$id );
+        $query->join('m_vendor','m_vendor.id','=','m_photo.vendor');
+        $query->where('m_photo.vendor','=',$id );
         if ($criteria && $keyword) {
             $query->where('m_photo.'.$criteria, 'ilike', '%'.$keyword.'%');
         }

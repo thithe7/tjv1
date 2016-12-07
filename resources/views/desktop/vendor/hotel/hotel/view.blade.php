@@ -1,7 +1,7 @@
 @extends("layout.vendorLayout")
 
 @section('content')
-<link rel="stylesheet" href="{{ URL::asset('assets/theme/AdminLTE_V_2.3.0/plugins/select2/select2.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('theme/admin/plugins/select2/select2.min.css') }}">
 <section class="content-header">
     <h1>
         Hotel
@@ -190,8 +190,9 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td width="20%"></td>
-                                                            <td width="20%"></td>
+                                                            <td width="20%">TJ Point Back</td>
+                                                            <td width="20%"><input type="number" style="width: 170px" id="point_back" name="point_back" min="0" class="form-control number" value="{{$data['hotel']->point_back}}">
+                                                            </td>
                                                         </tr>
 
                                                     </tbody>
@@ -282,17 +283,14 @@
                                                                         <td width="40%"><input type="text" style="width: 200px" id="cp_phone" name="cp_phone" class="number form-control" value="{{$data['hotel']->cp_phone}}" placeholder="Contact Phone Number">
                                                                         </td>
                                                                     </tr>
-
                                                                     <tr>
                                                                         <td> <br> </td>
                                                                     </tr>
-
                                                                     <tr>
                                                                         <td width="20%">Email</td>
                                                                         <td width="40%"><input type="email" style="width: 200px" id="cp_mail" name="cp_mail" class="form-control" value="{{$data['hotel']->cp_mail}}" placeholder="Contact Mail">
                                                                         </td>
                                                                     </tr>
-
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -327,7 +325,7 @@
     </div>
 </section>
 
-<script src="{{ URL::asset('assets/theme/AdminLTE_V_2.3.0/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+<script src="{{ URL::asset('theme/admin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <script>
@@ -354,7 +352,7 @@
                                 $.ajax({
                                     method: 'get',
                                     dataType: 'json',
-                                    url: '{!! url("hotel/deletephoto") !!}/' + photo_id,
+                                    url: '{!! url("tjvendor/deletephoto") !!}/' + photo_id,
                                     //data: {'id_photo': photo_id},
                                     success: function(data) {
                                         if (data.success === true) {
@@ -387,14 +385,14 @@
             $('body').on('click', '.submit', function() {
                 $.ajax({
                     method: 'POST',
-                    url: '{!! url("hotel/do-simpan") !!}',
+                    url: '{!! url("tjvendor/do-simpan") !!}',
                     data: new FormData($('#formpromo')[0]),
                     async: true,
                     contentType: false,
                     processData: false,
                     beforeSend: function(data) {
                         $.blockUI({
-                            message: "<img src='{{ URL::to('images/spin.gif') }}' style='max-width: 50px; max-height: 50px; z-index: 99999'> Please Wait...",
+                            message: "<img src='{{ URL::to('assets/images/spin.gif') }}' style='max-width: 50px; max-height: 50px; z-index: 99999'> Please Wait...",
                         });
                     },
                     success: function(data) {
@@ -425,7 +423,7 @@
             */
             var handleTable = function() {
                 hotel = {{$data['hotel']->id_hotel}};
-                url = '{!!url("hotel/photo/")!!}';
+                url = '{!!url("tjvendor/photo/")!!}';
 
                 $('#tabel_photo').dataTable({
                     "aLengthMenu": [

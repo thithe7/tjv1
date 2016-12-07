@@ -13,6 +13,6 @@ class authCtrl extends Controller {
     protected $redirectTo = '/';
 
     public function index() {
-    	return view('users/login');
+    	return view('users.register.view');
     }
 }

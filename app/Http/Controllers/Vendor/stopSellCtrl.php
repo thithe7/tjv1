@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Hotel;
+namespace App\Http\Controllers\vendor;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -19,10 +19,10 @@ use Input;
 class stopSellCtrl extends Controller{
     
     function getDateStopSellAllRoom(){
-        $query = DB::table('m_hotel');
-        $query->join('m_contract_hotel','m_hotel.id','=','m_contract_hotel.hotel');
-        $query->join('m_hotel_user', 'm_hotel_user.hotel', '=', 'm_hotel.id');
-        $query->where('m_hotel_user.id','=', Auth::guard('web_hotel')->user()->id);
+        $query = DB::table('m_vendor');
+        $query->join('m_contract_vendor','m_vendor.id','=','m_contract_vendor.vendor');
+        $query->join('m_vendor_user', 'm_vendor_user.vendor', '=', 'm_vendor.id');
+        $query->where('m_vendor_user.id','=', Auth::guard('web_vendor')->user()->id);
         $data = $query->first();
         if($data->valid_from<=date('Y-m-d') && date('Y-m-d')<=$data->valid_to){
             $return['batas']=date('Y-m-d');
@@ -54,9 +54,9 @@ class stopSellCtrl extends Controller{
     function getAllRoom(){
         $query = DB::table('m_room');
         $query->select('m_room.id as id_room', 'm_room.name as name_room');
-        $query->join('m_hotel','m_hotel.id','=','m_room.hotel');
-        $query->join('m_hotel_user', 'm_hotel_user.hotel', '=', 'm_hotel.id');
-        $query->where('m_hotel_user.id','=', Auth::guard('web_hotel')->user()->id);
+        $query->join('m_vendor','m_vendor.id','=','m_room.vendor');
+        $query->join('m_vendor_user', 'm_vendor_user.vendor', '=', 'm_vendor.id');
+        $query->where('m_vendor_user.id','=', Auth::guard('web_vendor')->user()->id);
         $data = $query->get();
         return $data;
     }
@@ -259,6 +259,7 @@ class stopSellCtrl extends Controller{
     function checkToday($id=""){
         $ratecheck=DB::table('stop_sell')
            ->where('room','=',$id)
+           ->where('status','=',false)
            ->where('stop_date_from','=',date('Y-m-d'))
            ->where('stop_date_to','=',date('Y-m-d'));
         $data=$ratecheck->get();

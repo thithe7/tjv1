@@ -22,7 +22,7 @@
         <div class="col-xs-12">
             <div class="box">
 
-                <form role="form-horizontal" action="{!! url('/supplier/hotelrate/newrate') !!}" method="POST" id="formrate">
+                <form role="form-horizontal" action="{!! url('/supplier/tjvendorrate/newrate') !!}" method="POST" id="formrate">
                     <input type="hidden" name="hiddenhandletable" id="hiddenhandletable" value="">
                     <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}">
                     <input type="hidden" id="id_hotel_rate" name="id_hotel_rate">
@@ -59,7 +59,7 @@
 
 <div id="myModal2" class="modal fade" role="dialog">
     <div class="modal-dialog">
-        <form role="form-horizontal" action="{!! url('/hotel/room/newallotment') !!}" method="POST" id="formrates2">
+        <form role="form-horizontal" action="{!! url('/tjvendor/room/newallotment') !!}" method="POST" id="formrates2">
             <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}">
 
             <div class="nav-tabs-custom" style="width: 900px;">
@@ -341,7 +341,7 @@
 <div id="myModal3" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
-        <form role="form-horizontal" action="{!! url('/hotel/room/newstopsale') !!}" method="POST" id="formrates3">
+        <form role="form-horizontal" action="{!! url('/tjvendor/room/newstopsale') !!}" method="POST" id="formrates3">
             <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}">
 
             <div class="collapse" id="newrate" name="newrate">
@@ -466,7 +466,7 @@
                 <h4 class="modal-title judul"></h4>
             </div>
             <div class="modal-body">
-                <form role="form-horizontal" action="{!! url('/hotel/room/newstopsale') !!}" method="POST" id="formrates4">
+                <form role="form-horizontal" action="{!! url('/tjvendor/room/newstopsale') !!}" method="POST" id="formrates4">
                     <input type="hidden" name="_token" id="token" value="{!! csrf_token() !!}">
                     <input type="hidden" name="id_room" id="id_room4" class="form-control">
                     <input type="hidden" name="mode_form" id="mode_form3" class="form-control" value="tambah">
@@ -524,7 +524,7 @@
 </div>
 </div>
 
-<script src="{{ URL::asset('assets/theme/AdminLTE_V_2.3.0/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+<script src="{{ URL::asset('theme/admin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <script>
@@ -558,7 +558,7 @@
                             $('#id_contract3').val($(this).attr("data-id"));
                             $.ajax({
                                 method: 'GET',
-                                url: '{!! url("/hotel/room/getdate") !!}/' + $(this).attr("data-id"),
+                                url: '{!! url("/tjvendor/room/getdate") !!}/' + $(this).attr("data-id"),
                                 success: function(data) {
                                     $('.collapse5').hide();
                                     $('.collapse6').hide();
@@ -629,7 +629,7 @@
                             $('#id_room3').val();
                             $.ajax({
                                 method: 'GET',
-                                url: '{!! url("/hotel/room/getdatestopsellallroom") !!}',
+                                url: '{!! url("/tjvendor/room/getdatestopsellallroom") !!}',
                                 success: function(data) {
                                     $("#myModal4").modal('show');
                                     $(".judul").html('Add Stop Sale All Room');
@@ -728,7 +728,7 @@
                             $('#id_room3').val($(this).attr("data-id"));
                             $.ajax({
                                 method: 'GET',
-                                url: '{!! url("/hotel/room/getdatestopsell") !!}/' + $(this).attr("data-id"),
+                                url: '{!! url("/tjvendor/room/getdatestopsell") !!}/' + $(this).attr("data-id"),
                                 success: function(data) {
                                     $('.collapse5').hide();
                                     $('.collapse6').hide();
@@ -796,7 +796,7 @@
                             $("#type").hide();
                             $.ajax({
                                 method: 'GET',
-                                url: '{!! url("/hotel/room/editallotment") !!}/' + $(this).attr("data-id"),
+                                url: '{!! url("/tjvendor/room/editallotment") !!}/' + $(this).attr("data-id"),
                                 success: function(data) {
                                     $('#mode_form2').val('ubah');
                                     $(".collapse2").show('toggle');
@@ -850,7 +850,7 @@
                             $("#type").hide();
                             $.ajax({
                                 method: 'GET',
-                                url: '{!! url("/hotel/room/editallotmentdaily") !!}/' + $(this).attr("data-id"),
+                                url: '{!! url("/tjvendor/room/editallotmentdaily") !!}/' + $(this).attr("data-id"),
                                 success: function(data) {
                                     $('#mode_form2').val('ubah');
                                     $(".collapse2").hide();
@@ -884,7 +884,7 @@
                                         callback: function() {
                                             $.ajax({
                                                 method: 'GET',
-                                                url: '{!! url("/hotel/room/deleteallotment") !!}/' + id_allotment,
+                                                url: '{!! url("/tjvendor/room/deleteallotment") !!}/' + id_allotment,
                                                 success: function(data) {
                                                     if (data.success === true) {
                                                         toastr.success(data.msgServer);
@@ -930,7 +930,7 @@
                                         callback: function() {
                                             $.ajax({
                                                 method: 'GET',
-                                                url: '{!! url("/hotel/room/deletestopsale") !!}/' + id_stopsale,
+                                                url: '{!! url("/tjvendor/room/deletestopsale") !!}/' + id_stopsale,
                                                 success: function(data) {
                                                     if (data.success === true) {
                                                         toastr.success(data.msgServer);
@@ -976,7 +976,7 @@
                                         callback: function() {
                                             $.ajax({
                                                 method: 'GET',
-                                                url: '{!! url("/hotel/room/cancelstopsale") !!}?id=' + id_stopsale,
+                                                url: '{!! url("/tjvendor/room/cancelstopsale") !!}?id=' + id_stopsale,
                                                 success: function(data) {
                                                     if (data.success === true) {
                                                         toastr.success(data.msgServer);
@@ -1119,7 +1119,7 @@
                         $('body').on('click', '.btn-save4', function() {
                             $.ajax({
                                 method: 'POST',
-                                url: '{!! url("/hotel/room/newallotmentdaily") !!}',
+                                url: '{!! url("/tjvendor/room/newallotmentdaily") !!}',
                                 data: new FormData($('#formrates2')[0]),
                                 async: false,
                                 success: function(data) {
@@ -1163,7 +1163,7 @@
                                 "bServerSide": true,
                                 "sServerMethod": "get",
                                 "bRetrieve": true,
-                                "sAjaxSource": "{!! url('/hotel/room/do_Tabel') !!}",
+                                "sAjaxSource": "{!! url('/tjvendor/room/do_Tabel') !!}",
                                 // set the initial value
                                 "iDisplayLength": 5,
                                 // "sPaginationType": "bootstrap_full_number",
@@ -1203,7 +1203,7 @@
                                 //"bRetrieve": true,
                                 "bFilter": true,
                                 "destroy": true,
-                                "sAjaxSource": "{!! url('/hotel/room/allotmentdo_Tabel') !!}",
+                                "sAjaxSource": "{!! url('/tjvendor/room/allotmentdo_Tabel') !!}",
                                 // set the initial value
                                 "iDisplayLength": 5,
                                 "fnServerParams": function(aoData) {
@@ -1238,7 +1238,7 @@
                                 //"bRetrieve": true,
                                 "bFilter": true,
                                 "destroy": true,
-                                "sAjaxSource": "{!! url('/hotel/room/allotmentdailydo_Tabel') !!}",
+                                "sAjaxSource": "{!! url('/tjvendor/room/allotmentdailydo_Tabel') !!}",
                                 // set the initial value
                                 "iDisplayLength": 5,
                                 "fnServerParams": function(aoData) {
@@ -1285,7 +1285,7 @@
                                     //"bRetrieve": true,
                                     "bFilter": false,
                                     "destroy": true,
-                                    "sAjaxSource": "{!! url('/hotel/room/stopselldo_Tabel') !!}",
+                                    "sAjaxSource": "{!! url('/tjvendor/room/stopselldo_Tabel') !!}",
                                     // set the initial value
                                     "iDisplayLength": 5,
                                     "fnServerParams": function(aoData) {

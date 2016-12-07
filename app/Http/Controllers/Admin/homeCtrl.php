@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\adminCtrl;
+use App\Http\Controllers\Admin\menuCtrl;
 
-class homeCtrl extends Controller {
-	use adminCtrl;
+class homeCtrl extends adminCtrl {
+	use menuCtrl;
 
     public function index(){
     	$menu = $this->generateMenu();

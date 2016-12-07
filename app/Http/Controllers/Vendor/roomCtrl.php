@@ -102,16 +102,16 @@ class roomCtrl extends Controller{
     */
     function getRoom($criteria = "", $keyword = "", $sort = "", $dir = "", $start = "", $limit = ""){
         $query = DB::table('m_room');
-        $query->select('m_room.*', 'm_contract_hotel.*', 'm_room.id as id_room');
-        $query->join('m_hotel','m_hotel.id','=','m_room.hotel');
-        $query->join('m_contract_hotel','m_hotel.id','=','m_contract_hotel.hotel');
-        $query->join('m_hotel_user', 'm_hotel_user.hotel', '=', 'm_hotel.id');
-        $query->where('m_hotel_user.id','=', Auth::guard('web_hotel')->user()->id);
+        $query->select('m_room.*', 'm_contract_vendor.*', 'm_room.id as id_room');
+        $query->join('m_vendor','m_vendor.id','=','m_room.vendor');
+        $query->join('m_contract_vendor','m_vendor.id','=','m_contract_vendor.vendor');
+        $query->join('m_vendor_user', 'm_vendor_user.vendor', '=', 'm_vendor.id');
+        $query->where('m_vendor_user.id','=', Auth::guard('web_vendor')->user()->id);
         if ($criteria && $keyword) {
             $query->where(function($modif)use($criteria, $keyword) {
                 $modif->where('m_room.'.$criteria, 'ilike', '%'.$keyword.'%');
-                $modif->orWhereRaw('to_char(m_contract_hotel.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-                $modif->orWhereRaw('to_char(m_contract_hotel.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
+                $modif->orWhereRaw('to_char(m_contract_vendor.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
+                $modif->orWhereRaw('to_char(m_contract_vendor.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
             });
         }
         if ($sort && $dir) {
@@ -132,16 +132,16 @@ class roomCtrl extends Controller{
     */    
     function getCountRoom($criteria = "", $keyword = ""){
         $query = DB::table('m_room');
-        $query->select('m_room.*', 'm_contract_hotel.*', 'm_room.id as id_room');
-        $query->join('m_hotel','m_hotel.id','=','m_room.hotel');
-        $query->join('m_contract_hotel','m_hotel.id','=','m_contract_hotel.hotel');
-        $query->join('m_hotel_user', 'm_hotel_user.hotel', '=', 'm_hotel.id');
-        $query->where('m_hotel_user.id','=', Auth::guard('web_hotel')->user()->id);
+        $query->select('m_room.*', 'm_contract_vendor.*', 'm_room.id as id_room');
+        $query->join('m_vendor','m_vendor.id','=','m_room.vendor');
+        $query->join('m_contract_vendor','m_vendor.id','=','m_contract_vendor.vendor');
+        $query->join('m_vendor_user', 'm_vendor_user.vendor', '=', 'm_vendor.id');
+        $query->where('m_vendor_user.id','=', Auth::guard('web_vendor')->user()->id);
         if ($criteria && $keyword) {
             $query->where(function($modif)use($criteria, $keyword) {
                 $modif->where('m_room.'.$criteria, 'ilike', '%'.$keyword.'%');
-                $modif->orWhereRaw('to_char(m_contract_hotel.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-                $modif->orWhereRaw('to_char(m_contract_hotel.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
+                $modif->orWhereRaw('to_char(m_contract_vendor.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
+                $modif->orWhereRaw('to_char(m_contract_vendor.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
             });
         }
         $data = $query->get();
@@ -156,7 +156,7 @@ class roomCtrl extends Controller{
     */
 	function getdate($id_room=null){
         $query = DB::table('m_room');
-        $query->join('m_contract_hotel','m_room.hotel','=','m_contract_hotel.hotel');
+        $query->join('m_contract_vendor','m_room.vendor','=','m_contract_vendor.vendor');
         $query->where('m_room.id','=',$id_room );
         $data = $query->first();
         if($data->valid_from<=date('Y-m-d') && date('Y-m-d')<=$data->valid_to){
@@ -517,7 +517,7 @@ class roomCtrl extends Controller{
         $max_sallotment = $request->input('max_sallotment');
 		$type_allotment = $request->input('type_allotment');
         $query = DB::table('m_room')
-            ->join('m_contract_hotel','m_room.hotel','=','m_contract_hotel.hotel')
+            ->join('m_contract_vendor','m_room.vendor','=','m_contract_vendor.vendor')
             ->where('m_room.id','=',$id_room )
             ->first();
         $valid_from=date('Y-m-d', strtotime($request->input('validity_day')));
@@ -648,7 +648,7 @@ class roomCtrl extends Controller{
         ];
         $return['results'] = $data;   
         $query = DB::table('m_room');
-        $query->join('m_contract_hotel','m_room.hotel','=','m_contract_hotel.hotel');
+        $query->join('m_contract_vendor','m_room.vendor','=','m_contract_vendor.vendor');
         $query->where('m_room.id','=',$rate->room );
         $room = $query->first();
         $return['room'] = $room;

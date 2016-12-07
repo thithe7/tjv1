@@ -81,8 +81,8 @@
 							</div>
 						</li>
 						<!-- END LANGS -->
-						@if(AUTH::guard('web_users')->user())
-						<li><a href="{{ url('profile') }}" style="text-decoration: none;">Welcome, {{{Auth::guard('web_users')->user()->name}}}</a></li>
+						@if(Auth::guard('web_users')->user())
+						<li><a href="{{ url('profile') }}" style="text-decoration: none;">Profile</a></li>
 						<li><a href="javascript:;" style="text-decoration: none;" data-toggle="modal" data-target="#myModal" data-keyboard="false" data-backdrop="static"><img src="{{ URL::asset('assets/images/help.png') }}" alt="How to use?" height="15px;"> TJ Point = <b>{{{number_format(Session::get('total_point'), 0, ',', '.')}}}</b></a></li>
 						<li><a href="{{ url('logout') }}">Log Out</a></li>
 						@else
@@ -236,6 +236,10 @@
     <script src="{{ URL::asset('theme/users/corporate/scripts/layout.js') }}" type="text/javascript"></script>
     
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
     <script type="text/javascript">
     	$.ajaxSetup({
     		headers: {
@@ -244,6 +248,43 @@
     	});
     	$(document).ready(function() {
     		// write condition here
+    		$.widget( "custom.catcomplete", $.ui.autocomplete, {
+				_create: function() {
+					this._super();
+					this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+				},
+				_renderMenu: function( ul, items ) {
+					var that = this,
+					currentCategory = "";
+					$.each( items, function( index, item ) {
+						var li;
+						if ( item.category != currentCategory ) {
+							ul.append( "<li class='ui-autocomplete-category' style='font-family:Source Sans Pro Regular; padding-left: 10px; font-size: 20px; color: white; background-color:#87949b'> <h3>" + item.category + "</h3> </i> </li>" );
+							currentCategory = item.category;
+						}
+						li = that._renderItemData( ul, item );
+						if ( item.category ) {
+							li.attr( "aria-label", item.category + " : " + item.label );
+							li.addClass("highlight");
+						}
+					});
+				}
+			});
+
+    		$("#autocomplete").catcomplete({
+					source: "{{ url('search-autocomplete') }}",
+					minLength: 3,
+					select: function(event, ui) {
+	                // prevent autocomplete from updating the textbox
+	                event.preventDefault();
+	                // manually update the textbox and hidden field
+	                $(this).val(ui.item.label);
+	                $("#autocomplete-value").val(ui.item.value);
+	                $("#autocomplete-hotel").val(ui.item.idhotel);
+	                $("#autocomplete-city").val(ui.item.idcity);
+	                $("#autocomplete-country").val(ui.item.idcountry);
+	            }
+	        });
         });
     	$('.make-switch').bootstrapSwitch();
     </script>
