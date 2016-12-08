@@ -47,6 +47,90 @@
 
 	<link href="{{ URL::asset('theme/users/plugins/datepicker/datepicker3.css') }}" rel="stylesheet"/>
 
+	<script type="text/javascript">
+	function validAngkaPhone(a)
+	{
+	    if(!/^[0-9]+$/.test(a.value))
+	    {
+	    a.value = a.value.substring(0,a.value.length-1);
+	    }
+	}
+
+	function validAngkaPost(a)
+	{
+	    if(!/^[0-9]+$/.test(a.value))
+	    {
+	    a.value = a.value.substring(0,a.value.length-1);
+	    }
+	}
+
+	function validNama(a)
+	{
+	    if(!/^[a-zA-Z\_\- ]+$/.test(a.value))
+	    {
+	    a.value = a.value.substring(0,a.value.length-1);
+	    }
+	}
+
+	function validAddress(a)
+	{
+	    if(!/^[a-zA-Z0-9\_\-\, ]+$/.test(a.value))
+	    {
+	    a.value = a.value.substring(0,a.value.length-1);
+	    }
+	}
+
+</script>
+
+
+<script type="text/javascript">
+
+        function validateForm () {
+
+        // var password=document.forms["formpass"]["password"].value;
+        var new_password=document.forms["formpass"]["new_password"].value;
+        var confirmation_password=document.forms["formpass"]["confirmation_password"].value;
+        var mincar = 10;
+
+        // if (password==null || password=="")
+        //   {
+        //     alert("Current Password Can't Empty");
+        //     return false;
+        //   };
+
+        //   if (password.length < mincar)
+        //   {
+        //     alert("Current Password Min. 10 character");
+        //     return false;
+        //   };
+
+          if (new_password==null || new_password=="")
+          {
+            alert("New Password Can't Empty");
+            return false;
+          };
+
+          if (new_password.length < mincar)
+          {
+            alert("New Password Min. 10 character");
+            return false;
+          };
+
+        if (confirmation_password==null || confirmation_password=="")
+          {
+            alert("Confirmation Password Can't Empty");
+            return false;
+          };
+
+          if (confirmation_password.length < mincar)
+          {
+            alert("Confirmation Password Min. 10 character");
+            return false;
+          };
+
+        }
+        </script>
+
 </head>
 
 <body>
@@ -116,7 +200,7 @@
 										<hr>
 										<dt><strong>Newsletter </strong></dt>
 										<dd>
-											<input type="checkbox" <?php if($profile->status_newsletter=='TRUE'){ echo "checked"; } ?> value="TRUE" name="status_newsletter" disabled>
+											<input type="checkbox" <?php if($profile->status_newsletter=='ACTIVE'){ echo "checked"; } ?> value="TRUE" name="status_newsletter" disabled>
 										</dd>
 										<hr>
 									</dl>
@@ -135,7 +219,7 @@
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-user"></i>
-														<input type="text" placeholder="Name" name="name" id="name" value="{{ Auth::guard('web_users')->user()->name }}">
+														<input type="text" onkeyup="validNama(this)" placeholder="Name" name="name" id="name" value="{{ Auth::guard('web_users')->user()->name }}">
 														<b class="tooltip tooltip-bottom-right">Don't forget your Name</b>
 													</label>
 												</section>
@@ -155,34 +239,18 @@
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-user"></i>
-														<input type="text" id="phone" name="phone" placeholder="Phone" value="{{ $profile->phone }}">
+														<input type="text" onkeyup="validAngkaPhone(this)" id="phone" name="phone" placeholder="Phone" value="{{ $profile->phone }}">
 														<b class="tooltip tooltip-bottom-right">Don't forget your phone</b>
 													</label>
 												</section>
 											</dd>
-											<dt>City</dt>
-											<dd>
-												<div class="col-md-3">
-												<section>
-													<label class="input">
-														
-														<select id="city" name="city" class="form-control">
-			                                                @foreach($data['city'] as $row)
-			                                                   <option value="{{{ $row->id }}}" @if($row->id == "1") selected @endif> {{{ $row->name }}}</option>
-			                                                @endforeach
-			                                            </select>
-			                                        	
-														<b class="tooltip tooltip-bottom-right">Don't forget your city</b>
-													</label>
-												</section>
-												</div>
-											</dd>
+											
 											<dt>Post Code</dt>
 											<dd>
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-user"></i>
-														<input type="text" id="postcode" name="postcode" placeholder="Post Code" value="{{ $profile->postcode }}">
+														<input type="text" onkeyup="validAngkaPost(this)" id="postcode" name="postcode" placeholder="Post Code" value="{{ $profile->postcode }}">
 														<b class="tooltip tooltip-bottom-right">Don't forget your post code</b>
 													</label>
 												</section>
@@ -192,7 +260,7 @@
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-user"></i>
-														<input type="text" id="address" name="address" placeholder="Address" value="{{ $profile->address }}">
+														<input type="text" onkeyup="validAddress(this)" id="address" name="address" placeholder="Address" value="{{ $profile->address }}">
 														<b class="tooltip tooltip-bottom-right">Don't forget your address</b>
 													</label>
 												</section>
@@ -212,9 +280,23 @@
 													</label>
 												</section>
 											</dd>
+											<dt>City</dt>
+											<dd>
+												<section>
+													<label class="input">
+														<select id="city" name="city" class="form-control" style="width:200px;">
+			                                                @foreach($data['city'] as $row)
+			                                                   <option value="{{{ $row->id }}}" @if($row->id == "1") selected @endif> {{{ $row->name }}}</option>
+			                                                @endforeach
+			                                            </select>
+			                                        	
+														<b class="tooltip tooltip-bottom-right">Don't forget your city</b>
+													</label>
+												</section>
+											</dd>
 											<dt><strong>Newsletter </strong></dt>
 											<dd>
-												<input type="checkbox" <?php if($profile->status_newsletter=='TRUE'){ echo "checked"; } ?> value="TRUE" name="status_newsletter">
+												<input type="checkbox" <?php if($profile->status_newsletter=='ACTIVE'){ echo "checked"; } ?> value="TRUE" name="status_newsletter">
 											</dd>
 										</dl>
 										<div class="row">
@@ -229,35 +311,29 @@
 									<h2 class="heading-md">Manage your Security Settings</h2>
 									<p>Change your password.</p>
 									<br>
-									<form class="sky-form" id="sky-form4" action="#">
+									<form class="sky-form" id="formpass" method="post" action="{!! url('changepasswordsave') !!}" onsubmit="return validateForm()">
+									<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+				                    <input type="hidden" name="id" value="{{{ Auth::user()->id }}}">
+				                    <input type="hidden" name="name" value="{{{ Auth::user()->name }}}">
+				                    <input type="hidden" name="email" value="{{{ Auth::user()->email }}}">	
 										<dl class="dl-horizontal">
-											<dt>Username</dt>
-											<dd>
-												<section>
-													<label class="input">
-														<i class="icon-append fa fa-user"></i>
-														<input type="text" placeholder="Username" name="username">
-														<b class="tooltip tooltip-bottom-right">Needed to enter the website</b>
-													</label>
-												</section>
-											</dd>
-											<dt>Email address</dt>
-											<dd>
-												<section>
-													<label class="input">
-														<i class="icon-append fa fa-envelope"></i>
-														<input type="email" placeholder="Email address" name="email">
-														<b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
-													</label>
-												</section>
-											</dd>
-											<dt>Enter your password</dt>
+											<dt>Current Password</dt>
 											<dd>
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-lock"></i>
-														<input type="password" id="password" name="password" placeholder="Password">
-														<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+														<input type="password" placeholder="Current Password" name="oldpassword" id="password">
+														<b class="tooltip tooltip-bottom-right">Needed to enter the website</b>
+													</label>
+												</section>
+											</dd>
+											<dt>New Password</dt>
+											<dd>
+												<section>
+													<label class="input">
+														<i class="icon-append fa fa-lock"></i>
+														<input type="password" placeholder="New Password" name="password" id="new_password">
+														<b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
 													</label>
 												</section>
 											</dd>
@@ -266,17 +342,12 @@
 												<section>
 													<label class="input">
 														<i class="icon-append fa fa-lock"></i>
-														<input type="password" name="passwordConfirm" placeholder="Confirm password">
+														<input type="password" id="confirmation_password" placeholder="Confirm Password" name="confirmation_password" id="confirmation_password">
 														<b class="tooltip tooltip-bottom-right">Don't forget your password</b>
 													</label>
 												</section>
 											</dd>
 										</dl>
-										<label class="toggle toggle-change"><input type="checkbox" checked="" name="checkbox-toggle-1"><i class="no-rounded"></i>Remember password</label>
-										<br>
-										<section>
-											<label class="checkbox"><input type="checkbox" id="terms" name="terms"><i></i><a href="#">I agree with the Terms and Conditions</a></label>
-										</section>
 										<div class="row">
 						                <div class="col-xs-5 col-md-3">
 						                    <h1><input type="submit" value="Save Changes" style="background-color:#095668;" class="btn btn-primary btn-block btn-sm btn-tj"></h1>

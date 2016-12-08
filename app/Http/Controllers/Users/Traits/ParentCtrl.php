@@ -9,7 +9,6 @@ use App\Http\Requests;
 use Auth;
 use DB;
 use URL;
-use Session;
 trait ParentCtrl {
     //home autocomplete
     public function getdateParent(){
@@ -126,10 +125,8 @@ trait ParentCtrl {
                         $ketamenities='<i class="ficon ficon-positive" data-selenium="benefit-included-icon"></i> Amenities included';
                     }
                     
-                    //echo $hargabreakfast.$hargaamenities;
                     $bestprice=$best_value+$queryprice->breakfast+$queryprice->amenities;
 
-                    // $ambiljam=date('H:i:s');
                     $date = new \DateTime("now", new \DateTimeZone($Fields->timezone) );
                     $curdatetime = $date->format('Y-m-d H:i:s');
                     $curdate = $date->format('Y-m-d');
@@ -138,7 +135,6 @@ trait ParentCtrl {
                     $tanggallastminutesakhir = date('H:i:s', strtotime($jinni->vlm_to));
                     
                     //checkbetween
-                    // $now=strtotime($ambiljam);
                     $now=strtotime($curtime);
                     $from=strtotime($jinni->vlm_from);
                     $to=strtotime($jinni->vlm_to);
@@ -146,31 +142,25 @@ trait ParentCtrl {
                         if($now <= $from && $now <= $to){
                             $hargaambil=$queryprice->vlm_value;
                             $vlmdeals = "<font style='color: #096588;'>Very last minute price</font>";
-                            // echo "vlm";
                         } else {
-                            $hargaambil=$best_value;  
-                            // echo "best";
+                            $hargaambil=$best_value;
                         }
                     } else {
                         if($now>=$from && $now<=$to){
                             $hargaambil=$queryprice->vlm_value;    
                             $vlmdeals = "<font style='color: #096588;'>Very last minute price</font>";
-                            // echo "vlm";
                         }
                         else{
-                            $hargaambil=$best_value;  
-                            // echo "best";  
+                            $hargaambil=$best_value;
                         }   
                     }
 
                     if($breakfast!="" && $amenities!=""){
                         $total=$bestprice;
-                        //echo "aaa";
                     }
                     else{
                         $total=$hargaambil+$hargabreakfast+$hargaamenities;
                     }
-                    //echo $total;
                     if($night!=0){
                         $harga_tampil_check=$total*$night;
                         $harga_tampil=number_format($total*$night);
@@ -203,7 +193,6 @@ trait ParentCtrl {
                         else{
                             $qty=$total_allotment;
                         }
-                        //$qty=0;   
                     }
 
                 }
@@ -225,9 +214,7 @@ trait ParentCtrl {
 
                 //check stop sell
                 $checkStopSell = $this->checkStopSell($Fields->id_hotel,$cekin);
-                //echo "bbbb".count($checkStopSell);
                 if (count($checkStopSell)>0) {
-                    //echo "aaaa".$checkStopSell->status;
                     if ($checkStopSell->status==FALSE) {
                     }
                     else{
@@ -301,11 +288,9 @@ trait ParentCtrl {
         $query->join('m_room','m_room.vendor','=','m_vendor.id');
         $query->join('stop_sell','m_room.id','=','stop_sell.room');
         $query->where('m_vendor.id','=',$id );
-        //$query->WhereRaw('to_char(stop_sell.stop_date_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$tanggal.'%'));
         $query->where('stop_sell.stop_date_from','=',$tanggal );
         $query->where('stop_sell.status','=',FALSE );
         $data = $query->first();
-        //echo count($data);
         if(count($data)==0){
             $query = DB::table('m_vendor');
             $query->select(DB::raw('stop_sell.status'));
@@ -350,14 +335,11 @@ trait ParentCtrl {
         $query->where('m_priment.valid_to','>=',$checkin );
         $query->where('m_priment.allotement','>',0 );
         if($amount!="" && $amount2!=""){
-            // $query->where('price', '>=', $amount);
-            // $query->where('price', '<=', $amount2);
             if($ketdbprice=="best"){
                 $query->whereBetween('best_value', [$amount, $amount2]);
             }
             else{
                 $query->whereBetween('vlm_value', [$amount, $amount2]);
-                //->whereBetween('loc_lng', array(-0.24272918701172, -0.24272918701172))
             }
         }
         $query->orderBy('m_priment.best_value','asc' );
@@ -425,22 +407,14 @@ trait ParentCtrl {
             $query->whereIn('m_vendor.star_rate',$star);
         }
         if($amount!="" && $amount2!=""){
-            // $query->where('price', '>=', $amount);
-            // $query->where('price', '<=', $amount2);
             if($ketdbprice=="best"){
                 $query->whereBetween('m_priment.best_value', [$amount, $amount2]);
             }
             else{
                 $query->whereBetween('m_priment.vlm_value', [$amount, $amount2]);
-                //->whereBetween('loc_lng', array(-0.24272918701172, -0.24272918701172))
             }
         }
-        //$data = $query->groupBy('m_vendor.id');
         $data = $query->get();
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
-        // die;
         return $data;
     }
 
@@ -530,8 +504,6 @@ trait ParentCtrl {
     }
 
     public function getRoom($criteria = "", $keyword = "", $sort = "", $dir = "", $start = "", $limit = "", $id = "", $checkin = ""){
-        //$cekin='2016-12-08';
-        //$cekin= $request->input('checkin');
         $query = DB::table('m_room');
         $query->select('m_room.*','m_priment.*','m_room.id as id_room');
         $query->join('m_priment','m_room.id','=','m_priment.room');
@@ -539,13 +511,6 @@ trait ParentCtrl {
         $query->where('m_priment.valid_from','<=',$checkin );
         $query->where('m_priment.valid_to','>=',$checkin );
         $query->orderBy('m_priment.best_value','desc' );
-        // if ($criteria && $keyword) {
-        //     $query->where(function($modif)use($criteria, $keyword) {
-        //         $modif->where('m_room.'.$criteria, 'ilike', '%'.$keyword.'%');
-        //         $modif->orWhereRaw('to_char(m_contract_hotel.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-        //         $modif->orWhereRaw('to_char(m_contract_hotel.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-        //     });
-        // }
         
         if ($sort && $dir) {
             $query->orderBy($sort, $dir);
@@ -565,13 +530,6 @@ trait ParentCtrl {
         $query->where('m_priment.valid_from','<=',$checkin );
         $query->where('m_priment.valid_to','>=',$checkin );
         $query->orderBy('m_priment.best_value','desc' );
-        // if ($criteria && $keyword) {
-        //     $query->where(function($modif)use($criteria, $keyword) {
-        //         $modif->where('m_room.'.$criteria, 'ilike', '%'.$keyword.'%');
-        //         $modif->orWhereRaw('to_char(m_contract_hotel.valid_from, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-        //         $modif->orWhereRaw('to_char(m_contract_hotel.valid_to, \'YYYY-Mon-DD\') ilike ?', array('%'.$keyword.'%'));
-        //     });
-        // }
         $data = $query->get();
         return count($data);
     }
@@ -594,8 +552,6 @@ trait ParentCtrl {
         $query = DB::table('m_room');
         $query->where('id','=',$id );
         $data = $query->first();
-        // echo "aaa".$id;
-        // print_r($data);
         return $data;
     }
 
@@ -623,8 +579,6 @@ trait ParentCtrl {
         $query->where('m_booking.invoice_code','=',$code);
         $query->where('m_point.total_point','>',0);
         $data = $query->first();
-        //print_r($data);
-        //die;
         return $data;
     }
 

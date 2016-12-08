@@ -113,39 +113,55 @@ class HotelCtrl extends Controller{
             ->whereYear('created_at', '=', date('Y'))
             ->count('id');
 
-        DB::beginTransaction();
-        try {
-            $data = array(
-                "point_back"    => $request->input('point_back'),
-                "phone"         => $request->input('telephone_hotel'),
-                "email"         => $request->input('email_hotel'),
-                "cp_phone"      => $request->input('cp_phone'),
-                "cp_mail"       => $request->input('cp_mail'),
-                "updated_at"    => date("Y-M-d H:i:s")
-            );    
-            DB::table('m_vendor')->where('id', $id)->update($data);
-            
-            $data2 = array(
-                "email"     => $request->input('email_hotel'),
-                "updated_at"=> date('Y-m-d H:i:s'),
-            );
-            DB::table('m_vendor_user')->where('vendor', $id)->update($data2);
-
-            if ($request->hasFile('hotel_photo')){
-                $file = $request->file('hotel_photo');
-                $destinationPath = 'assets/images';
-                $filename = $file->getClientOriginalName().date("ymdHis").$file->getClientOriginalExtension();
-                Input::file('hotel_photo')->move($destinationPath, $filename);
-                $photo=array('vendor'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
-                DB::table('m_photo')->insert($photo);
-            }
-            DB::commit();
-            $return["msgServer"] = "Update Hotel success.";
-            $return["success"] = TRUE;
-        } catch (Exception $e) {
-            DB::rollback();
-            $return["msgServer"] = "Update Hotel failed. !!!";
+        $point_back = $request->input('point_back');
+        $telephone_hotel = $request->input('telephone_hotel');
+        $email_hotel = $request->input('email_hotel');
+        $cp_mail = $request->input('cp_mail');
+        $cp_phone = $request->input('cp_phone');
+        
+        if (!filter_var($email_hotel, FILTER_VALIDATE_EMAIL) || !filter_var($cp_mail, FILTER_VALIDATE_EMAIL)) {
+            $return["msgServer"] = "Email Format Not Valid. !!!";
             $return["success"] = FALSE;
+        }
+        else if(!is_numeric($telephone_hotel) || !is_numeric($cp_phone) || !is_numeric($point_back)) {
+            $return["msgServer"] = "You Must Use Number Format Only. !!!";
+            $return["success"] = FALSE;
+        } 
+        else{
+            DB::beginTransaction();
+            try {
+                $data = array(
+                    "point_back"    => $point_back,
+                    "phone"         => $telephone_hotel,
+                    "email"         => $email_hotel,
+                    "cp_phone"      => $cp_phone,
+                    "cp_mail"       => $cp_mail,
+                    "updated_at"    => date("Y-M-d H:i:s")
+                );    
+                DB::table('m_vendor')->where('id', $id)->update($data);
+                
+                $data2 = array(
+                    "email"     => $email_hotel,
+                    "updated_at"=> date('Y-m-d H:i:s'),
+                );
+                DB::table('m_vendor_user')->where('vendor', $id)->update($data2);
+
+                if ($request->hasFile('hotel_photo')){
+                    $file = $request->file('hotel_photo');
+                    $destinationPath = 'assets/images';
+                    $filename = $file->getClientOriginalName().date("ymdHis").$file->getClientOriginalExtension();
+                    Input::file('hotel_photo')->move($destinationPath, $filename);
+                    $photo=array('vendor'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
+                    DB::table('m_photo')->insert($photo);
+                }
+                DB::commit();
+                $return["msgServer"] = "Update Hotel success.";
+                $return["success"] = TRUE;
+            } catch (Exception $e) {
+                DB::rollback();
+                $return["msgServer"] = "Update Hotel failed. !!!";
+                $return["success"] = FALSE;
+            }
         }
         echo json_encode($return);
     }

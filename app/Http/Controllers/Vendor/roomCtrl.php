@@ -234,7 +234,6 @@ class roomCtrl extends Controller{
                 if($check!=0){
                     $tombol="<a href='javascript:;' data-id='".$Fields->id_allotment."' data-room='".$Fields->id_room."' class='btn btn-xs btn-info btn-flat edit-allotment'><i class='fa fa-pencil'></i>Edit Allotment</a>";
                     $tanggal=date('d-M-Y', strtotime($Fields->valid_from)).' s/d '.date('d-M-Y', strtotime($Fields->valid_to));
-                    //$tambah='&nbsp; <button id="allotmentbutton" type="button" data-id="'.$Fields->id_room.'" class="btn btn-flat btn-xs btn-flat add-allotment btn-success"><i class="fa fa-plus">Add Daily Allotment</i></button> ';
                     $tambah='';
                 }
                 else{

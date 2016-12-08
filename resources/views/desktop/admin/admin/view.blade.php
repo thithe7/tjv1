@@ -23,7 +23,7 @@
                         <th>Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Member Since</th>
+                        <th>Create Date</th>
                         <th>Status</th>
                         <th style="text-align: center;"><button type="button" class="btn btn-flat btn-xs btn-block btn-add btn-success" data-toggle="modal" data-target="#myModal" data-backdrop="static"><i class="fa fa-plus"></i> Add User</button></th>
                     </tr>

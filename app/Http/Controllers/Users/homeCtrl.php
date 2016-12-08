@@ -31,7 +31,7 @@ class homeCtrl extends usersCtrl {
     * Fungsi       : halaman awal home user
     * Tipe         : create
     */
-    public function index(/*$value5 = NULL*/) {
+    public function index() {
         $data['date']=date('Y-m-d');
         return view('users/home/view',compact('data'));
     }

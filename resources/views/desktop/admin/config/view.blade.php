@@ -74,7 +74,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Meta Description</label>
-                                            <textarea class="form-control" id="seo_desc" name="seo_desc" name="footer" value="{{{$data['config']->seo_desc}}}"></textarea>
+                                            <textarea class="form-control" id="seo_desc" name="seo_desc" name="footer">{{{$data['config']->seo_desc}}}</textarea>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                 </div>
@@ -460,6 +460,13 @@
 </section><!-- /.content -->
     <!-- jQuery 2.1.4 -->
         <script src="{{ URL::asset('theme/admin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    
+    /**
+    * Programmer   : Ory
+    * Tanggal      : 08-12-2016
+    * Fungsi       : Update data
+    * Tipe         : Edit
+    */
     <script>
         $(document).ready(function(){
             $(document).on("click", ".btn-auto-td", function(){

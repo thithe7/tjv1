@@ -84,6 +84,7 @@
                                                                             </td>
                                                                             <td width="20%">Email*</td>
                                                                             <td width="20%"><input type="email" style="width: 170px" id="email_hotel" name="email_hotel" class="form-control" value="{{$data['hotel']->email_hotel}}" required>
+                                                                            <span id="errorFieldemail" class="err"><font color="red">Email not valid</font></span>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -261,6 +262,7 @@
                                                                         <tr>
                                                                             <td width="20%">Email</td>
                                                                             <td width="40%"><input type="email" style="width: 200px" id="cp_mail" name="cp_mail" class="form-control" value="{{$data['hotel']->cp_mail}}" placeholder="Contact Mail">
+                                                                            <span id="errorField_cp_mail" class="err"><font color="red">Email not valid</font></span>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -292,6 +294,8 @@
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <script>
     $(document).ready(function() {
+        $('#errorField_cp_mail').hide();
+        $('#errorFieldemail').hide();
         var InitController = function() {
             /**
             * Programmer   : Thithe
@@ -448,5 +452,37 @@
             }
         }
     }
+
+    function validateEmail($email){
+        $regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return $regex.test($email);
+    }
+
+    $('#cp_mail').on('blur', function() {
+        // Get the  value of the input field being submitted
+        $value = $(this).val();
+        if (validateEmail($value) && $value != '') {
+            $('#errorField_cp_mail').hide();
+            return true;
+        } else {
+            $('#errorField_cp_mail').show(function() {  
+                $("#cp_mail").focus();
+            });
+        }
+    });
+
+    $('#email_hotel').on('blur', function() {
+        // Get the  value of the input field being submitted
+        $value = $(this).val();
+        if (validateEmail($value) && $value != '') {
+            $('#errorFieldemail').hide();
+            return true;
+        } else {
+            $('#errorFieldemail').show(function() {  
+                $("#email_hotel").focus();
+            });
+        }
+    });
+
 </script>
 @endsection

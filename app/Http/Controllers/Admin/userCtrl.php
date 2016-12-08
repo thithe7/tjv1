@@ -156,13 +156,20 @@ class userCtrl extends adminCtrl {
         $postcode = ($request->input("postcode") != "") ? $request->input("postcode") : "";
         $address = ($request->input("address") != "") ? $request->input("address") : "";
         $birthdate = ($request->input("birthdate") != "") ? $request->input("birthdate") : "";
-        $status_newsletter = ($request->input("status_newsletter") != "") ? $request->input("status_newsletter") : "";
+        $statusconfirm = 'need confirm';
+        
+        if($request->input("status_newsletter")!=""){
+                $status_newsletter='ACTIVE';
+            }
+            else{
+                $status_newsletter='NON ACTIVE';
+            }
 
         if ($mode_form == "tambah") {
             if ($this->Chek_Data($id) == 0) {
                 DB::beginTransaction();
                 try {
-                    $this->insert($name, $username, $email, $password, $status, $phone, $city, $postcode, $address, $birthdate, $status_newsletter);
+                    $this->insert($name, $username, $email, $password, $status, $phone, $city, $postcode, $address, $birthdate, $status_newsletter, $statusconfirm);
                     DB::commit();
                     $return["msgServer"] = "Save user success.";
                     $return["success"] = TRUE;
@@ -221,7 +228,7 @@ class userCtrl extends adminCtrl {
     */
     function List_Data($id = "") {
         $query = DB::table('m_user');
-        $query->select('id', 'm_user.name', 'username', 'email', 'status', 'phone', 'city', 'postcode', 'address', 'birthdate', 'status_newsletter');
+        $query->select('id', 'm_user.name', 'username', 'email', 'status', 'phone', 'city', 'postcode', 'address', 'birthdate', 'status_newsletter', 'statusconfirm');
         $query->where('id', $id);
         $data = $query->first();
         return $data;
@@ -319,7 +326,7 @@ class userCtrl extends adminCtrl {
     * Fungsi       : Fungsi menyimpan data user baru
     * Tipe         : Edit
     */
-    public function insert($name = "", $username = "", $email = "", $password = "", $status = "", $phone = "", $city = "", $postcode = "", $address = "", $birthdate = "", $status_newsletter = "")
+    public function insert($name = "", $username = "", $email = "", $password = "", $status = "", $phone = "", $city = "", $postcode = "", $address = "", $birthdate = "", $status_newsletter = "", $statusconfirm = "")
     {
         $data = array(
             "name" => $name,
@@ -333,6 +340,7 @@ class userCtrl extends adminCtrl {
             "address" => $address,
             "birthdate" => $birthdate,
             "status_newsletter" => $status_newsletter,
+            "statusconfirm" => $statusconfirm,
             "created_at" => date("Y-m-d H:i:s")
         );
         DB::table('m_user')->insert($data);

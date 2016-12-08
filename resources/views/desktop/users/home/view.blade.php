@@ -48,7 +48,6 @@
                                     <input name="amenities" id="amenities" class="form-control" type="hidden" value="">
                                     <div class="col-md-2 col-sm-6">
                                         <div class="input-group">
-                                            <!-- <label>&nbsp;</label> -->
                                             <button type="submit" class="btn btn-tj trigger-search" name="" style="width: 100%; height: 57px; font-size: 25px;"><i class="fa fa-search"></i> Search</button>
                                         </div>
                                     </div>
@@ -82,7 +81,6 @@
                                 </div>
                                 <div class="col-md-2 col-sm-6">
                                     <div class="input-group">
-                                        <!-- <label>&nbsp;</label> -->
                                         <button type="button" class="btn btn-tj trigger-search" name="" style="width: 100%; height: 57px; font-size: 25px;"><i class="fa fa-search"></i> Search</button>
                                     </div>
                                 </div>
@@ -100,11 +98,7 @@
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript"></script>
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
-    // $(document).on('click', '.trigger-search', function(){
-    //     window.location.href = 'search-hotel?destination=Denpasar%2C+Bali%2C+Indonesia&checkin=02%2F12%2F2016&checkout=03%2F12%2F2016&breakfast=&amenities=';
-    // });
     var valid_from = new Date();
-    //alert(valid_from);
     $('input[name="when"]').daterangepicker({
         autoUpdateInput: false,
         startDate: valid_from,
