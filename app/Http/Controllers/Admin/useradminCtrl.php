@@ -8,8 +8,8 @@ use App\Http\Controllers\Admin\adminCtrl;
 use DB;
 use Auth;
 
-class useradminCtrl extends Controller {
-    use adminCtrl;
+class useradminCtrl extends adminCtrl {
+    
     /**
     * Programmer   : Ory
     * Tanggal      : 05-12-2016

@@ -17,7 +17,13 @@ use Auth;
 use Input;
 
 class stopSellCtrl extends Controller{
-    
+
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : get date untuk stop sale all room
+    * Tipe         : create
+    */    
     function getDateStopSellAllRoom(){
         $query = DB::table('m_vendor');
         $query->join('m_contract_vendor','m_vendor.id','=','m_contract_vendor.vendor');
@@ -34,6 +40,12 @@ class stopSellCtrl extends Controller{
         return $return;
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : check period untuk stop sale apabila periodnya 1 hari
+    * Tipe         : create
+    */
     function checkStop($id_room="",$date=""){
         $ratecheck=DB::table('stop_sell')
            ->where('room','=',$id_room)
@@ -41,7 +53,13 @@ class stopSellCtrl extends Controller{
         $data=$ratecheck->first();
         return count($data);
     }
-
+    
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : check period untuk stop sale apabila lebih dari 1 hari
+    * Tipe         : create
+    */
     function checkStop2($id_room="",$date="",$date2=""){
         $ratecheck=DB::table('stop_sell')
            ->where('room','=',$id_room)
@@ -51,6 +69,12 @@ class stopSellCtrl extends Controller{
         return count($data);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : ambil data semua room untuk proses stop sale all room
+    * Tipe         : create
+    */
     function getAllRoom(){
         $query = DB::table('m_room');
         $query->select('m_room.id as id_room', 'm_room.name as name_room');
@@ -61,6 +85,12 @@ class stopSellCtrl extends Controller{
         return $data;
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi simpan data stop sale
+    * Tipe         : create
+    */
     public function postStopSale(Request $request){
         $id_room = $request->input('id_room');
         //echo "aaa".$id_room;
@@ -136,6 +166,12 @@ class stopSellCtrl extends Controller{
         return json_encode($data);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : menampilkan data stop sale untuk data table
+    * Tipe         : create
+    */
     function do_Tabel(Request $request){
         $records["aaData"] = array();
         $aColumns = array('','name', 'allotement', 'valid_from', '','');
@@ -200,6 +236,12 @@ class stopSellCtrl extends Controller{
         echo json_encode($records);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : get data untuk stop sale
+    * Tipe         : create
+    */
     function getData($criteria = "", $keyword = "", $sort = "", $dir = "", $start = "", $limit = "",$id_room=""){
         $query = DB::table('m_room');
         $query->select('m_room.*','stop_sell.*','m_room.id as id_room','stop_sell.stop_date_from as mroomdatefrom','stop_sell.stop_date_to as mroomdateto','stop_sell.id as id_stopsell');
@@ -223,6 +265,12 @@ class stopSellCtrl extends Controller{
         return $data;
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : get count data untuk stop sale
+    * Tipe         : create
+    */
     function getCountData($criteria = "", $keyword = "",$id_room=""){
         $query = DB::table('m_room');
         $query->select('m_room.*','stop_sell.*','m_room.id as id_room','stop_sell.stop_date_from as mroomdatefrom','stop_sell.stop_date_to as mroomdateto','stop_sell.id as id_stopsell');
@@ -240,6 +288,12 @@ class stopSellCtrl extends Controller{
         return count($data);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : menghapus data stop sale
+    * Tipe         : create
+    */
     public function deleteStopSale($id){
         DB::beginTransaction();
         try {
@@ -256,6 +310,12 @@ class stopSellCtrl extends Controller{
         return $return;
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi cek apakah stop sale sudah pernah di cancel stop sale
+    * Tipe         : create
+    */
     function checkToday($id=""){
         $ratecheck=DB::table('stop_sell')
            ->where('room','=',$id)
@@ -266,6 +326,12 @@ class stopSellCtrl extends Controller{
         return count($data);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi cek apakah stop sale sudah ada periodnya
+    * Tipe         : create
+    */
     function checkPeriod($id=""){
         $ratecheck=DB::table('stop_sell')
            ->where('room','=',$id);
@@ -273,6 +339,12 @@ class stopSellCtrl extends Controller{
         return count($data);
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi cancel stop sale
+    * Tipe         : create
+    */
     public function cancelStopSale(Request $request){
         $id=$request->get("id");
         //echo $checkToday;die;
@@ -345,7 +417,6 @@ class stopSellCtrl extends Controller{
                 }
             }
         }
-
         return $return;
     }
 }

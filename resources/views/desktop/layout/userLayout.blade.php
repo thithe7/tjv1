@@ -17,7 +17,7 @@
 	<link rel="shortcut icon" href="favicon.ico">
 
 	<!-- Global styles START -->       
-	<link href="{{ URL::asset('theme/users/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
+	<link href="{{ URL::asset('theme/users/plugins/font-awesome-4.7.0/css/font-awesome.css') }}" rel="stylesheet"/>
 	<link href="{{ URL::asset('theme/users/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
 	<!-- Global styles END --> 
 
@@ -30,7 +30,6 @@
 	<link href="{{ URL::asset('theme/users/pages/css/slider.css') }}" rel="stylesheet">
 	<link href="{{ URL::asset('theme/users/corporate/css/style.css') }}" rel="stylesheet"/>
 	<link href="{{ URL::asset('theme/users/corporate/css/style-responsive.css') }}" rel="stylesheet"/>
-	<link href="{{ URL::asset('theme/users/corporate/css/themes/turquoise.css') }}" rel="stylesheet"/>
 	<link href="{{ URL::asset('theme/users/corporate/css/custom.css') }}" rel="stylesheet"/>
 	<!-- Theme styles END -->
 	<link href="{{ URL::asset('theme/users/plugins/toastr/toastr.min.css') }}" rel="stylesheet"/>
@@ -40,6 +39,9 @@
 	<link href="{{ URL::asset('assets/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
 
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+	<!-- bxSlider CSS file -->
+	<link href="{{ URL::asset('theme/users/plugins/bxslider/jquery.bxslider.css') }}" rel="stylesheet" />
 </head>
 <!-- Head END -->
 
@@ -240,6 +242,9 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 
+	<!-- bxSlider Javascript file -->
+	<script src="{{ URL::asset('theme/users/plugins/bxslider/jquery.bxslider.min.js') }}"></script>
+
     <script type="text/javascript">
     	$.ajaxSetup({
     		headers: {
@@ -248,6 +253,9 @@
     	});
     	$(document).ready(function() {
     		// write condition here
+    		
+    		$('.bxslider').bxSlider();
+
     		$.widget( "custom.catcomplete", $.ui.autocomplete, {
 				_create: function() {
 					this._super();
@@ -272,9 +280,9 @@
 			});
 
     		$("#autocomplete").catcomplete({
-					source: "{{ url('search-autocomplete') }}",
-					minLength: 3,
-					select: function(event, ui) {
+				source: "{{ url('search-autocomplete') }}",
+				minLength: 3,
+				select: function(event, ui) {
 	                // prevent autocomplete from updating the textbox
 	                event.preventDefault();
 	                // manually update the textbox and hidden field

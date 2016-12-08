@@ -307,15 +307,15 @@
                                             <div class="form-group">
                                                 <label>{{{$row->payment_name}}}<input type="hidden" id="id_type" name="id_type[]" value="{{{$row->id_type}}}"></input></label>
                                                 <select class="form-control" id="status_payment_type_{{{$row->id_type}}}" name="status_payment_type[{{{$row->id_type}}}]">
-                                                    @if($row->status === 0)
+                                                    @if($row->status == 0)
                                                         <option value="0" selected>Off</option>
                                                         <option value="1">Live</option>
                                                         <option value="2">Development</option>
-                                                    @elseif($row->status === 1)
+                                                    @elseif($row->status == 1)
                                                         <option value="0">Off</option>
                                                         <option value="1" selected>Live</option>
                                                         <option value="2">Development</option>
-                                                    @elseif($row->status === 2)
+                                                    @elseif($row->status == 2)
                                                         <option value="0">Off</option>
                                                         <option value="1">Live</option>
                                                         <option value="2" selected>Development</option>

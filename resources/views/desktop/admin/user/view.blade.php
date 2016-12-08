@@ -1,6 +1,10 @@
 @extends("layout.adminLayout")
 
 @section('content')
+
+
+    <link href="{{ URL::asset('theme/users/plugins/datepicker/datepicker3.css') }}" rel="stylesheet"/>
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -25,7 +29,6 @@
                     <tr>
                         <th>No</th>
                         <th>Name</th>
-                        <th>Username</th>
                         <th>Email</th>
                         <th>Status</th>
                         <th style="text-align: center;"><button type="button" class="btn btn-flat btn-xs btn-block btn-add btn-success" data-toggle="modal" data-target="#myModal" data-backdrop="static"><i class="fa fa-plus"></i> Add User</button></th>
@@ -61,18 +64,13 @@
                                         <input type="email" name="email" id="email" class="form-control" placeholder="Email">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Username</label>
                                         <input type="text" name="username" id="username" class="form-control" placeholder="Username">
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="password">Password <button type="button" class="btn-flat btn-xs btn btn-password btn-warning">Change</button></label>
-                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-                                    </div>
-                                </div>
+                                </div> -->
+                                
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="status">Status</label>
@@ -113,7 +111,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Birthdate</label>
-                                        <input type="text" name="birthdate" id="birthdate" class="form-control" placeholder="Birthdate">
+                                        <i class="icon-append fa fa-calendar"></i>
+                                        <input class="date form-control" type="text" name="birthdate" id="birthdate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="password">Password <button type="button" class="btn-flat btn-xs btn btn-password btn-warning">Change</button></label>
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -135,8 +140,19 @@
         </div>
     </section><!-- /.content -->
     <script src="{{ URL::asset('theme/admin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    <script src="{{ URL::asset('theme/users/plugins/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ URL::asset('theme/users/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+
     <script>
+
+            $('.date').datepicker({
+                format: 'yyyy-mm-dd',
+                endDate: '0D',
+                autoclose: true
+            });
+
         $(document).ready(function(){
+
             $('.btn-password').hide();
 
             $('body').on('click', '.btn-password', function(){
@@ -164,9 +180,6 @@
                                 required: true
                             },
                             name: {
-                                required: true
-                            },
-                            username: {
                                 required: true
                             },
                             email: {
@@ -294,7 +307,6 @@
                                 if (data.success === true) {
                                     $('#id').val(data.results.id);
                                     $('#name').val(data.results.name);
-                                    $('#username').val(data.results.username);
                                     $('#email').val(data.results.email);
                                     $('#status').val(data.results.status);
                                     $('#phone').val(data.results.phone);

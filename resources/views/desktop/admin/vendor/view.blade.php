@@ -774,7 +774,7 @@
 
                         <td width="20%">Telephone*</td>
 
-                        <td width="20%"><input type="text" style="width: 170px" id="telephone_hotel" class="number form-control" name="telephone_hotel">
+                        <td width="20%"><input type="text" style="width: 170px" id="telephone_hotel" class="number form-control" name="telephone_hotel" required>
 
                        </td>
 
@@ -794,7 +794,7 @@
 
                         <td width="20%">
 
-                          <select  id="area_hotel" name="area_hotel" class="form-control" style="width: 150px;">
+                          <select  id="area_hotel" name="area_hotel" class="form-control" style="width: 150px;" required>
 
                            @foreach($data['area'] as $kota)
 
@@ -826,9 +826,9 @@
 
                       <tr>
 
-                        <td width="20%">Address</td>
+                        <td width="20%">Address*</td>
 
-                        <td width="20%"><textarea style="width: 200px" id="address" placeholder="Road Name" name="address" class="form-control"></textarea>
+                        <td width="20%"><textarea style="width: 200px" id="address" placeholder="Road Name" name="address" class="form-control" required></textarea>
 
                         </td>
 
@@ -1121,12 +1121,6 @@
 
 
               <tr>
-
-                <td width="20%">Department</td>
-
-                <td width="40%"><input type="text" style="width: 200px" id="cp_department" name="cp_department" class="form-control" value="" placeholder="Contact Department">
-
-                </td>
 
                 <td width="20%">Telephone</td>
 

@@ -7,6 +7,12 @@
             {{{$data['title']}}}
             <small>{{{$data['subtitle']}}}</small>
         </h1>
+        <ol class="breadcrumb">
+            <li><a href="javascript:;">Master</a></li>
+            <li><a href="javascript:;">CMS</a></li>
+            <li><a href="javascript:;">FAQ</a></li>
+            <li class="active">List</li>
+        </ol>
     </section>
 
     <!-- Main content -->

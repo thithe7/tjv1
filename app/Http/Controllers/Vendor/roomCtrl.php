@@ -151,7 +151,7 @@ class roomCtrl extends Controller{
     /**
     * Programmer   : Thithe
     * Tanggal      : 05-12-2016
-    * Fungsi       : check data kontrak hotel
+    * Fungsi       : check dan get date kontrak hotel
     * Tipe         : create
     */
 	function getdate($id_room=null){
@@ -172,7 +172,7 @@ class roomCtrl extends Controller{
     /**
     * Programmer   : Thithe
     * Tanggal      : 05-12-2016
-    * Fungsi       : check data validity price
+    * Fungsi       : check dan get date stop sale per room
     * Tipe         : create
     */
     function getdatestopsell($id_room=null){

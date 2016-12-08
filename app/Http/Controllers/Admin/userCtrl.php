@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\adminCtrl;
-use App\Http\Controllers\Admin\menuCtrl;
 use DB;
 use Auth;
 
 class userCtrl extends adminCtrl {
-    use menuCtrl;
+    
     /**
     * Programmer   : Ory
     * Tanggal      : 05-12-2016
@@ -50,7 +50,7 @@ class userCtrl extends adminCtrl {
     */
     function do_Tabel(Request $request){
         $records["aaData"] = array();
-        $aColumns = array('', 'name', 'username', 'email', 'status');
+        $aColumns = array('', 'name', 'email', 'status');
         $sort = "name";
         $dir = "desc";
         $criteria = "username";
@@ -84,7 +84,6 @@ class userCtrl extends adminCtrl {
                 $records["aaData"][] = array(
                     $no,
                     $Fields->name,
-                    $Fields->username,
                     $Fields->email,
                     $Fields->status,
                     '<center><!--<a href="javascript:;" data-id="' . $Fields->id . '" data-name="' . $Fields->name . '" class="btn btn-xs btn-success btn-flat btn-detailable"><i class="fa fa-file-text-o"></i> Detail </a>--> '
@@ -148,7 +147,7 @@ class userCtrl extends adminCtrl {
         $mode_form = ($request->input("mode_form") != "") ? $request->input("mode_form") : "";
         $id = ($request->input("id") != "") ? $request->input("id") : "";
         $name = ($request->input("name") != "") ? $request->input("name") : "";
-        $username = ($request->input("username") != "") ? $request->input("username") : "";
+        $username = ($request->input("email") != "") ? $request->input("email") : "";
         $email = ($request->input("email") != "") ? $request->input("email") : "";
         $password = ($request->input("password") != "") ? $request->input("password") : "";
         $status = ($request->input("status") != "") ? $request->input("status") : "";

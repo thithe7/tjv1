@@ -35,6 +35,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet" href="{{ URL::asset('theme/admin/plugins/select2/select2.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/plugins/toastr/toastr.min.css') }}">
 
+        <!-- include tinymce js-->
+        <script src="{{ URL::asset('assets/plugins/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+
+
         <style type="text/css">
             table td{word-break: break-all;}
         </style>
@@ -171,6 +175,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="{{ URL::asset('assets/plugins/bootbox/bootbox.js') }}"></script>
         <script src="{{ URL::asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
         <!-- include tinymce js-->
+        <script src="{{ URL::asset('assets/plugins/tinymce/js/tinymce/tinymce.min.js') }}"></script>
 
         <!-- iCheck 1.0.1 -->
         <script src="{{ URL::asset('theme/admin/plugins/iCheck/icheck.min.js') }}"></script>
@@ -184,6 +189,45 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }
             });
             $(document).ready(function () {
+
+                tinymce.init({
+          selector: "textarea.tinymce",theme: "modern",height: 300,
+          plugins: [
+            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+            "table contextmenu directionality emoticons paste textcolor responsivefilemanager code"
+          ],
+          toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+          toolbar2: " link unlink anchor | image media | forecolor backcolor  | print preview code ",
+          // toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
+          image_advtab: true ,
+          convert_urls: false,
+          relative_urls: false,
+          // autosave_ask_before_unload: false,
+          autosave_ask_before_unload: false,
+
+          external_filemanager_path:"{{ URL::asset('assets/plugins/responsive_filemanager/filemanager/') }}/",
+          filemanager_title:"Inap Filemanager" ,
+          external_plugins: { "filemanager" : "{{ URL::asset('assets/plugins/responsive_filemanager/filemanager/plugin.min.js') }}"},
+          templates: [
+            { title: 'Test template 1', content: 'Test 1' },
+            { title: 'Test template 2', content: 'Test 2' }
+          ],
+          content_css: [
+            '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
+            '//www.tinymce.com/css/codepen.min.css'
+          ],
+          remove_script_host: true,
+          setup : function(ed){
+            ed.on('change', function(e){
+              tinyMCE.triggerSave();
+            });
+            ed.on('SetContent', function(e){
+              tinyMCE.triggerSave();
+            });
+          }
+        });
+                
             });
         </script>
     </body>
