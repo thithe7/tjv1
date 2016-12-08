@@ -2,6 +2,45 @@
 
 @section('content')
 
+<style type="text/css">
+    .iconbirth {
+        background-image: url('../assets/images/date_small.png');
+        background-position: 97% ;
+        background-repeat: no-repeat;
+        cursor:pointer;
+}
+</style>
+
+
+
+
+
+<script type="text/javascript">
+function validAngkaPhone(a)
+{
+    if(!/^[0-9]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1);
+    }
+}
+
+function validAngkaPost(a)
+{
+    if(!/^[0-9]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1);
+    }
+}
+
+function validNama(a)
+{
+    if(!/^[a-zA-Z\_\- ]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1);
+    }
+}
+</script>
+
 
     <link href="{{ URL::asset('theme/users/plugins/datepicker/datepicker3.css') }}" rel="stylesheet"/>
 
@@ -52,10 +91,11 @@
                         <input type="hidden" name="id" id="id" class="form-control" placeholder="id">
                         <div class="modal-body">
                             <div class="row">
+                                <div id="fillouts" class="alert-danger"></div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+                                        <input type="text" onkeyup="validNama(this)" name="name" id="name" class="form-control" placeholder="Name">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -83,7 +123,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Phone</label>
-                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone">
+                                        <input type="text" onkeyup="validAngkaPhone(this)" name="phone" id="phone" class="form-control" placeholder="Phone">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -99,7 +139,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Post Code</label>
-                                        <input type="text" name="postcode" id="postcode" class="form-control" placeholder="Post Code">
+                                        <input type="text" onkeyup="validAngkaPost(this)" name="postcode" id="postcode" class="form-control" placeholder="Post Code">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -111,8 +151,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Birthdate</label>
-                                        <i class="icon-append fa fa-calendar"></i>
-                                        <input class="date form-control" type="text" name="birthdate" id="birthdate">
+                                        <input class="date form-control iconbirth" type="text" name="birthdate" id="birthdate">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -124,7 +163,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Newsletter </label>
-                                        <input type="checkbox" value="true" name="status_newsletter">
+                                        <input type="checkbox" value="true" name="status_newsletter" id="status_newsletter">
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +222,8 @@
                                 required: true
                             },
                             email: {
-                                required: true
+                                required: true,
+                                email: true
                             },
                             password: {
                                 required: true

@@ -9,22 +9,12 @@ use App\Http\Controllers\Vendor\vendorCtrl;
 
 use DB;
 use File;
-use Image;
-use Storage;
 use URL;
-use Toastr;
-use Mail;
 use Auth;
 use Input;
 
 class HotelCtrl extends Controller{
     use vendorCtrl;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     /**
     * Programmer   : Thithe
     * Tanggal      : 05-12-2016

@@ -42,14 +42,13 @@ trait vendorCtrl {
 			$arrowTree = '';
 			if(count($item->children) > 0){
 				$arrowTree = '<i class="fa fa-angle-left pull-right"></i>';
-		}
-		if(isset($item->header) && !empty($item->header)){
-			$data .= '
-			<li class="header">'.strtoupper($item->header).'</li>';
-		}
+			}
+			if(isset($item->header) && !empty($item->header)){
+				$data .= '
+				<li class="header">'.strtoupper($item->header).'</li>';
+			}
 
-		$data .= '
-		<li class="'.$classTree.'"><a href="' . $item->url . '">'.$item->icon.' <span>'. $item->name .'</span>'.$arrowTree. '</a>';
+			$data .= '<li class="'.$classTree.'"><a href="/' . $item->url . '">'.$item->icon.' <span>'. $item->name .'</span>'.$arrowTree. '</a>';
 
 			if (count($item->children) > 0)
 			{

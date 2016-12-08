@@ -5,10 +5,14 @@
     ul {
         list-style-type: none;
     }
+    .paddingsetup{
+        padding-right: 30px;
+        padding-left: 30px;
+    }   
 </style>
+
 <div class="page-slider" style="margin-top: -23px;">
     <div id="carousel-example-generic" class="carousel slide carousel-slider">
-        <!-- Wrapper for slides -->
         <div class="container" style="margin-bottom: 40px;">
             <br>
             <div class="col-md-3">
@@ -32,25 +36,35 @@
                     </div>
                     <br>
                     <div class="input-group">
-                        <label>Breakfast</label>
-                        &nbsp;
-                        <a href="{!! url('breakfast') !!}" target="_BLANK"><sup><img src="{{ URL::asset('assets/images/help.png') }}" width="18px;" height="18px;"></sup></a>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <input id="breakfast2" @if($breakfast!="") checked="checked" @endif onchange="return klik();" type="checkbox" class="make-switch" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Breakfast</label>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="{!! url('breakfast') !!}" target="_BLANK"><img src="{{ URL::asset('assets/images/help.png') }}" width="18px;" height="18px;"></a>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="breakfast2" @if($breakfast!="") checked="checked" @endif onchange="return klik();" type="checkbox" class="make-switch" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
+                            </div>
+                        </div>                        
                     </div>
                     <br>
                     <div class="input-group">
-                        <label>Amenities <a href="{!! url('amenities') !!}" target="_BLANK"><sup><img src="{{ URL::asset('assets/images/help.png') }}" width="18px;" height="18px;"></sup></a></label>
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        <input id="amenities2" @if($amenities!="") checked="checked" @endif onchange="return klik2();" type="checkbox" class="make-switch" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Amenities</label>
+                            </div>
+                            <div class="col-md-2">
+                                <a href="{!! url('amenities') !!}" target="_BLANK"><img src="{{ URL::asset('assets/images/help.png') }}" width="18px;" height="18px;"></a>
+                            </div>
+                            <div class="col-md-4 pull-left">
+                                <input id="amenities2" @if($amenities!="") checked="checked" @endif onchange="return klik2();" type="checkbox" class="make-switch" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
+                            </div>
+                        </div>
                     </div>
                     <br>
                     <div class="input-group">
-                        <button style="background-color:#095668; font-size: 18px; width:267px;" class="btn btn-primary btn-block btn-lg search-submit btn-tj">Search</button>
+                        <button style="background-color:#095668; font-size: 18px;" class="btn btn-primary btn-block btn-lg search-submit btn-tj">Search</button>
                     </div>
                 </form>
                 <br>
@@ -133,21 +147,19 @@
                     </div>
                     <br>
                     <div class="input-group">
-                        <button style="background-color:#095668; font-size: 18px; width:267px;" class="btn btn-primary btn-block btn-lg search-submit_filter btn-tj">Filter</button>
+                        <button style="background-color:#095668; font-size: 18px;" class="btn btn-primary btn-block btn-lg search-submit_filter btn-tj">Filter</button>
                     </div>
                 </div>
             </div>
             <br>
-            <div class="col-md-9">
+            <div class="col-md-9 paddingsetup">
                 <div id="content">
                 </div>
             </div>
             <br>
             <div class="col-md-9">
-                <!-- Holds your page information!! -->
                 <input type="hidden" id="page" value="1" />
                 <input type="hidden" id="max_page" value="{{$getdata['totalPages']}}" />
-                <!-- Your End of page message. Hidden by default -->
                 <div id="end_of_page" class="center">
                     <hr/>
                     <span>You've reached the end of the hotel.</span>
@@ -160,6 +172,12 @@
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript"></script>
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
 <script>
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi date range picker
+    * Tipe         : create
+    */
     var valid_from = new Date();
     $('input[name="when"]').daterangepicker({
         autoUpdateInput: false,
@@ -176,6 +194,12 @@
         $('input[name="when"]').val(start.format('DD MMMM YYYY')+' - '+end.format('DD MMMM YYYY'));
     });
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi jika breakfast diklik
+    * Tipe         : create
+    */
     function klik(){
         if(document.getElementById("breakfast2").checked){
             $("#breakfast").val('breakfast');
@@ -184,6 +208,13 @@
             $("#breakfast").val('');
         }
     }
+
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi jika amenitis diklik
+    * Tipe         : create
+    */
     function klik2(){    
         if(document.getElementById("amenities2").checked){
             $("#amenities").val('amenities');
@@ -196,10 +227,10 @@
     var outerPane = $('#content'),
     didScroll = false;
 
-    $(window).scroll(function() { //watches scroll of the window
+    $(window).scroll(function() {
         didScroll = true;
     });
-    //Sets an interval so your window.scroll event doesn't fire constantly. This waits for the user to stop scrolling for not even a second and then fires the pageCountUpdate function (and then the getPost function)
+
     setInterval(function() {
         if (didScroll) {
             didScroll = false;
@@ -209,7 +240,12 @@
         }
     }, 250);
 
-
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi untuk range slider
+    * Tipe         : create
+    */
     $(function() {
         $("#slider-range").slider({
             range: true,
@@ -226,7 +262,6 @@
             " - IDR. " + $("#slider-range").slider("values", 1));
     });
 
-    //This function runs when user scrolls. It will call the new posts if the max_page isn't met and will fade in/fade out the end of page message
     function pageCountUpdate() {
         var page = parseInt($('#page').val());
         var max_page = parseInt($('#max_page').val());
@@ -239,7 +274,6 @@
         }
     }
 
-    //Ajax call to get your new posts
     function getPosts() {
         var page = parseInt($('#page').val());
         var breakfast = $('#breakfast').val();
@@ -248,22 +282,21 @@
         var checkout = $('#checkout').val();
         $.ajax({
             type: "get",
-            url: '{!!url("search-tampil/")!!}?destination={{$_GET["destination"]}}&checkin=' + checkin + '&checkout=' + checkout + '&breakfast=' + breakfast + '&amenities=' + amenities, // whatever your URL is
+            url: '{!!url("search-tampil/")!!}?destination={{$_GET["destination"]}}&checkin=' + checkin + '&checkout=' + checkout + '&breakfast=' + breakfast + '&amenities=' + amenities, 
             data: {
                 page: page
             },
-            beforeSend: function() { //This is your loading message ADD AN ID
+            beforeSend: function() { 
                 $('#content').append("<div id='loading' class='center'>Loading news items...</div>");
             },
-            complete: function() { //remove the loading message
+            complete: function() { 
                 $('#loading').remove();
             },
-            success: function(html) { // success! YAY!! Add HTML to content container
+            success: function(html) { 
                 $('#content').append(html);
             }
         });
-    } //end of getPosts function
-
+    } 
 
     function getData(){
         $('#content').html();
@@ -315,7 +348,7 @@
 
         $.ajax({
             type: "get",
-            url: '{!!url("search-tampil/")!!}?destination={{$_GET["destination"]}}', // whatever your URL is
+            url: '{!!url("search-tampil/")!!}?destination={{$_GET["destination"]}}',
             data: {
                 page: page,
                 checkin: checkin,
@@ -327,13 +360,13 @@
                 amount2: $amount2,
                 star: $star
             },
-            beforeSend: function() { //This is your loading message ADD AN ID
+            beforeSend: function() { 
                 $('#content').append("<div id='loading' class='center'>Loading news items...</div>");
             },
-            complete: function() { //remove the loading message
+            complete: function() { 
                 $('#loading').remove();
             },
-            success: function(html) { // success! YAY!! Add HTML to content container
+            success: function(html) { 
                 $('#content').append(html);
             }
         });

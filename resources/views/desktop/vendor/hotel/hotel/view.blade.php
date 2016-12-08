@@ -19,10 +19,7 @@
                 <div class="box-header">
                     <h3 class="box-title"></h3>
                 </div>
-                <!-- /.box-header -->
                 <div class="box-body">
-
-                    <!-- Modal content-->
                     <form role="form-horizontal" action="#" id="formpromo" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{!! csrf_token() !!}" />
                         <input type="hidden" name="id_hotel" id="id_hotel" class="form-control" placeholder="id_hotel" value="{{$data['hotel']->id_hotel}}">
@@ -37,20 +34,13 @@
                                                 <li><a href="#photos" data-toggle="tab">Photos</a></li>
                                                 <li><a href="#contact" data-toggle="tab">Contact Person</a></li>
                                             </ul>
-
-                                            <!-- Tab Detail -->
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="detail">
-
-
                                                     <section id="new">
                                                         <div class="box box-primary">
                                                             <div class="box-header with-border">
                                                                 <h3 class="box-title">Important</h3>
                                                             </div>
-                                                            <!-- /.box-header -->
-                                                            <!-- form start -->
-
                                                             <div class="box-body">
                                                                 <table>
                                                                     <tbody>
@@ -58,154 +48,140 @@
                                                                             <td width="10%">Country*</td>
                                                                             <td width="20%">
                                                                                 <select disabled="disabled" id="country_hotel" name="country_hotel" class="form-control" style="width: 150px;">
-                                                                                  @foreach($data['country'] as $row)
-                                                                                  <option value="{{{ $row->id }}}" @if($row->id == "1") selected @endif> {{{ $row->name }}}</option>
-                                                                                  @endforeach
-                                                                              </select>
-                                                                          </td>
-                                                                          <td width="5%">City*</td>
-                                                                          <td width="20%">
-                                                                            <select disabled="disabled" id="city_hotel" name="city_hotel" class="form-control" style="width: 150px;">
-                                                                              @foreach($data['city'] as $kota)
-                                                                              <option value="{{{ $kota->id }}}">{{{ $kota->name }}}</option>
-                                                                              @endforeach
-                                                                          </select>
-                                                                      </td>
-                                                                  </tr>
-                                                                  <tr>
-                                                                    <td> <br> </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <!-- /.box-body -->
-
-                                                    <div class="box-footer">
-                                                    </div>
-
-                                                </div>
-                                                <!-- /.box -->
-
-                                                <div class="box box-primary">
-                                                    <div class="box-header with-border">
-                                                        <h3 class="box-title">Detail</h3>
-                                                    </div>
-                                                    <!-- /.box-header -->
-                                                    <!-- form start -->
-                                                    <div class="box-body">
-                                                        <table width="100%">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td width="20%">Hotel Name*</td>
-                                                                    <td width="20%"><input readonly="readonly" type="text" style="width: 200px" id="name_hotel" name="name_hotel" class="form-control" value="{{$data['hotel']->name_hotel}}" required>
-                                                                    </td>
-                                                                    <td width="20%">Email*</td>
-                                                                    <td width="20%"><input type="email" style="width: 170px" id="email_hotel" name="email_hotel" class="form-control" value="{{$data['hotel']->email_hotel}}" required>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td> <br> </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td width="20%">Star</td>
-                                                                    <td width="20%">
-                                                                        <select disabled="disabled" class="form-control" style="width: 100px;" id="star_hotel" name="star_hotel">
-                                                                          <option value="0" @if($data['hotel']->star_hotel==0) selected @endif>0</option>
-                                                                          <option value="1" @if($data['hotel']->star_hotel==1) selected @endif>1</option>
-                                                                          <option value="2" @if($data['hotel']->star_hotel==2) selected @endif>2</option>
-                                                                          <option value="3" @if($data['hotel']->star_hotel==3) selected @endif>3</option>
-                                                                          <option value="4" @if($data['hotel']->star_hotel==4) selected @endif>4</option>
-                                                                          <option value="5" @if($data['hotel']->star_hotel==5) selected @endif>5</option>
-                                                                      </select>
-                                                                  </td>
-                                                                  <td width="20%">Telephone*</td>
-                                                                  <td width="20%"><input type="text" style="width: 170px" id="telephone_hotel" class="number form-control" name="telephone_hotel" value="{{$data['hotel']->telephone_hotel}}">
-                                                                  </td>
-                                                              </tr>
-                                                              <tr>
-                                                                <td> <br> </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td width="20%">Area*</td>
-                                                                <td width="20%">
-                                                                    <select disabled="disabled" id="area_hotel" name="area_hotel" class="form-control" style="width: 150px;">
-                                                                      @foreach($data['area'] as $kota)
-                                                                      <option value="{{{ $kota->id }}}">{{{ $kota->name }}}</option>
-                                                                      @endforeach
-                                                                  </select>
-                                                              </td>
-                                                              <td width="20%">Longitude</td>
-                                                              <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="longitude_hotel" name="longitude_hotel" class="form-control" value="{{$data['hotel']->longitude_hotel}}">
-                                                              </td>
-                                                          </tr>
-
-                                                          <tr>
-                                                            <td> <br> </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td width="20%">Address</td>
-                                                            <td width="20%"><textarea readonly="readonly" style="width: 200px" id="address" placeholder="Road Name" name="address" class="form-control">{{$data['hotel']->address}}</textarea>
-                                                            </td>
-                                                            <td width="20%">Latitude</td>
-                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="latitude_hotel" name="latitude_hotel" class="form-control" value="{{$data['hotel']->latitude_hotel}}">
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> <br> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td width="20%">Validity From</td>
-                                                            <td width="20%">
-                                                                <div class="form-group" style="width: 150px">
-                                                                    <div class="input-group">
-                                                                        <input readonly="readonly" type="text" class="rate form-control" value="{{$data['hotel']->valid_from}}" readonly="readonly">
-                                                                        <span class="input-group-addon">
-                                                                            <span class="glyphicon glyphicon-calendar pull-left">
-                                                                            </span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-
-                                                            <td width="20%">Cut of Date</td>
-                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="latitude_hotel" name="latitude_hotel" class="form-control" readonly="readonly" value="{{$data['hotel']->cod_hotel}}">
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td> <br> </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td width="20%">Validity To</td>
-                                                            <td width="20%">
-                                                                <div class="form-group" style="width: 150px">
-                                                                    <div class="input-group">
-                                                                        <input readonly="readonly" type="text" class="rate form-control" value="{{$data['hotel']->valid_to}}" readonly="readonly">
-                                                                        <span class="input-group-addon">
-                                                                            <span class="glyphicon glyphicon-calendar pull-left">
-                                                                            </span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td width="20%">TJ Point Back</td>
-                                                            <td width="20%"><input type="number" style="width: 170px" id="point_back" name="point_back" min="0" class="form-control number" value="{{$data['hotel']->point_back}}">
-                                                            </td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <!-- /.box-body -->
-
-                                            <div class="box-footer">
-                                                                <!--   <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary pull-right">Submit</button> -->
+                                                                                    @foreach($data['country'] as $row)
+                                                                                    <option value="{{{ $row->id }}}" @if($row->id == "1") selected @endif> {{{ $row->name }}}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </td>
+                                                                            <td width="5%">City*</td>
+                                                                            <td width="20%">
+                                                                                <select disabled="disabled" id="city_hotel" name="city_hotel" class="form-control" style="width: 150px;">
+                                                                                    @foreach($data['city'] as $kota)
+                                                                                    <option value="{{{ $kota->id }}}">{{{ $kota->name }}}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="box-footer">
                                                             </div>
                                                         </div>
-                                                        <!-- /.box -->
+                                                        <div class="box box-primary">
+                                                            <div class="box-header with-border">
+                                                                <h3 class="box-title">Detail</h3>
+                                                            </div>
+                                                            <div class="box-body">
+                                                                <table width="100%">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td width="20%">Hotel Name*</td>
+                                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 200px" id="name_hotel" name="name_hotel" class="form-control" value="{{$data['hotel']->name_hotel}}" required>
+                                                                            </td>
+                                                                            <td width="20%">Email*</td>
+                                                                            <td width="20%"><input type="email" style="width: 170px" id="email_hotel" name="email_hotel" class="form-control" value="{{$data['hotel']->email_hotel}}" required>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="20%">Star</td>
+                                                                            <td width="20%">
+                                                                                <select disabled="disabled" class="form-control" style="width: 100px;" id="star_hotel" name="star_hotel">
+                                                                                    <option value="0" @if($data['hotel']->star_hotel==0) selected @endif>0</option>
+                                                                                    <option value="1" @if($data['hotel']->star_hotel==1) selected @endif>1</option>
+                                                                                    <option value="2" @if($data['hotel']->star_hotel==2) selected @endif>2</option>
+                                                                                    <option value="3" @if($data['hotel']->star_hotel==3) selected @endif>3</option>
+                                                                                    <option value="4" @if($data['hotel']->star_hotel==4) selected @endif>4</option>
+                                                                                    <option value="5" @if($data['hotel']->star_hotel==5) selected @endif>5</option>
+                                                                                </select>
+                                                                            </td>
+                                                                            <td width="20%">Telephone*</td>
+                                                                            <td width="20%"><input type="text" style="width: 170px" id="telephone_hotel" class="number form-control" name="telephone_hotel" value="{{$data['hotel']->telephone_hotel}}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="20%">Area*</td>
+                                                                            <td width="20%">
+                                                                                <select disabled="disabled" id="area_hotel" name="area_hotel" class="form-control" style="width: 150px;">
+                                                                                    @foreach($data['area'] as $kota)
+                                                                                    <option value="{{{ $kota->id }}}">{{{ $kota->name }}}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </td>
+                                                                            <td width="20%">Longitude</td>
+                                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="longitude_hotel" name="longitude_hotel" class="form-control" value="{{$data['hotel']->longitude_hotel}}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td width="20%">Address</td>
+                                                                            <td width="20%"><textarea readonly="readonly" style="width: 200px" id="address" placeholder="Road Name" name="address" class="form-control">{{$data['hotel']->address}}</textarea>
+                                                                            </td>
+                                                                            <td width="20%">Latitude</td>
+                                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="latitude_hotel" name="latitude_hotel" class="form-control" value="{{$data['hotel']->latitude_hotel}}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="20%">Validity From</td>
+                                                                            <td width="20%">
+                                                                                <div class="form-group" style="width: 150px">
+                                                                                    <div class="input-group">
+                                                                                        <input readonly="readonly" type="text" class="rate form-control" value="{{$data['hotel']->valid_from}}" readonly="readonly">
+                                                                                        <span class="input-group-addon">
+                                                                                            <span class="glyphicon glyphicon-calendar pull-left">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+
+                                                                            <td width="20%">Cut of Date</td>
+                                                                            <td width="20%"><input readonly="readonly" type="text" style="width: 170px" id="latitude_hotel" name="latitude_hotel" class="form-control" readonly="readonly" value="{{$data['hotel']->cod_hotel}}">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+
+                                                                        <tr>
+                                                                            <td width="20%">Validity To</td>
+                                                                            <td width="20%">
+                                                                                <div class="form-group" style="width: 150px">
+                                                                                    <div class="input-group">
+                                                                                        <input readonly="readonly" type="text" class="rate form-control" value="{{$data['hotel']->valid_to}}" readonly="readonly">
+                                                                                        <span class="input-group-addon">
+                                                                                            <span class="glyphicon glyphicon-calendar pull-left">
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td width="20%">TJ Point Back</td>
+                                                                            <td width="20%"><input type="number" style="width: 170px" id="point_back" name="point_back" min="0" class="form-control number" value="{{$data['hotel']->point_back}}">
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                            <div class="box-footer">
+                                                            </div>
+                                                        </div>
                                                     </section>
                                                 </div>
 
@@ -246,14 +222,11 @@
                                                     </section>
                                                 </div>
                                                 <div class="tab-pane" id="contact">
-
                                                     <section id="new">
                                                         <div class="box box-primary">
                                                             <div class="box-header with-border">
                                                                 <h3 class="box-title">Detail</h3>
                                                             </div>
-                                                            <!-- /.box-header -->
-                                                            <!-- form start -->
                                                             <div class="box-body">
                                                                 <table>
                                                                     <tbody>
@@ -263,45 +236,39 @@
                                                                             </td>
                                                                             <td width="20%">Title</td>
                                                                             <td width="40%">
-                                                                              <select disabled="disabled" class="form-control" style="width: 200px;" id="cp_title" name="cp_title">
-                                                                                  <option value="Mr" @if($data['hotel']->cp_title=="Mr") selected @endif>Mr.</option>
-                                                                                  <option value="Ms" @if($data['hotel']->cp_title=="Ms") selected @endif>Ms.</option>
-                                                                                  <option value="Mrs" @if($data['hotel']->cp_title=="Mrs") selected @endif>Mrs</option>
-                                                                              </select>
-                                                                          </td>
-                                                                      </tr>
+                                                                                <select disabled="disabled" class="form-control" style="width: 200px;" id="cp_title" name="cp_title">
+                                                                                    <option value="Mr" @if($data['hotel']->cp_title=="Mr") selected @endif>Mr.</option>
+                                                                                    <option value="Ms" @if($data['hotel']->cp_title=="Ms") selected @endif>Ms.</option>
+                                                                                    <option value="Mrs" @if($data['hotel']->cp_title=="Mrs") selected @endif>Mrs</option>
+                                                                                </select>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
 
-                                                                      <tr>
-                                                                        <td> <br> </td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <td width="20%">Department</td>
-                                                                        <td width="40%"><input readonly="readonly" type="text" style="width: 200px" id="cp_department" name="cp_department" class="form-control" value="{{$data['hotel']->cp_department}}" placeholder="Contact Department">
-                                                                        </td>
-                                                                        <td width="20%">Telephone</td>
-                                                                        <td width="40%"><input type="text" style="width: 200px" id="cp_phone" name="cp_phone" class="number form-control" value="{{$data['hotel']->cp_phone}}" placeholder="Contact Phone Number">
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td> <br> </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td width="20%">Email</td>
-                                                                        <td width="40%"><input type="email" style="width: 200px" id="cp_mail" name="cp_mail" class="form-control" value="{{$data['hotel']->cp_mail}}" placeholder="Contact Mail">
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <!-- /.box-body -->
-                                                        <div class="box-footer">
-                                                                <!--   <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary pull-right">Submit</button> -->
+                                                                        <tr>
+                                                                            <td width="20%">Department</td>
+                                                                            <td width="40%"><input readonly="readonly" type="text" style="width: 200px" id="cp_department" name="cp_department" class="form-control" value="{{$data['hotel']->cp_department}}" placeholder="Contact Department">
+                                                                            </td>
+                                                                            <td width="20%">Telephone</td>
+                                                                            <td width="40%"><input type="text" style="width: 200px" id="cp_phone" name="cp_phone" class="number form-control" value="{{$data['hotel']->cp_phone}}" placeholder="Contact Phone Number">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td> <br> </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td width="20%">Email</td>
+                                                                            <td width="40%"><input type="email" style="width: 200px" id="cp_mail" name="cp_mail" class="form-control" value="{{$data['hotel']->cp_mail}}" placeholder="Contact Mail">
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
-
+                                                            <div class="box-footer">
+                                                            </div>
                                                         </div>
-                                                        <!-- /.box -->
                                                     </section>
                                                 </div>
                                             </div>
@@ -310,17 +277,12 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <!-- <button type="button" class="btn btn-default pull-left btn-close tutup" data-dismiss="modal">Close</button> -->
                                 <button type="button" class="btn btn-primary submit">Save changes</button>
-                                <!-- <button type="submit" class="btn btn-primary btn-save">Save changes</button> -->
                             </div>
                         </div>
                     </form>
-
                 </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
         </div>
     </div>
 </section>
@@ -473,19 +435,15 @@
     function ValidateFileUpload() {
         var fuData = document.getElementById('hotel_photo');
         var FileUploadPath = fuData.value;
-        //To check if user upload any file
         if (FileUploadPath == '') {
             alert("Please upload an image");
         } else {
             var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-            //The file uploaded is an image
             if (Extension == "jpeg" || Extension == "jpg" || Extension == "png") {
             }
-            //The file upload is NOT an image
             else {
                 document.getElementById("hotel_photo").value = "";
                 alert("Photo only allows file types of JPG and JPEG. ");
-                //$("#tombolnya").hide();
                 return false;
             }
         }

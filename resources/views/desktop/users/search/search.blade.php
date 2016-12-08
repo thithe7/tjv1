@@ -6,20 +6,22 @@
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
         margin-bottom: 20px;
         min-height: 20px;
-        padding: 9px;
+        padding: 25px 10px 25px 10px !important;
     }
-        /* style hover div hotel */
     .info:hover{
-        box-shadow: 3px 3px 3px #888888;
         background-color:#f2f2f2;
     }   
+    .paddingsetupsearch{
+        padding-right: 0px;
+        padding-left: 0px;
+    } 
 </style>
-@if(count($getdata['records'])==0)
+@if(count($getdata['records'])==0 || $getdata['records'][0]=="")
     No Data Found
 @else
     @foreach ($getdata['records'] as $Fields)
     <a id="form_list" class="link_hotel_detail" href="" name="detail1" target="_blank">
-        <div class="row well info no-ctrl" noctrl="1" style="margin-bottom: 20px; padding: 0px; cursor: pointer;">
+        <div class="row well info no-ctrl" noctrl="1">
             <form method="get" action="{{$Fields['url']}}">
                 <input type="hidden" name="id_hotel" value="{{$Fields['id_hotel']}}">
                 <input type="hidden" name="destination" value="{{$destination}}">
@@ -29,12 +31,10 @@
                 <input type="hidden" name="amenities" value="{{$amenities}}">
 
                 <div class="hotel-container">
-                    <!-- Hotel Image -->
                     <div class="hotel-image-wrapper">
                         <img class="col-xs-4 hotel-img" src="{{$Fields['photo']}}">
                     </div>
-                    <!-- End Hotel Image -->
-                    <div class="col-xs-8">
+                    <div class="col-xs-8 paddingsetupsearch">
                         <div class="hotel-name">
                             <h3><a href="{{$Fields['link']}}"><font style="color:#095668;">{{$Fields['name_hotel']}}</font></a> <?php echo html_entity_decode($Fields['labelsold']); ?></h3>
                         </div>

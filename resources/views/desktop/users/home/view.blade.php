@@ -16,8 +16,8 @@
                             <li><a href="#tab-deals" data-toggle="tab">Deals</a></li>
                         </ul>
                         <div class="tab-content">
-                            <form method="get" action="{!! url('search-hotel') !!}">
-                                <div class="tab-pane row fade in active" id="tab-rooms">
+                            <div class="tab-pane row fade in active" id="tab-rooms">
+                                <form method="get" action="{!! url('search-hotel') !!}">
                                     <div class="col-md-4 col-sm-6">
                                         <div class="input-group">
                                             <label>Where</label>
@@ -52,8 +52,8 @@
                                             <button type="submit" class="btn btn-tj trigger-search" name="" style="width: 100%; height: 57px; font-size: 25px;"><i class="fa fa-search"></i> Search</button>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                             <div class="tab-pane row fade in" id="tab-deals">
                                 <div class="col-md-4 col-sm-6">
                                     <div class="input-group">

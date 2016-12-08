@@ -7,12 +7,6 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use DB;
-use File;
-use Image;
-use Storage;
-use URL;
-use Toastr;
-use Mail;
 use Auth;
 use Input;
 

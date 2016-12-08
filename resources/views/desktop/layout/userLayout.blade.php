@@ -110,7 +110,7 @@
 			<!-- BEGIN NAVIGATION -->
 			<div class="header-navigation pull-right font-transform-inherit">
 				<ul>
-					<li><a href="{{ url('http://traveljinni.com/tj/public/') }}"><font style="font-family: 'MontserratFont'">HOME</font></a></li>
+					<li><a href="{{ url('/') }}"><font style="font-family: 'MontserratFont'">HOME</font></a></li>
 					<li><a href="{{ url('about-traveljinni') }}"><font style="font-family: 'MontserratFont'">ABOUT US</font></a></li>
 					<li><a href="{!! url('faq') !!}"><font style="font-family: 'MontserratFont'">FAQ</font></a></li>
 					<li><a href="{!! url('career-traveljinni') !!}"><font style="font-family: 'MontserratFont'">CAREER</font></a></li>

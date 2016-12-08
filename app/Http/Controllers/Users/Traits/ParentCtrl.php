@@ -68,6 +68,7 @@ trait ParentCtrl {
         $qty=0;
         $hargamaks=0;
         $total=0;
+        $data['hargamaks']=0;
         $jinni=$this->getConfig();
         $default_allotment=$jinni->max_allotment_default;
         $link='';
@@ -182,8 +183,6 @@ trait ParentCtrl {
                     if($hargamaks<$harga_tampil_check){
                         $hargamaks=$harga_tampil_check;
                         $data['hargamaks']=$harga_tampil_check;
-                        Session::set('hargamaks', $hargamaks);
-                        Session::put('hargamaks', $hargamaks); 
                     }
 
                     $total_allotment=$queryprice->allotement;

@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Vendor\vendorCtrl;
 
 use DB;
-use File;
-use Image;
 use Auth;
 
 class roomCtrl extends Controller{

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Users\Traits\ParentCtrl;
 
 use App;
 use Auth;
@@ -20,13 +19,11 @@ class bookCtrl extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    use ParentCtrl;
-
     /**
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan halaman form booking
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function index(Request $request){
@@ -60,13 +57,7 @@ class bookCtrl extends Controller {
         $data['get'] = 'This TJ Point get from total price. (IDR. '.$data['config']->point_value.' = '.$data['config']->point.' TJ Point)';
         $data['getback'] = $data['hotel']->point_back.' TJ Point back get from this hotel ('.$data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value.')';
         $data['link'] = "http://traveljinni.com/tj/public/detail-hotel?id_hotel=".$id."&destination=".$request->input('destination')."&checkin=".$request->input('checkin')."&checkout=".$request->input('checkout')."&breakfast=".$request->input('breakfast')."&amenities=".$request->input('amenities');
-        
-        // echo($data['redeem'])."<br>";
-        // echo($data['redeemback'])."<br>";
-        // echo($data['get'])."<br>";
-        // echo($data['getback'])."<br>";
-        // echo($data['link']);
-        
+                
         $best_value=$data['price']->best_value;
         $hargabreakfast=0;
         $hargaamenities=0;
@@ -79,9 +70,6 @@ class bookCtrl extends Controller {
             $hargaamenities=$data['price']->amenities;
         }
 
-        // echo $best_value;
-        // echo $hargabreakfast.$hargaamenities;
-        //$bestprice=$best_value-$data['price']->breakfast-$data['price']->amenities;
         $bestprice=$best_value+$data['price']->breakfast+$data['price']->amenities;
         $ambiljam=date('H:i:s');
         $tanggallastminutesawal = date('H:i:s', strtotime($data['config']->vlm_from));
@@ -93,29 +81,23 @@ class bookCtrl extends Controller {
         $to=strtotime($data['config']->vlm_to);
         if($from>=$to){
             if($now<=$from && $now<=$to){
-                $hargaambil=$data['price']->vlm_value; 
-                //echo "vlm";   
+                $hargaambil=$data['price']->vlm_value;   
             }
             else{
                 $hargaambil=$best_value;    
-                //echo "best";
             }
         }
         else{
             if($now>=$from && $now<=$to){
                 $hargaambil=$data['price']->vlm_value;    
-                //echo "vlm";
             }
             else{
-                $hargaambil=$best_value;  
-                //echo "best";  
+                $hargaambil=$best_value;   
             }   
         }
 
         if($breakfast!="" && $amenities!=""){
-            //$total=$best_value;
             $total=$bestprice;
-            //echo "aaa";
         }
         else{
             $total=$hargaambil+$hargabreakfast+$hargaamenities;
@@ -136,20 +118,11 @@ class bookCtrl extends Controller {
             $data['totalnormal']=$total*$jml_kamar;   
             $totalakhir=$total*$jml_kamar;
         }
-        // echo $total;
-        // echo $totalakhir;
 
-        if(Auth::guest()){
-        }
-        else{
-            //echo "akakakak";
+        if(!Auth::guest()){
             $iduser=Auth::user()->id;
             $data['jmlpoint'] = $this->getTotalPoint($iduser);         
             $data['user'] = $this->getUser();
-            // $coba=$this->getUser();
-            // echo "<pre>";
-            // print_r($coba);         
-            // echo "</pre>";
         }
         
         $data['pointtotal']=intval($totalakhir/$data['config']->point_value);
@@ -166,10 +139,6 @@ class bookCtrl extends Controller {
 
         if($act == 'need confirm') $msg="Your account hasn't been verified. Please check your email to verify your account.";
 
-        // echo "<pre>";
-        // print_r($data);         
-        // echo "</pre>";
-
         return view('users/book/view', compact('data', 'id', 'id_room', 'destination','checkin','checkout','night','breakfast','amenities','jml_kamar','id_room', 'msg'));
     }
 
@@ -177,7 +146,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan info room
-    * Tipe         : create
+    * Tipe         : update
     */
 
     function getInfoRoom($id = ""){
@@ -193,7 +162,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan data room (price, allotment, validity)
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function getDataRoom($id = "",$idroom = "", $checkin = ""){
@@ -215,7 +184,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan foto hotel
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function getPhoto($id = ""){
@@ -231,7 +200,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan info hotel
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function getHotelDetail($id = "") {
@@ -251,7 +220,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan info config
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function getConfig(){
@@ -265,8 +234,8 @@ class bookCtrl extends Controller {
     /**
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
-    * Fungsi       : cek ketersediaan allotment
-    * Tipe         : create
+    * Fungsi       : cek ketersediaan monthly allotment
+    * Tipe         : update
     */
    
     function checkAllotment($idroom = "", $checkin = ""){
@@ -284,7 +253,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : cek ketersediaan daily allotment
-    * Tipe         : create
+    * Tipe         : update
     */
    
     public function checkDailyAllotment($id = "", $tanggal = ""){
@@ -300,8 +269,8 @@ class bookCtrl extends Controller {
     /**
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
-    * Fungsi       : menampilkan info point
-    * Tipe         : create
+    * Fungsi       : menampilkan info point per user
+    * Tipe         : update
     */
    
     function getTotalPoint($iduser = ""){
@@ -310,11 +279,8 @@ class bookCtrl extends Controller {
         $query = DB::table('m_point');
         $query->where('userid', '=', $iduser);
 
-        $ambilpoint = $query->get();
+        $jmlpoint = $query->sum('total_point');
 
-        foreach ($ambilpoint as $key) {
-            $jmlpoint=$jmlpoint+$key->total_point;
-        }
         return $jmlpoint; 
     }
 
@@ -322,17 +288,12 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : submit booking
-    * Tipe         : create
+    * Tipe         : update
     */
 
     public function post_book(Request $request)
     {
         $det_inv=array();
-
-        // echo "<pre>";
-        // print_r($request->input());
-        // echo "</pre>";
-        //die;
 
         $id_hotel = $request->input('id_hotel');
         $id_room = $request->input('id_room');
@@ -349,14 +310,11 @@ class bookCtrl extends Controller {
         $point = $request->input('point');
         $point_back = $request->input('point_back');
         $point_backstatus = $request->input('point_backstatus');
-        $voucher=str_replace(" ","",strtoupper($request->input('voucher')));
 
-        //echo $voucher;
         $breakfast_price=0;
         $pointtotal=0;
         $amenities_price=0;
-        $value_voucher=0;
-        $id_voucher=0;
+
         if(Auth::guest()){
             $iduser=0;
         }
@@ -387,8 +345,8 @@ class bookCtrl extends Controller {
                     $dailyallotment=$checkdailyallotment->allotment;
                     $total_allotment=$checkallotment->allotement;
 
-                    $newdailyallotment=$checkdailyallotment->allotment-$jml_kamar;
-                    $newtotal_allotment=$checkallotment->allotement-$jml_kamar;
+                    $newdailyallotment=$dailyallotment-$jml_kamar;
+                    $newtotal_allotment=$total_allotment-$jml_kamar;
                     
                     //update table daily_allotment
                     $dataupdate = array(
@@ -408,7 +366,6 @@ class bookCtrl extends Controller {
 
             $kurangpoint=0;
             $kurangpointback=0;
-            $kurangvoucher=0;
             $id_inv = 0;
 
             //generate invoice code
@@ -420,6 +377,7 @@ class bookCtrl extends Controller {
             } 
 
             $code_inv="TJB".date('Ym').substr(10001+$id_inv,1);
+            if($point_backstatus=="") $point_back = 0;
 
             $insert = array(
                 "room"              => $id_room,
@@ -430,43 +388,18 @@ class bookCtrl extends Controller {
                 "checkin"           => $checkin,
                 "checkout"          => $checkout,
                 "qty"               => $jml_kamar,
-                "original_price"    => floatval($total),
-                "sell_price"        => floatval($total),
+                "original_price"    => floatval($total), //harga asli
+                "sell_price"        => floatval($total), //harga setelah dikurangi point-point
                 "status"            => 2,
                 "breakfast"         => $breakfast,
                 "amenities"         => $amenities,
                 "breakfast_price"   => $breakfast_price,
                 "amenities_price"   => $amenities_price,
                 "invoice_code"      => $code_inv,
-              //  "use_point_back"    => "",
-                "point_back"        => 0,
+                "point_back"        => $point_back,
                 "created_at"        => date('Y-m-d H:i:s'),
                 "updated_at"        => date('Y-m-d H:i:s')
             );
-            if($point_backstatus!=""){
-                $insert = array(
-                    "room"              => $id_room,
-                    "userid"            => $iduser,
-                    "name_pemesan"      => $name,
-                    "email_pemesan"     => $email,
-                    "telp_pemesan"      => $phoneNumber,
-                    "checkin"           => $checkin,
-                    "checkout"          => $checkout,
-                    "qty"               => $jml_kamar,
-                    "original_price"    => floatval($total),
-                    "sell_price"        => floatval($total),
-                    "status"            => 2,
-                    "breakfast"         => $breakfast,
-                    "amenities"         => $amenities,
-                    "breakfast_price"   => $breakfast_price,
-                    "amenities_price"   => $amenities_price,
-                    "invoice_code"      => $code_inv,
-                   // "use_point_back"    => $point_backstatus,
-                    "point_back"        => $point_back,
-                    "created_at"        => date('Y-m-d H:i:s'),
-                    "updated_at"        => date('Y-m-d H:i:s')
-                );  
-            }
             DB::table('m_booking')->insert($insert);
 
             //insert d_booking
@@ -475,7 +408,6 @@ class bookCtrl extends Controller {
             $data = $query->first();
 
             $kurangpoint=0;
-            $kurangvoucher=0;
             $kurangpointback=0;
             
             for($i=1;$i<=$jml_kamar;$i++){
@@ -491,137 +423,63 @@ class bookCtrl extends Controller {
             }
 
             if(!Auth::guest()){
-                $checkpoint=$this->getConfig();
-                $totalvoucher = $this->getTotalPoint($iduser);
+                $checkpoint=$this->getConfig(); //ambil nilai kelipatan untuk mengalikan poin jadi rupiah
+                $totalpoint = $this->getTotalPoint($iduser); //ambil total point user
                 
                 //dapat point back dari hotel
-                if($point_back<=0 && $point_backstatus!=""){
-                    $kurangpointback=$point_back*$checkpoint->redeem_value;
+                if($point_back>0 && $point_backstatus!=""){
+                    $kurangpointback=$point_back*$checkpoint->redeem_value; //poin dalam rupiah
                 }
 
-                if($point>0 && $point<=$totalvoucher){ //menggunakan point sendiri
-                    if($point_backstatus==""){ //no point back
+                if($point>0 && $point<=$totalpoint){ //menggunakan point sendiri
+                    if($point_backstatus=="") {
                         $kurangpoint=$point*$checkpoint->redeem_value;
-                        $insert = array(
-                            "userid"            => $iduser,
-                            "id_trans"          => $data->id,
-                            "total_point"       => ($point)*-1,
-                            "status"            => 'use',
-                            "created_at"        => date('Y-m-d H:i:s'),
-                            "updated_at"        => date('Y-m-d H:i:s')
-                        );
-                        DB::table('m_point')->insert($insert);
-                    } else { // use point back
+                    } else { 
                         $kurangpoint=($point+$point_back)*$checkpoint->redeem_value;
-                        $insert = array(
-                            "userid"            => $iduser,
-                            "id_trans"          => $data->id,
-                            "total_point"       => ($point)*-1,
-                            "status"            => 'use',
-                            "created_at"        => date('Y-m-d H:i:s'),
-                            "updated_at"        => date('Y-m-d H:i:s')
-                        );
-                        DB::table('m_point')->insert($insert);
+                        $point_back=0;
                     }
+
+                    $insert = array(
+                        "userid"            => $iduser,
+                        "id_trans"          => $data->id,
+                        "total_point"       => ($point)*-1,
+                        "status"            => 'use',
+                        "created_at"        => date('Y-m-d H:i:s'),
+                        "updated_at"        => date('Y-m-d H:i:s')
+                    );
+                    DB::table('m_point')->insert($insert);
                 }
                 else{//tidak menggunakan point sendiri dan use point back
-                    if($point_backstatus!=""){
+                    if($point_backstatus!="") {
                         $kurangpoint=($point_back)*$checkpoint->redeem_value;
-                        $insert = array(
-                            "userid"            => $iduser,
-                            "id_trans"          => $data->id,
-                            "total_point"       => ($point_back)*-1,
-                            "status"            => 'use',
-                            "created_at"        => date('Y-m-d H:i:s'),
-                            "updated_at"        => date('Y-m-d H:i:s')
-                        );
-                        DB::table('m_point')->insert($insert);
+                        $point_back=0;
                     }
                 }
 
                 //dapat point jika login
                 $pointtotal=intval(($total-$kurangpoint)/$checkpoint->point_value);
                 
-                if($pointtotal>0){ // cek sisa total apakah dapat point atau tidak
-                    if($point_backstatus!=""){ // jika use point back
-                        $point_back=0;
-                    }
-                    $insert = array(
-                        "userid"            => $iduser,
-                        "id_trans"          => $data->id,
-                        "total_point"       => intval($pointtotal+$point_back),
-                        "status"            => 'confirmed',
-                        "created_at"        => date('Y-m-d H:i:s'),
-                        "updated_at"        => date('Y-m-d H:i:s')
-                    );
-                    DB::table('m_point')->insert($insert);
-                }
-                else{
-                    if($point_backstatus!=""){
-                        $point_back=0;
-                    }
-                    $insert = array(
-                        "userid"            => $iduser,
-                        "id_trans"          => $data->id,
-                        "total_point"       => intval($point_back),
-                        "status"            => 'confirmed',
-                        "created_at"        => date('Y-m-d H:i:s'),
-                        "updated_at"        => date('Y-m-d H:i:s')
-                    );
-                    DB::table('m_point')->insert($insert);
-                }
+                if($pointtotal>0) $insert_total_point = intval($pointtotal+$point_back);
+                else $insert_total_point = intval($point_back);
 
-                //check voucher
-                $iduser=Auth::user()->id;
-                $checkvoucher=$this->checkVoucher($voucher);
-
-                if(count($checkvoucher)>0 && $voucher!=""){
-                    $id_voucher=$checkvoucher->id; 
-                    if($checkvoucher->total_point<=$totalvoucher){
-                        $kurangvoucher=$checkvoucher->total_point*$checkpoint->redeem_value;
-                        $kurangpoint=$point*$checkpoint->redeem_value;
-
-                        //ngurangi point dari voucher
-                        $insert = array(
-                            "userid"            => $iduser,
-                            "id_trans"          => $data->id,
-                            "total_point"       => $checkvoucher->total_point*-1,
-                            "status"            => 'voucher',
-                            "created_at"        => date('Y-m-d H:i:s'),
-                            "updated_at"        => date('Y-m-d H:i:s')
-                        );
-                        DB::table('m_point')->insert($insert);
-
-                        //insert ke m_voucher
-                        $insert = array(
-                            "userid"            => $iduser,
-                            "id_point"          => $checkvoucher->id_point,
-                            "code"              => $voucher,
-                            "status"            => 'active',
-                            "expired"           => date('Y-m-d'),
-                            "created_at"        => date('Y-m-d H:i:s'),
-                            "updated_at"        => date('Y-m-d H:i:s')
-                        );
-                        DB::table('m_voucher')->insert($insert); 
-                        
-                        $value_voucher=$checkvoucher->total_point;    
-                    }
-                }
+                $insert = array(
+                    "userid"            => $iduser,
+                    "id_trans"          => $data->id,
+                    "total_point"       => $insert_total_point,
+                    "status"            => 'confirmed',
+                    "created_at"        => date('Y-m-d H:i:s'),
+                    "updated_at"        => date('Y-m-d H:i:s')
+                );
+                DB::table('m_point')->insert($insert);
             }
 
-            $sell_price=$total-$kurangpoint-$kurangvoucher;
-            if($sell_price!=$total || $kurangpoint!=0 || $kurangvoucher!=0){
+            $sell_price=$total-$kurangpoint;
+            if($sell_price!=$total || $kurangpoint>0){
                 $dataupdate = array(
-                    "voucher"       => $id_voucher,
                     "sell_price"    => floatval($sell_price),
                     "updated_at"    => date("Y-M-d H:i:s")
                 );    
                 DB::table('m_booking')->where('invoice_code', $code_inv)->update($dataupdate);
-                $dataupdate1 = array(
-                    "price"         => floatval($total/$jml_kamar),
-                    "updated_at"    => date("Y-M-d H:i:s")
-                );    
-                DB::table('d_booking')->where('id', $data->id)->update($dataupdate1);
             }
 
             DB::commit();     
@@ -638,7 +496,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan master transaksi
-    * Tipe         : create
+    * Tipe         : update
     */
    
     public function getTransaction($id = ""){
@@ -656,7 +514,7 @@ class bookCtrl extends Controller {
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
     * Fungsi       : menampilkan detail transaksi
-    * Tipe         : create
+    * Tipe         : update
     */
    
     public function getTransactionDetail($id_invoice = "", $id_room = ""){
@@ -676,25 +534,7 @@ class bookCtrl extends Controller {
     /**
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
-    * Fungsi       : menampilkan info poin transaksi
-    * Tipe         : create
-    */
-   
-    public function getM_VoucherTransdone($id_invoice = ""){
-        $m_voucher = DB::table('m_point');
-        $m_voucher->join('m_booking','m_booking.id','=','m_point.id_trans');
-        $m_voucher->where('id_trans','=',$id_invoice );
-        $m_voucher->where('m_point.status','=','voucher');
-        
-        $data = $m_voucher->first();
-
-        return $data;
-    }
-
-    /**
-    * Programmer   : Ima
-    * Tanggal      : 08-12-2016
-    * Fungsi       : menampilkan master poin
+    * Fungsi       : menampilkan jumlah poin yang digunakan untuk transaksi tersebut
     * Tipe         : create
     */
 
@@ -711,7 +551,7 @@ class bookCtrl extends Controller {
     /**
     * Programmer   : Ima
     * Tanggal      : 08-12-2016
-    * Fungsi       : menampilkan dan mengimkan invoice transaksi
+    * Fungsi       : menampilkan jumlah poin yang didapat dari transaksi tersebut
     * Tipe         : create
     */ 
 
@@ -735,13 +575,7 @@ class bookCtrl extends Controller {
     public function transdone($id = ""){
         $invoice = $this->getTransaction($id);
 
-        // echo "<pre>";
-        // print_r($invoice);
-        // echo "</pre>";
-        // die;
-
         $id_invoice=$invoice->id;
-        //$id_voucher=$invoice->voucher;
         $id_room=$invoice->room;
         $id_hotel=$invoice->id_hotel;
         $checkin=$invoice->checkin;
@@ -752,17 +586,10 @@ class bookCtrl extends Controller {
         $hotellink = "http://traveljinni.com/tj/public/detail-hotel?id_hotel=".$id_hotel."&destination=bali&checkin=".$checkin."&checkout=".$checkout."&breakfast=".$breakfast."&amenities=".$amenities;
 
         $detail = $this->getTransactionDetail($id_invoice, $id_room);
-        //$voucher = $this->getM_VoucherTransdone($id_invoice);
-        $point = $this->useM_PointTransdone($id_invoice); //use
-        $pointget = $this->getM_PointTransdone($id_invoice); //use
-
-        // echo "<pre>";
-        // print_r($point);
-        // echo "</pre>";
-        // die;
+        $point = $this->useM_PointTransdone($id_invoice); //point yang digunakan untuk trx
+        $pointget = $this->getM_PointTransdone($id_invoice); //poin yang didapatkan dari trx
 
         $data=array();
-
         $config=$this->getConfig();
       
         $data[] = [
