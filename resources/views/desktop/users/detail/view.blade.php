@@ -1,32 +1,16 @@
 @extends('layout.userLayout')
 @section('content')
-	<style type="text/css">
-		.btn-book-detail {
-	    	width: 140px;
-	    	height: 34px;
-	    	background-color: #145769;
-	    	font-family: 'MontserratFont';
-	        font-size: 14px;
-	        color: #fff;
-	        line-height: 1.42857;
-	    }
-		.btn-book-detail:hover {
-	    	width: 140px;
-	    	height: 34px;
-	    	background-color: #f68alf;
-	    	font-family: 'MontserratFont';
-	        font-size: 14px;
-	        color: #fff;
-	        line-height: 1.42857;
-	    }
-	</style>
-
 	<div class="container" style="margin-bottom: 40px;">
 		<div class="row">
 			<div class="col-md-7">
 			    <ul class="bxslider">
+			    	@if(!empty($data['photo']))
+			    		@foreach($data['photo'] as $photo)
 				      		<li><img src="{{ URL::asset('assets/images/Top.jpg') }}" class="imgslider"/></li>
-				      		<li><img src="{{ URL::asset('assets/images/Top.jpg') }}" class="imgslider"/></li>
+				      	@endforeach
+				    @else
+				    	<li><img src="{{ URL::asset('theme/user/corporate/img/NoImageFound.png') }}" class="imgslider"/></li>
+				    @endif
 			    </ul>
 			</div>
 			<div class="col-md-5">
@@ -147,7 +131,7 @@
                                 </div>
                                 <p id="more-collapse">
                                     <span class="btn-showmore" data-toggle="collapse" data-target="#moreamenities">
-                                    	<font class="morecollapse" color="#f68alf">+ More</font>
+                                    	<font class="morecollapse" color="#ff8a0b">+ More</font>
                                     </span>
                                 </p>
                                 <div class="collapse" id="moreamenities">
@@ -170,7 +154,7 @@
 	                            </div>
 	                            <p id="less-collapse">
                                     <span class="btn-showmore" data-toggle="collapse" data-target="#moreamenities">
-                                    	<font class="morecollapse" color="#f68alf">- Less</font>
+                                    	<font class="morecollapse" color="#ff8a0b">- Less</font>
                                     </span>
                                 </p>
                                 <hr>
@@ -213,7 +197,7 @@
 
 									<p id="more-desc">
 	                                    <span class="btn-showmore" data-toggle="collapse" data-target="#moredesc">
-	                                    	<font class="moreamenities" color="#f68alf">+ More</font>
+	                                    	<font class="moreamenities" color="#ff8a0b">+ More</font>
 	                                    </span>
 	                                </p>
 
@@ -300,7 +284,7 @@
                         		</div>
                         		<p id="less-desc">
                                     <span class="btn-showmore" data-toggle="collapse" data-target="#moredesc">
-                                    	<font class="morecollapse" color="#f68alf">- Less</font>
+                                    	<font class="morecollapse" color="#ff8a0b">- Less</font>
                                     </span>
                                 </p>
                                 <hr>
@@ -326,7 +310,7 @@
 
 									<p id="more-house">
 	                                    <span class="btn-showmore" data-toggle="collapse" data-target="#morehouse">
-	                                    	<font class="moreamenities" color="#f68alf">+ More</font>
+	                                    	<font class="moreamenities" color="#ff8a0b">+ More</font>
 	                                    </span>
 	                                </p>
 
@@ -337,7 +321,7 @@
                         		</div>
                         		<p id="less-house">
                                     <span class="btn-showmore" data-toggle="collapse" data-target="#morehouse">
-                                    	<font class="morecollapse" color="#f68alf">- Less</font>
+                                    	<font class="morecollapse" color="#ff8a0b">- Less</font>
                                     </span>
                                 </p>
                                 <hr>

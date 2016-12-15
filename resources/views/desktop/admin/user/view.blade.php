@@ -14,77 +14,102 @@
 
 <script type="text/javascript">
 
-        function validateForm () {
+function validateForm () {
 
-        var name=document.forms["formku"]["name"].value;
-        var email=document.forms["formku"]["email"].value;
-        var phone=document.forms["formku"]["phone"].value;
-        var birthdate=document.forms["formku"]["birthdate"].value;
-        var postcode=document.forms["formku"]["postcode"].value;
-        var address=document.forms["formku"]["address"].value;
-        var password2=document.forms["formku"]["password2"].value;
-        var mincarpassword = 10;
-        var mincarphone = 7;
-        
+    var mode_form=document.forms["formku"]["mode_form"].value;
+    var name=document.forms["formku"]["name"].value;
+    var email=document.forms["formku"]["email"].value;
+    var password=document.forms["formku"]["password"].value;
+    var phone=document.forms["formku"]["phone"].value;
+    var birthdate=document.forms["formku"]["birthdate"].value;
+    var postcode=document.forms["formku"]["postcode"].value;
+    var address=document.forms["formku"]["address"].value;
+    var mincarpassword = 10;
+    var mincarphone = 7;
 
-        if (name==null || name=="")
-          {
-            alert("Name Can't Empty");
+
+    if (name==null || name=="")
+    {
+        toastr.error("Name Can't Empty");
+        return false;
+    };
+
+    if (email==null || email=="")
+    {
+        toastr.error("Email Can't Empty");
+        return false;
+    };
+
+    if ((email.indexOf('@',0)==-1) || (email.indexOf('.',0)==-1))
+    { 
+        toastr.error("Wrong Email Format");
+        return false;
+    };
+
+    if (phone==null || phone=="")
+    {
+        toastr.error("Phone Can't Empty");
+        return false;
+    };
+
+    if (phone.length < mincarphone)
+    {
+        toastr.error("Phone Min. 7 character");
+        return false;
+    };
+
+    if (postcode==null || postcode=="")
+    {
+        toastr.error("Post Code Can't Empty");
+        return false;
+    };
+
+    if (address==null || address=="")
+    {
+        toastr.error("Address Can't Empty");
+        return false;
+    };
+
+    if (birthdate==null || birthdate=="")
+    {
+        toastr.error("Birthdate Can't Empty");
+        return false;
+    };
+
+    if (mode_form=="tambah")
+    {
+        if (password==null || password=="")
+        {
+            toastr.error("Password Can't Empty");
             return false;
-          };
-
-        if (email==null || email=="")
-          {
-            alert("Email Can't Empty");
-            return false;
-          };
-
-        if ((email.indexOf('@',0)==-1) || (email.indexOf('.',0)==-1))
-            { 
-            alert("Wrong Email Format");
-            return false;
-          };
-
-        if (phone==null || phone=="")
-          {
-            alert("Phone Can't Empty");
-            return false;
-          };
-
-        if (phone.length < mincarphone)
-          {
-            alert("Phone Min. 7 character");
-            return false;
-          };
-
-        if (postcode==null || postcode=="")
-          {
-            alert("Post Code Can't Empty");
-            return false;
-          };
-
-        if (address==null || address=="")
-          {
-            alert("Address Can't Empty");
-            return false;
-          };  
-
-          if (password2==null || password2=="")
-          {
-            alert("Password Can't Empty");
-            return false;
-          };
-
-          if (password2.length < mincarpassword)
-          {
-            alert("Password Min. 10 character");
-            return false;
-          };
-
-          
-
         }
-        </script>
+        if (password.length < mincarpassword)
+        {
+            toastr.error("Password Min. 10 character");
+            return false;
+        };
+    }
+    else{
+        if (password==null || password=="" && $('#password').attr("disabled") != 'disabled')
+        {
+            toastr.error("Password Can't Empty");
+            return false;
+        }
+        if (password.length < mincarpassword && $('#password').attr("disabled") != 'disabled')
+        {
+            toastr.error("Password Min. 10 character");
+            return false;
+        };
+        
+    }
+
+
+    
+
+
+
+}
+</script>
 
 
 <script type="text/javascript">
@@ -92,7 +117,7 @@ function validAngkaPhone(a)
 {
     if(!/^[0-9]+$/.test(a.value))
     {
-    a.value = a.value.substring(0,a.value.length-1000);
+        a.value = a.value.substring(0,a.value.length-1000);
     }
 }
 
@@ -100,7 +125,7 @@ function validAngkaPost(a)
 {
     if(!/^[0-9]+$/.test(a.value))
     {
-    a.value = a.value.substring(0,a.value.length-1000);
+        a.value = a.value.substring(0,a.value.length-1000);
     }
 }
 
@@ -108,7 +133,7 @@ function validNama(a)
 {
     if(!/^[a-zA-Z\_\- ]+$/.test(a.value))
     {
-    a.value = a.value.substring(0,a.value.length-1);
+        a.value = a.value.substring(0,a.value.length-1000);
     }
 }
 
@@ -169,13 +194,13 @@ function validNama(a)
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name">Name*</label>
-                                        <input type="text" onkeyup="validNama(this)" name="name" id="name" class="form-control" placeholder="Name">
+                                        <input type="text" onkeyup="validNama(this)" name="name" id="name" class="form-control" placeholder="Name" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="email">Email*</label>
-                                        <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+                                        <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
                                     </div>
                                 </div>
                                 
@@ -191,7 +216,7 @@ function validNama(a)
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Phone*</label>
-                                        <input type="text" onkeyup="validAngkaPhone(this)" name="phone" id="phone" class="form-control" placeholder="Phone">
+                                        <input type="text" onkeyup="validAngkaPhone(this)" name="phone" id="phone" class="form-control" placeholder="Phone" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -207,25 +232,25 @@ function validNama(a)
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Post Code*</label>
-                                        <input type="text" onkeyup="validAngkaPost(this)" name="postcode" id="postcode" class="form-control" placeholder="Post Code">
+                                        <input type="text" onkeyup="validAngkaPost(this)" name="postcode" id="postcode" class="form-control" placeholder="Post Code" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Address*</label>
-                                        <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                                        <input type="text" name="address" id="address" class="form-control" placeholder="Address" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="username">Birthdate*</label>
-                                        <input class="date form-control iconbirth" type="text" name="birthdate" id="birthdate" readonly>
+                                        <input class="date form-control iconbirth" type="text" name="birthdate" id="birthdate" readonly required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="password">Password* <button type="button" class="btn-flat btn-xs btn btn-password btn-warning">Change</button></label>
-                                        <input type="password" name="password" id="password2" class="form-control" placeholder="Password" required>
+                                        <input type="password" name="password" id="password" class="form-control" placeholder="Password" required minlength="10"> 
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -283,48 +308,6 @@ function validNama(a)
                         errorClass: 'help-block', // default input error message class
                         focusInvalid: true, // do not focus the last invalid input
                         ignore: "",
-                        // rules: {
-                        //     mode_form: {
-                        //         required: true
-                        //     },
-                        //     name: {
-                        //         required: true
-                        //     },
-                        //     email: {
-                        //         required: true
-                        //     },
-                        //     password: {
-                        //         required: true
-                        //     },
-                        //     status: {
-                        //         required: true
-                        //     },
-                        //     phone: {
-                        //         required: true
-                        //     },
-                        //     city: {
-                        //         required: true
-                        //     },
-                        //     postcode: {
-                        //         required: true
-                        //     },
-                        //     address: {
-                        //         required: true
-                        //     },
-                        //     birthdate: {
-                        //         required: true
-                        //     }
-                        // },
-                        // messages: {
-                        //     name: "Please specify your name",
-                        //     email: {
-                        //       required: "We need your email address to contact you",
-                        //       email: "Your email address must be in the format of name@domain.com"
-                        //     }
-                        //   },
-                        // invalidHandler: function (event, validator) { //display error alert on form submit              
-                        //     toastr.error("Maaf, Inputkan data dengan lengkap");
-                        // },
                         errorPlacement: function (error, element) { // render error placement for each input type
                             var icon = $(element).parent('.input-icon').children('i');
                             icon.removeClass('fa-check').addClass("fa-warning");
@@ -429,6 +412,7 @@ function validNama(a)
                                     $('#postcode').val(data.results.postcode);
                                     $('#address').val(data.results.address);
                                     $('#birthdate').val(data.results.birthdate);
+                                    $('#password').val(data.results.password);
 
                                     if(data.results.status_newsletter == 'ACTIVE') {
                                         $('#status_newsletter').attr('checked','checked')

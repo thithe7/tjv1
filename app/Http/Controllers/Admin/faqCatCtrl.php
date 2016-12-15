@@ -96,7 +96,7 @@ class faqCatCtrl extends adminCtrl {
                     '<center>'
                     . '<a href="javascript:;" data-id="' . $Fields->id . '" data-name="' . $Fields->name_en . '" data-parent="' . $Fields->parent . '" class="btn btn-xs btn-info btn-flat btn-editable" data-toggle="modal" data-target="#myModal" data-backdrop="static"><i class="fa fa-pencil"></i> Edit</a> '
                     . '<a href="javascript:;" data-id="' . $Fields->id . '" data-name="' . $Fields->name_en . '" data-parent="' . $Fields->parent . '" class="btn btn-xs btn-danger btn-flat btn-removable"><i class="fa fa-times"></i> Delete</a></center>'
-                );
+                    );
             }
         }
         echo json_encode($records);
@@ -122,7 +122,7 @@ class faqCatCtrl extends adminCtrl {
                 "name_id"   => $Fields->name_id,
                 "name_en"   => $Fields->name_en,
                 "parent"    => $Fields->parent
-            );
+                );
             $itemList[] = $item;
 
             $return["success"] = TRUE;
@@ -151,38 +151,44 @@ class faqCatCtrl extends adminCtrl {
         $name_en = ($request->input("name_en") != "") ? $request->input("name_en") : "";
         $parent = ($request->input("parent") != null) ? $request->input("parent") : null;
 
-        if ($mode_form == "tambah") {
-            if ($this->Chek_Data($id) == 0) {
-                DB::beginTransaction();
-                try {
-                    $this->insert($name_id, $name_en, $parent);
-                    DB::commit();
-                    $return["msgServer"] = "Save category success.";
-                    $return["success"] = TRUE;
-                } catch (Exception $e) {                    
-                    DB::rollback();
-                    $return["msgServer"] = "Save category failed. !!!";
+        //  Check kondisi inputan
+        if ($mode_form == "" || $mode_form == null || $name_id == "" || $name_id == null || $name_en == "" || $name_en == null) {
+            $return["msgServer"] = "Please fill the blank field.";
+            $return["success"] = FALSE;
+        } else {
+            if ($mode_form == "tambah") {
+                if ($this->Chek_Data($id) == 0) {
+                    DB::beginTransaction();
+                    try {
+                        $this->insert($name_id, $name_en, $parent);
+                        DB::commit();
+                        $return["msgServer"] = "Save category success.";
+                        $return["success"] = TRUE;
+                    } catch (Exception $e) {                    
+                        DB::rollback();
+                        $return["msgServer"] = "Save category failed. !!!";
+                        $return["success"] = FALSE;
+                    }
+                } else {
+                    $return["msgServer"] = "Sorry, category already exists. !!!";
                     $return["success"] = FALSE;
                 }
-            } else {
-                $return["msgServer"] = "Sorry, category already exists. !!!";
-                $return["success"] = FALSE;
-            }
-        } else if ($mode_form == "ubah") {
-            if ($this->Chek_Data($id) > 0) {
-                DB::beginTransaction();
-                try {
-                    $this->update($id, $name_id, $name_en, $parent);
-                    DB::commit();
-                    $return["msgServer"] = "Update category success.";
-                    $return["success"] = TRUE;
-                } catch (Exception $e) {                    
-                    DB::rollback();
-                    $return["msgServer"] = "Update category failed. !!!";
-                    $return["success"] = FALSE;
+            } else if ($mode_form == "ubah") {
+                if ($this->Chek_Data($id) > 0) {
+                    DB::beginTransaction();
+                    try {
+                        $this->update($id, $name_id, $name_en, $parent);
+                        DB::commit();
+                        $return["msgServer"] = "Update category success.";
+                        $return["success"] = TRUE;
+                    } catch (Exception $e) {                    
+                        DB::rollback();
+                        $return["msgServer"] = "Update category failed. !!!";
+                        $return["success"] = FALSE;
+                    }
+                } else {
+                    $error = "Sorry, category not found. !!!";
                 }
-            } else {
-                $error = "Sorry, category not found. !!!";
             }
         }
 
@@ -331,7 +337,7 @@ class faqCatCtrl extends adminCtrl {
             "parent"  => $parent,
             "created_at" => date("Y-m-d H:i:s"),
             "created_by" => Auth::guard('web_admin')->user()->id
-        );
+            );
 
         DB::table('m_kategori_faq')->insert($data);
     }
@@ -349,7 +355,7 @@ class faqCatCtrl extends adminCtrl {
             "parent"  => $parent,
             "updated_at"    => date("Y-m-d H:i:s"),
             "updated_by"    => Auth::guard('web_admin')->user()->id
-        );
+            );
 
         DB::table('m_kategori_faq')->where('id', $id)->update($data);
     }

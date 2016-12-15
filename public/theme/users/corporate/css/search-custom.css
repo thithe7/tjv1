@@ -1,0 +1,96 @@
+.paddingsetup{
+    padding-right: 30px;
+    padding-left: 30px;
+}
+.well {
+    background-color: #fff;
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 25px 10px 25px 10px !important;
+}
+.info:hover{
+    background-color:#f2f2f2;
+}   
+.paddingsetupsearch{
+    padding-right: 0px;
+    padding-left: 0px;
+} 
+.paddingsetupsearch{
+    padding-right: 0px;
+    padding-left: 0px;
+} 
+.no-text-decoration{
+    text-decoration: none !important;
+    color: #095668;
+}
+
+/* 2.2.10. Five Stars */
+.five-stars-container {
+    display: inline-block;
+    position: relative;
+    font-family: 'Glyphicons Halflings';
+    font-size: 14px;
+    text-align: left;
+    cursor: default;
+    white-space: nowrap;
+    line-height: 1.2em;
+    color: #dbdbdb; 
+}
+.five-stars-container .five-stars, .five-stars-container.editable-rating .ui-slider-range {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    padding-left: 1px; 
+}
+.five-stars-container .five-stars:before, .five-stars-container.editable-rating .ui-slider-range:before {
+    content: "\e006\e006\e006\e006\e006";
+    color: #fdb714; 
+}
+.five-stars-container .five-stars.transparent-bg, .five-stars-container.editable-rating .ui-slider-range.transparent-bg {
+    background: none; 
+}
+.five-stars-container:before {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 1px;
+    content: "\e006\e006\e006\e006\e006";
+    z-index: 0; 
+}
+
+.page-slider-custom{
+    margin-top: -23px;
+}
+
+.container-custom{
+    margin-bottom: 40px;
+}
+
+.star-active-custom{
+    color:#445987;
+}
+
+.star-nonactive-custom{
+    color:#dde1e2;
+}
+
+.tj-custom-btn{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.tj-custom-btn:focus { 
+    color: #ffffff !important; 
+    background-color: #145769 !important;
+}
+
+.tj-custom-font{
+    color:#095668;
+}
+
+.tj-custom-star-hotel{
+    color:#FFCC33;
+}

@@ -56,7 +56,7 @@ trait ParentCtrl {
     * Fungsi       : query halaman search untuk ambil data vendor
     * Tipe         : create
     */
-    public function getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page){
+    public function getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page, $tipe){
         $query=$this->getHotelInfinite($hotel_name, $star, $cekin, $amount, $amount2, $ketdbprice);
         //echo count($query);
         $hargabreakfast=0;
@@ -75,6 +75,22 @@ trait ParentCtrl {
             foreach ($query as $Fields) {
                 //ambil photo
                 $id=$Fields->id_hotel;
+                $valueformoney_rate=0;
+                $location_rate=0;
+                $cleanliness_rate=0;
+                $staff_rate=0;
+                $facilities_rate=0;
+                $review=0;
+                $queryreview = $this->getReview($id);
+                if(count($queryreview)>0){
+                    $valueformoney_rate=$queryreview->valueformoney_rate*10*2;
+                    $location_rate=$queryreview->location_rate*10*2;
+                    $cleanliness_rate=$queryreview->cleanliness_rate*10*2;
+                    $staff_rate=$queryreview->staff_rate*10*2;
+                    $facilities_rate=$queryreview->facilities_rate*10*2;
+                    $review=floatval(((($queryreview->valueformoney_rate+$queryreview->location_rate+$queryreview->cleanliness_rate+$queryreview->staff_rate+$queryreview->facilities_rate)/5)*100)/5);
+                    //$review=intval(($queryreview->valueformoney_rate+$queryreview->location_rate+$queryreview->cleanliness_rate+$queryreview->staff_rate+$queryreview->facilities_rate)/5);
+                }
                 $link = "http://localhost/tj/public/detail-hotel?id_hotel=".$id."&destination=".$destination."&checkin=".$cekin."&checkout=".$cekout."&breakfast=".$breakfast."&amenities=".$amenities;
                 $queryphoto = $this->getPhoto($Fields->id_hotel);
                 if(count($queryphoto)>0){
@@ -104,10 +120,10 @@ trait ParentCtrl {
                         $ketdbprice='best';  
                     }   
                 }
-                $queryprice = $this->getPrice($Fields->id_hotel, $cekin, $amount, $amount2, $ketdbprice);
+                $queryprice = $this->getPrice($Fields->id_hotel, $cekin, $amount, $amount2, $ketdbprice, $breakfast, $amenities);
                 if(count($queryprice)>0){
-                    $uang='IDR.';
-                    $book='<button type="submit" style="background-color:#095668;" class="btn btn-primary btn-block btn-md search-submit btn-tj">Book Now</button>';
+                    $uang='IDR ';
+                    $book='<button type="submit" class="btn btn-primary btn-tj trigger-search">Book Now</button>';
                     $labelsold='';
 
                     $best_value=$queryprice->best_value;
@@ -155,19 +171,20 @@ trait ParentCtrl {
                         }   
                     }
 
-                    if($breakfast!="" && $amenities!=""){
-                        $total=$bestprice;
+                    if($queryprice->vlm_value==0){
+                        $hargaambil=$best_value;
+                        $vlmdeals='';
                     }
-                    else{
-                        $total=$hargaambil+$hargabreakfast+$hargaamenities;
-                    }
+
+                    $total=$hargaambil+$hargabreakfast+$hargaamenities;
+
                     if($night!=0){
                         $harga_tampil_check=$total*$night;
-                        $harga_tampil=number_format($total*$night);
+                        $harga_tampil=number_format($total*$night,0,",",".");
                     }
                     else{
                         $harga_tampil_check=$total;
-                        $harga_tampil=number_format($total);   
+                        $harga_tampil=number_format($total,0,",",".");  
                     }
 
                     if($hargamaks<$harga_tampil_check){
@@ -200,16 +217,16 @@ trait ParentCtrl {
                     $uang='';
                     $harga_tampil='';
                     $book='<button class="btn btn-primary" style="background-color:#87949b;" disabled>Book Now</button>';
-                    $labelsold='<font color=red>(Sold Out)</font>';
+                    $labelsold='<font color=red>(Sold Out1)</font>';
                     $vlmdeals = "";
                 }
-
+                
                 //check star hotel
                 if($Fields->star_hotel!=""){
-                    $star='<i class="ficon ficon-star-'.$Fields->star_hotel.'"></i>';
+                    $star=$Fields->star_hotel;
                 }
                 else{
-                    $star='No Star';
+                    $star=0;
                 }
 
                 //check stop sell
@@ -218,50 +235,102 @@ trait ParentCtrl {
                     if ($checkStopSell->status==FALSE) {
                     }
                     else{
-                        $uang='';
-                        $best_value='';
                         $book='<button class="btn btn-primary" style="background-color:#87949b;" disabled>Book Now</button>';                        
-                        $labelsold='<font color=red>(Sold Out)</font>';
+                        $labelsold='<font color=red>(Sold Out2)</font>';
                     }
                 } else {
                 }
 
                 if ( $qty > 0 ) {
                 } else{
-                    $harga_tampil='';
-                    $uang='';
-                    $best_value='';
                     $book='<button class="btn btn-primary" style="background-color:#87949b;" disabled>Book Now</button>';   
-                    $labelsold='<font color=red>(Sold Out)</font>';
+                    $labelsold='<font color=red>(Sold Out3)</font>';
                 }
 
-                $data['records'][] = array(
-                    'harga_tampil'  =>$harga_tampil,
-                    'url'           =>url('detail-hotel'),
-                    'id_hotel'      =>$Fields->id_hotel,
-                    'address'       =>$Fields->address,
-                    'area'          =>$Fields->name_area,
-                    'destination'   =>$destination,
-                    'cekin'         =>$cekin,
-                    'cekout'        =>$cekout,
-                    'breakfast'     =>$breakfast,
-                    'amenities'     =>$amenities,
-                    'ketbreakfast'  =>$ketbreakfast,
-                    'ketamenities'  =>$ketamenities,
-                    'photo'         =>$photo,
-                    'name_hotel'    =>$Fields->name_hotel,
-                    'star'          =>$star,
-                    'uang'          =>$uang,
-                    'book'          =>$book,
-                    'vlmdeals'      =>$vlmdeals,
-                    'labelsold'     =>$labelsold,
-                    'link'          =>$link
-                );
+                if($labelsold!=""){
+                    $urutan=3;
+                }
+                elseif($vlmdeals!=""){
+                    $urutan=1;
+                }
+                else{
+                    $urutan=2;   
+                }
+                if($labelsold=="" && $tipe=="filter"){
+                    $data['records'][] = array(
+                        'urutan'             =>$urutan,
+                        'harga_tampil'       =>$harga_tampil,
+                        'url'                =>url('detail-hotel'),
+                        'id_hotel'           =>$Fields->id_hotel,
+                        'address'            =>$Fields->address,
+                        'area'               =>$Fields->name_area,
+                        'destination'        =>$destination,
+                        'cekin'              =>$cekin,
+                        'cekout'             =>$cekout,
+                        'breakfast'          =>$breakfast,
+                        'amenities'          =>$amenities,
+                        'ketbreakfast'       =>$ketbreakfast,
+                        'ketamenities'       =>$ketamenities,
+                        'photo'              =>$photo,
+
+                        'valueformoney_rate' =>$valueformoney_rate,
+                        'location_rate'      =>$location_rate,
+                        'cleanliness_rate'   =>$cleanliness_rate,
+                        'staff_rate'         =>$staff_rate,
+                        'facilities_rate'    =>$facilities_rate,
+                        'review'             =>$review,
+
+                        'name_hotel'         =>$Fields->name_hotel,
+                        'star'               =>$star,
+                        'uang'               =>$uang,
+                        'book'               =>$book,
+                        'vlmdeals'           =>$vlmdeals,
+                        'labelsold'          =>$labelsold,
+                        'link'               =>$link,
+                        'tipe'               =>$tipe
+                    );
+                }
+                else if($tipe=="search"){
+                    $data['records'][] = array(
+                        'urutan'             =>$urutan,
+                        'harga_tampil'       =>$harga_tampil,
+                        'url'                =>url('detail-hotel'),
+                        'id_hotel'           =>$Fields->id_hotel,
+                        'address'            =>$Fields->address,
+                        'area'               =>$Fields->name_area,
+                        'destination'        =>$destination,
+                        'cekin'              =>$cekin,
+                        'cekout'             =>$cekout,
+                        'breakfast'          =>$breakfast,
+                        'amenities'          =>$amenities,
+                        'ketbreakfast'       =>$ketbreakfast,
+                        'ketamenities'       =>$ketamenities,
+                        'photo'              =>$photo,
+
+                        'valueformoney_rate' =>$valueformoney_rate,
+                        'location_rate'      =>$location_rate,
+                        'cleanliness_rate'   =>$cleanliness_rate,
+                        'staff_rate'         =>$staff_rate,
+                        'facilities_rate'    =>$facilities_rate,
+                        'review'             =>$review,
+
+                        'name_hotel'         =>$Fields->name_hotel,
+                        'star'               =>$star,
+                        'uang'               =>$uang,
+                        'book'               =>$book,
+                        'vlmdeals'           =>$vlmdeals,
+                        'labelsold'          =>$labelsold,
+                        'link'               =>$link,
+                        'tipe'               =>$tipe
+                    );
+                }
             }
         }
         else{
             $data['records'] = array('');
         }
+        
+        asort($data['records']);
 
         $page = ! empty( $page ) ? (int) $page : 1;
         $total = count( $data['records'] ); //total items in array    
@@ -273,6 +342,24 @@ trait ParentCtrl {
         if( $offset < 0 ) $offset = 0;
         $data['records'] = array_slice( $data['records'], $offset, $limit );
 
+        return $data;
+    }
+
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 10-12-2016
+    * Fungsi       : ambil data review
+    * Tipe         : create
+    */
+    public function getReview($id = ""){
+        $query = DB::table('t_user_review');
+        $query->where('hotel_code','=',$id );
+        $query->where('valueformoney_rate', DB::raw("(select max(valueformoney_rate) from t_user_review)"));
+        $query->where('location_rate', DB::raw("(select max(location_rate) from t_user_review)"));
+        $query->where('cleanliness_rate', DB::raw("(select max(cleanliness_rate) from t_user_review)"));
+        $query->where('staff_rate', DB::raw("(select max(staff_rate) from t_user_review)"));
+        $query->where('facilities_rate', DB::raw("(select max(facilities_rate) from t_user_review)"));
+        $data = $query->first();
         return $data;
     }
 
@@ -322,24 +409,53 @@ trait ParentCtrl {
 
     /**
     * Programmer   : Thithe
+    * Tanggal      : 14-12-2016
+    * Fungsi       : check ikut VLM atau tidak
+    * Tipe         : create
+    */
+    public function checkVLM($id = "", $checkin = ""){
+        $query = DB::table('m_room');
+        $query->select(DB::raw('m_priment.vlm_value'));
+        $query->join('m_priment','m_room.id','=','m_priment.room');
+        $query->where('m_room.vendor','=',$id);
+        $query->where('m_priment.vlm_value','>',0);
+        $query->where('m_priment.valid_from','<=',$checkin);
+        $query->where('m_priment.valid_to','>=',$checkin);
+        $query->orderBy('m_priment.vlm_value','asc');
+        $data = $query->first();
+        return count($data);
+    }
+
+    /**
+    * Programmer   : Thithe
     * Tanggal      : 01-12-2016
     * Fungsi       : ambil harga vendor
     * Tipe         : create
     */
-    public function getPrice($id = "", $checkin = "", $amount = "", $amount2 = "", $ketdbprice = ""){
+    public function getPrice($id = "", $checkin = "", $amount = "", $amount2 = "", $ketdbprice = "", $breakfast = "", $amenities = ""){
         $query = DB::table('m_room');
         $query->select(DB::raw('m_room.*, m_priment.*, m_priment.id as id_priment'));
         $query->join('m_priment','m_room.id','=','m_priment.room');
-        $query->where('m_room.vendor','=',$id );
-        $query->where('m_priment.valid_from','<=',$checkin );
-        $query->where('m_priment.valid_to','>=',$checkin );
-        $query->where('m_priment.allotement','>',0 );
+        $query->where('m_room.vendor','=',$id);
+        $query->where('m_priment.valid_from','<=',$checkin);
+        $query->where('m_priment.valid_to','>=',$checkin);
         if($amount!="" && $amount2!=""){
             if($ketdbprice=="best"){
-                $query->whereBetween('best_value', [$amount, $amount2]);
+                $value='best_value';
+                if($breakfast!="" && $amenities=="") $query->whereRaw('m_priment.'.$value.'+m_priment.breakfast between '.$amount.' and '. $amount2); 
+                else if($breakfast=="" && $amenities!="") $query->whereRaw('m_priment.'.$value.'+m_priment.amenities between '.$amount.' and '. $amount2);
+                else if($breakfast!="" && $amenities!="") $query->whereRaw('m_priment.'.$value.'+m_priment.breakfast+m_priment.amenities between '.$amount.' and '. $amount2);
+                else $query->whereRaw('m_priment.'.$value.' between '.$amount.' and '. $amount2);
             }
             else{
-                $query->whereBetween('vlm_value', [$amount, $amount2]);
+                $vlm_check = $this->checkVLM($id, $checkin);
+                if($vlm_check>0) $value='vlm_value';
+                else $value='best_value';
+
+                if($breakfast!="" && $amenities=="") $query->whereRaw('m_priment.'.$value.'+m_priment.breakfast between '.$amount.' and '. $amount2); 
+                else if($breakfast=="" && $amenities!="") $query->whereRaw('m_priment.'.$value.'+m_priment.amenities between '.$amount.' and '. $amount2);
+                else if($breakfast!="" && $amenities!="") $query->whereRaw('m_priment.'.$value.'+m_priment.breakfast+m_priment.amenities between '.$amount.' and '. $amount2);
+                else $query->whereRaw('m_priment.'.$value.' between '.$amount.' and '. $amount2);
             }
         }
         $query->orderBy('m_priment.best_value','asc' );
@@ -392,7 +508,7 @@ trait ParentCtrl {
     */
     public function getHotelInfinite($hotel_name = "", $star = "", $checkin = "", $amount = "", $amount2 = "", $ketdbprice = ""){
         $query = DB::table('m_vendor');
-        $query->select(DB::raw('distinct m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_vendor.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_vendor.valid_from as valid_from, m_contract_vendor.valid_to as valid_to, m_timezones.TimeZone as timezone'));
+        $query->select(DB::raw('distinct m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_vendor.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_city.code as city_code, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_vendor.valid_from as valid_from, m_contract_vendor.valid_to as valid_to, m_timezones.TimeZone as timezone'));
         $query->join('m_room','m_room.vendor','=','m_vendor.id');
         $query->join('m_priment','m_room.id','=','m_priment.room');
         $query->join('m_contract_vendor','m_contract_vendor.vendor','=','m_vendor.id');

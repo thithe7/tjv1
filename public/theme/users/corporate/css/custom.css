@@ -14,19 +14,33 @@ label {
 	font-weight: 500;
 }
 
+.logo-header {
+	height: 36px;
+}
+
+.header-navigation ul li a {
+	color: #3e4d5c;
+}
+
+.langs-block-others {
+	background: #145769;
+	border-top: solid 2px #F68A1F;
+	min-width: 150px;
+}
+
 .nav-tabs {
-	border-color: #095668;
+	border-color: #145769;
 	font-size: 20px;
 }
 
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-	background: #095668;
+.nav-tabs li.active a, .nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
+	background: #145769;
 	color: #fff;
 	padding: 5px 15px 4px;
 }
 
 .pre-header {
-	background: #095668;
+	background: #145769;
 	color: #fff;
 }
 
@@ -36,11 +50,11 @@ label {
 }
 
 .pre-header a:hover {
-	color: #FF8A0B;
+	color: #F68A1F;
 }
 
 .pre-footer {
-	background: #095668;
+	background: #145769;
 	color: #fff;
 }
 
@@ -55,16 +69,16 @@ label {
 
 .pre-footer a {
 	text-decoration: none;
-	color: #fff;
+	color: #ddd;
 }
 
 .pre-footer a:hover {
-	color: #FF8A0B;
+	color: #F68A1F;
 }
 
 .footer {
 	background: #FFFFFF;
-	color: #095668;
+	color: #145769;
 	position: absolute;
 	bottom: 0;
 	right: 0;
@@ -76,15 +90,15 @@ label {
 }
 
 .footer a {
-	color: #095668;
+	color: #145769;
 }
 
 .footer a:hover {
-	color: #FF8A0B;
+	color: #F68A1F;
 }
 
 .sosmed {
-	background: #095668;
+	background: #145769;
 	padding: 2px !important;
 }
 
@@ -94,17 +108,23 @@ label {
 }
 
 .tjbutton {
-	background: #FF8A0B;
+	background: #F68A1F;
 }
 
 .btn-tj {
-	background: #095668;
+	background: #145769;
 	color: #FFFFFF;
 }
 
 .btn-tj:hover, .btn-tj:focus {
-	background: #FF8A0B;
+	background: #F68A1F;
 	color: #FFFFFF;
+}
+
+.btn-sold-out, .btn-sold-out:hover, .btn-sold-out:focus {
+	background: #87949B;
+	color: #FFFFFF;
+	cursor: auto;
 }
 
 table {
@@ -116,17 +136,17 @@ table tr th, table tr td {
 }
 
 blockquote {
-	border-left: solid 4px #FF8A0B;
-	background: #095668;
+	border-left: solid 4px #F68A1F;
+	background: #145769;
 	color: #fff;
 }
 
 div .blog-sidebar .panel{
-	border: solid 2px #095668;
+	border: solid 2px #145769;
 }
 
 div .blog-sidebar .panel .header-panel{
-	background: #095668;
+	background: #145769;
 	padding: 10px;
 	color: #fff;
 }
@@ -140,7 +160,7 @@ div .blog-sidebar .panel .nav li a{
 }
 
 div .blog-sidebar .panel .nav li:hover a, div .blog-sidebar .panel .nav .active a{
-	background: #095668;
+	background: #145769;
 	border-top: solid 1px #fff;
 	color: #fff;
 }
@@ -150,13 +170,339 @@ div .blog-sidebar .panel .nav li:hover a, div .blog-sidebar .panel .nav .active 
 }
 
 .bootstrap-switch-handle-on {
-	background: #095668 !important;
+	background: #145769 !important;
 }
 
 .bootstrap-switch-handle-off {
-	background: #FF8A0B !important;
+	background: #F68A1F !important;
 }
 
 input, select, textarea, .bootstrap-switch {
-	border-color: #095668 !important;
+	border-color: #145769 !important;
+}
+
+p1 {
+    font-family: 'SourceSansPro';
+    font-size: 26px !important;
+}
+
+p2 {
+    font-family: 'SourceSansPro';
+    font-size: 20px !important;
+}
+
+p3 {
+    font-family: 'SourceSansPro';
+    font-size: 16px !important;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : CSS untuk heading
+* Tipe         : Create
+*/
+
+h1 {
+    font-family: 'MontserratFont';
+    font-size: 32px !important;
+}
+h2 {
+    font-family: 'MontserratFont';
+    font-size: 26px !important;
+}
+h3 {
+    font-family: 'MontserratFont';
+    font-size: 20px !important;
+}
+h4 {
+    font-family: 'MontserratFont';
+    font-size: 16px !important;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : CSS untuk collapse di halaman form booking
+* Tipe         : Create
+*/
+.panel-style {
+	border: 0;
+}
+.panel-heading-style {
+	background-color: #fff !important;
+}
+.heading-style-in {
+	font-size: 26px;
+}
+.heading-style {
+	font-size: 18px;
+}
+.row-style {
+	padding-bottom: 20px;
+}
+.table-details tr td {
+	padding: 0 10px 5px 0;
+}
+.hotel-details {
+	padding-left: 0;
+}
+.price-book {
+	text-align: right;
+}
+hr { 
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: 1px solid #ddd;
+} 
+.total-price {
+	padding-bottom: 10px;
+}
+.content-details {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.err, .suc {
+    display: none;
+}
+.err { color: red;}
+.suc { color: green;}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : CSS untuk image slider di halaman detail hotel
+* Tipe         : Create
+*/
+
+.imgslider {
+    max-height: 600px;
+    width: 100%; 
+    z-index: 0;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : CSS untuk informasi hotel di halaman detail hotel
+* Tipe         : Create
+*/
+.name-hotel {
+	padding-top: 10px;
+}
+.star-hotel {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.address-hotel {
+	font-style: italic;
+}
+.info-hotel {
+	padding-top: 30px;
+}
+.listroom-section {
+    padding-top: 5px;
+    padding-bottom: 20px;
+    background-color: #EBEBEB;
+}
+.room-section {
+    font-family: 'MontserratFont';
+    padding: 0 15px;
+    margin: 15px auto 0;
+    background-color: #fff;
+    box-shadow: 0 3px 2px rgba(86,86,86,.15);
+    width: 90%;
+    text-align: center;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : CSS untuk deskripsi hotel di halaman detail hotel
+* Tipe         : Create
+*/
+
+.about-hotel-section {
+    padding: 0 15px;
+    margin: 15px auto 0;
+    background-color: #fff;
+    box-shadow: 0 3px 2px rgba(86,86,86,.15);
+    width: 90%;
+    line-height: 2em;
+}
+.title-detail {
+	padding-bottom: 20px;
+	font-size: 20px;
+	font-weight: bold;
+}
+.about-details {
+	padding: 40px 30px 40px 30px;
+}
+.about-section {
+	padding-bottom: 20px;
+}
+.space-section {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.space-title {
+	font-weight: bold;
+}
+.btn-showmore {
+	cursor: pointer;
+}
+.morecollapse {
+	font-color: #f68alf;
+	font-weight: bold;
+}
+.houseinfo p {
+	text-indent: 20px;
+	margin-bottom: 0;
+	line-height:1.5em;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : button book now halaman detail
+* Tipe         : Create
+*/
+
+.btn-book-detail {
+	width: 140px;
+	height: 34px;
+	background-color: #145769;
+	font-family: 'MontserratFont';
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.42857;
+}
+.btn-book-detail:hover {
+	width: 140px;
+	height: 34px;
+	background-color: #F68A1F;
+	font-family: 'MontserratFont';
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.42857;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : button login
+* Tipe         : Create
+*/
+
+.col-title {
+	float: left;
+	color: #145769;
+}
+.signin {
+	display: block;
+	float: right;
+	background-color: #145769;
+	width: 100%;
+	height: 34px;
+	font-size: 14px;
+    line-height: 1.42857143;
+    color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.1), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.signin:hover {
+	display: block;
+	float: right;
+	background-color: #F68A1F;
+	width: 100%;
+	height: 34px;
+	font-size: 14px;
+    line-height: 1.42857143;
+    color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.15), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : warna * untuk required di halaman book
+* Tipe         : Create
+*/
+
+.span-required {
+	color: red;
+}
+
+/**
+* Programmer   : Ima
+* Tanggal      : 07-12-2016
+* Fungsi       : tabel invoice dan font grand total pada invoice
+* Tipe         : Create
+*/
+
+table thead tr td {
+	font-size: 16px;
+}
+
+.height {
+    min-height: 150px;
+}
+
+.icon {
+    font-size: 47px;
+    color: #5CB85C;
+}
+
+.iconbig {
+    font-size: 77px;
+    color: #5CB85C;
+}
+
+.table > tbody > tr > .emptyrow {
+    border-top: none;
+}
+
+.table > thead > tr > .emptyrow {
+    border-bottom: none;
+}
+
+.table > tbody > tr > .highrow {
+    border-top: 3px solid;
+}
+.row-padding {
+    padding-top: 20px;
+}
+.logo-inv {
+    width: 200px; 
+    float: left;
+}
+.h1-inv {
+    float: right; 
+    margin-top: 0
+}
+.msg-done {
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	color: #000;
+}
+.inv-header {
+	padding-top: 20px;
+}
+
+.grand-total {
+	font-size: 24px;
+}
+
+.text-right {
+	text-align: right;
+	float: right;
+}
+.float-center {
+	margin-right: 200px;
+	margin-left: 200px;
 }

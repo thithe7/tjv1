@@ -1,19 +1,12 @@
 @extends('layout.userLayout')
 @section('content')
+@section('css')
 <link href="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-<style type="text/css">
-    ul {
-        list-style-type: none;
-    }
-    .paddingsetup{
-        padding-right: 30px;
-        padding-left: 30px;
-    }   
-</style>
-
-<div class="page-slider" style="margin-top: -23px;">
+<link href="{{ URL::asset('theme/users/corporate/css/search-custom.css') }}" rel="stylesheet"/>
+@endsection
+<div class="page-slider page-slider-custom">
     <div id="carousel-example-generic" class="carousel slide carousel-slider">
-        <div class="container" style="margin-bottom: 40px;">
+        <div class="container container-custom">
             <br>
             <div class="col-md-3">
                 <div class="filter-list-header div-styles">
@@ -30,7 +23,7 @@
                     <br>
                     <div class="input-group">
                         <label>When</label>
-                        <input type="text" class="form-control" name="when" id="when" placeholder="When are you going?" value="{{$when}}">
+                        <input type="text" class="form-control" name="when" id="when" placeholder="When are you going?" value="{{$when}}" readonly="readonly">
                         <input type="hidden" class="form-control" name="checkin" id="checkin" value="{{$cekin}}">
                         <input type="hidden" class="form-control" name="checkout" id="checkout" value="{{$cekout}}">
                     </div>
@@ -64,7 +57,7 @@
                     </div>
                     <br>
                     <div class="input-group">
-                        <button style="background-color:#095668; font-size: 18px;" class="btn btn-primary btn-block btn-lg search-submit btn-tj">Search</button>
+                        <button class="btn btn-primary btn-block btn-lg search-submit_filter btn-tj trigger-search tj-custom-btn">Search</button>
                     </div>
                 </form>
                 <br>
@@ -82,14 +75,43 @@
                     </div>
                     <br>
                     <div class="input-group">
-                        <label>Price Range</label>
-                        <div align="center">
-                            <input type="text" class="" id="amount" readonly style="border: none;color:#f6931f; font-weight:bold;border-color: transparent;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Price Range</label>
+                            </div>
                         </div>
-                        <input type='hidden' name='amount' id="amountmin">
-                        <input type='hidden' name='amount2' id="amountmax">
+                        <div class="row">
+                            <div class="col-md-6">
+                                Min Price
+                            </div>
+                            <div class="col-md-6">
+                                Max Price
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type='hidden' class="form-control number" value="0" name='amount' id="amountmin" onkeyup="return rangeslider();">
+                            </div>
+                            <div class="col-md-6">
+                                <input type='hidden' class="form-control number" value="{{$getdata['hargamaks']}}" name='amount2' id="amountmax" onkeyup="return rangeslider();">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type='text' class="form-control number" value="0" name='tampilamount' id="tampilamountmin" onClick="this.setSelectionRange(0, this.value.length)">
+                            </div>
+                            <div class="col-md-6">
+                                <input type='text' class="form-control number" value="{{$getdata['hargamaks']}}" name='tampilamount2' id="tampilamountmax" onClick="this.setSelectionRange(0, this.value.length)">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="slider-range"></div>
+                            </div>
+                        </div>
+
                         <input type='hidden' id="maxharga" name='maxharga' value="{{$getdata['hargamaks']}}">
-                        <div id="slider-range"></div>
                     </div>
                     <br>
                     <div class="input-group">
@@ -97,47 +119,47 @@
                         <br>
                         <label>
                             <input type="checkbox" class="checkhome" name="star_rating5" id="star_rating5" value="1" checked /> &nbsp;&nbsp;&nbsp;
-                            <i class="fa fa-star" style="color:#445987;" title="5 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="5 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="5 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="5 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="5 star"></i>
+                            <i class="fa fa-star star-active-custom" title="5 star"></i>
+                            <i class="fa fa-star star-active-custom" title="5 star"></i>
+                            <i class="fa fa-star star-active-custom" title="5 star"></i>
+                            <i class="fa fa-star star-active-custom" title="5 star"></i>
+                            <i class="fa fa-star star-active-custom" title="5 star"></i>
                         </label>
                         <br>
                         <label>
                             <input type="checkbox" class="checkhome" name="star_rating4" id="star_rating4" value="1" checked/> &nbsp;&nbsp;&nbsp;
-                            <i class="fa fa-star" style="color:#445987;" title="4 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="4 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="4 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="4 star"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
+                            <i class="fa fa-star star-active-custom" title="4 star"></i>
+                            <i class="fa fa-star star-active-custom" title="4 star"></i>
+                            <i class="fa fa-star star-active-custom" title="4 star"></i>
+                            <i class="fa fa-star star-active-custom" title="4 star"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
                         </label>
                         <br>
                         <label>
                             <input type="checkbox" class="checkhome" name="star_rating3" id="star_rating3" value="1" checked/> &nbsp;&nbsp;&nbsp;
-                            <i class="fa fa-star" style="color:#445987;" title="3 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="3 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="3 star"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
+                            <i class="fa fa-star star-active-custom" title="3 star"></i>
+                            <i class="fa fa-star star-active-custom" title="3 star"></i>
+                            <i class="fa fa-star star-active-custom" title="3 star"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
                         </label>
                         <br>
                         <label>
                             <input type="checkbox" class="checkhome" name="star_rating2" id="star_rating2" value="1" checked/> &nbsp;&nbsp;&nbsp;
-                            <i class="fa fa-star" style="color:#445987;" title="2 star"></i>
-                            <i class="fa fa-star" style="color:#445987;" title="2 star"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
+                            <i class="fa fa-star star-active-custom" title="2 star"></i>
+                            <i class="fa fa-star star-active-custom" title="2 star"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
                         </label>
                         <br>
                         <label>
                             <input type="checkbox" class="checkhome" name="star_rating1" id="star_rating1" value="1" checked/> &nbsp;&nbsp;&nbsp;
-                            <i class="fa fa-star" style="color:#445987;" title="1 star"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
-                            <i class="fa fa-star-o" style="color:#dde1e2"></i>
+                            <i class="fa fa-star star-active-custom" title="1 star"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
+                            <i class="fa fa-star-o star-nonactive-custom"></i>
                         </label>
                         <br>
                         <label>
@@ -147,7 +169,7 @@
                     </div>
                     <br>
                     <div class="input-group">
-                        <button style="background-color:#095668; font-size: 18px;" class="btn btn-primary btn-block btn-lg search-submit_filter btn-tj">Filter</button>
+                        <button class="btn btn-primary btn-block btn-lg search-submit_filter btn-tj trigger-search tj-custom-btn">Filter</button>
                     </div>
                 </div>
             </div>
@@ -162,15 +184,18 @@
                 <input type="hidden" id="max_page" value="{{$getdata['totalPages']}}" />
                 <div id="end_of_page" class="center">
                     <hr/>
-                    <span>You've reached the end of the hotel.</span>
+                    <span></span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="{{ URL::asset('theme/users/plugins/jquery.min.js') }}" type="text/javascript"></script>
+@endsection
+@section('jsfile')
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript"></script>
 <script src="{{ URL::asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
+@endsection
+@section('jsload')
 <script>
     /**
     * Programmer   : Thithe
@@ -242,26 +267,60 @@
 
     /**
     * Programmer   : Thithe
-    * Tanggal      : 08-12-2016
-    * Fungsi       : fungsi untuk range slider
+    * Tanggal      : 13-12-2016
+    * Fungsi       : fungsi change slider dari text
     * Tipe         : create
     */
-    $(function() {
-        $("#slider-range").slider({
-            range: true,
-            min: 0,
-            max: $('#maxharga').val(),
-            values: [0, $('#maxharga').val()],
-            slide: function(event, ui) {
-                $("#amount").val("IDR. " + ui.values[0] + " - IDR. " + ui.values[1]);
-                $("#amountmin").val(ui.values[0]);
-                $("#amountmax").val(ui.values[1]);
+    function rangeslider() {
+        var nilai1=parseInt($("#amountmin").val());
+        var nilai2=parseInt($("#amountmax").val());
+        var maxharga=parseInt($('#maxharga').val());
+        var amountmax = $('#amountmax').val();
+        $('#tampilamountmax').val(amountmax.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+        if(nilai1>nilai2){
+            nilai1=nilai2;
+            $("#amountmin").val(nilai1);
+        }
+        if(nilai1>maxharga){
+            nilai1=maxharga;
+            $("#amountmin").val(nilai);
+        }
+        if(nilai2>maxharga){
+            nilai2=maxharga;
+            $("#amountmax").val(nilai2);
+        }
+        $(function() {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: $('#maxharga').val(),
+                values: [0, $('#maxharga').val()],
+                slide: function(event, ui) {
+                    $("#amount").val("IDR. " + ui.values[0] + " - IDR. " + ui.values[1]);
+                    $("#amountmin").val(ui.values[0]);
+                    var amountmin = $('#amountmin').val();
+                    $('#tampilamountmin').val(amountmin.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                    $("#amountmax").val(ui.values[1]);
+                    var amountmax = $('#amountmax').val();
+                    $('#tampilamountmax').val(amountmax.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                }
+            });
+            $("#amount").val("IDR. " + nilai1 + " - IDR. " + nilai2);
+            if(nilai1>0){
+                $("#slider-range").slider('values',0,nilai1);
             }
-        });
-        $("#amount").val("IDR. " + $("#slider-range").slider("values", 0) +
-            " - IDR. " + $("#slider-range").slider("values", 1));
-    });
+            if(nilai2<maxharga){
+                $("#slider-range").slider('values',1,nilai2);
+            }
+        }); 
+    }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi update page
+    * Tipe         : create
+    */
     function pageCountUpdate() {
         var page = parseInt($('#page').val());
         var max_page = parseInt($('#max_page').val());
@@ -274,6 +333,12 @@
         }
     }
 
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi update content
+    * Tipe         : create
+    */
     function getPosts() {
         var page = parseInt($('#page').val());
         var breakfast = $('#breakfast').val();
@@ -298,7 +363,13 @@
         });
     } 
 
-    function getData(){
+    /**
+    * Programmer   : Thithe
+    * Tanggal      : 08-12-2016
+    * Fungsi       : fungsi ammbil data ke controller
+    * Tipe         : create
+    */
+    function getData(tipe){
         $('#content').html();
         var data = "";
         $("#content").hide().html(data).fadeIn('fast');
@@ -358,7 +429,8 @@
                 hotel_name: $hotel_name,
                 amount: $amount,
                 amount2: $amount2,
-                star: $star
+                star: $star,
+                tipe: tipe,
             },
             beforeSend: function() { 
                 $('#content').append("<div id='loading' class='center'>Loading news items...</div>");
@@ -371,10 +443,127 @@
             }
         });
     }
+
     $(document).ready(function() {
-        getData();
+        var tipe='search';
+        getData(tipe);
+        rangeslider();
+
+        /**
+        * Programmer   : Thithe
+        * Tanggal      : 08-12-2016
+        * Fungsi       : fungsi filter search
+        * Tipe         : create
+        */
         $('body').on('click', '.search-submit_filter', function() {
-            getData();
+            var tipe='filter';
+            getData(tipe);
+        });
+        
+        /**
+        * Programmer   : Thithe
+        * Tanggal      : 14-12-2016
+        * Fungsi       : fungsi setting format money number dan setting ke slider min price
+        * Tipe         : create
+        */
+        $('body').on('keyup', '#tampilamountmin', function() {
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40){
+                event.preventDefault();
+            }
+            
+            var checkval0 = $(this).val();
+            var res = checkval0.substring(0,1);
+            if( res == "0"){
+                $(this).val(0);
+            }
+
+            $(this).val(function(index, value) {
+                return value
+                .replace(/\D/g, "")
+                .replace(/([0-9])([0-9]{0})$/, '$1')  
+                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+                ;
+            });
+            var a = $(this).val();
+            a=a.replace(/\,/g,'');
+            a=parseInt(a,10);    
+            $('#amountmin').val(a);
+
+            var nilai1=parseInt($("#amountmin").val());
+            var nilai2=parseInt($("#amountmax").val());
+            var maxharga=parseInt($('#maxharga').val());
+            if(nilai1>nilai2){
+                nilai1=nilai2;
+                $("#amountmin").val(nilai1);
+
+                var amountmin = $('#amountmin').val();
+                $('#tampilamountmin').val(amountmin.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                toastr.error("Min Price Can't higher Than Max Price");
+            }
+            if(nilai1>maxharga){
+                nilai1=maxharga;
+                $("#amountmin").val(nilai);
+
+                var amountmin = $('#amountmin').val();
+                $('#tampilamountmin').val(amountmin.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+            }
+
+            $("#slider-range").slider('values',0,nilai1);
+
+        });
+
+        /**
+        * Programmer   : Thithe
+        * Tanggal      : 14-12-2016
+        * Fungsi       : fungsi setting format money number dan setting ke slider max price
+        * Tipe         : create
+        */
+        $('body').on('keyup', '#tampilamountmax', function() {
+            // skip for arrow keys
+            if(event.which >= 37 && event.which <= 40){
+                event.preventDefault();
+            }
+
+            var checkval0 = $(this).val();
+            var res = checkval0.substring(0,1);
+            if( res == "0"){
+                $(this).val(0);
+            }           
+            
+            $(this).val(function(index, value) {
+                return value
+                .replace(/\D/g, "")
+                .replace(/([0-9])([0-9]{0})$/, '$1')  
+                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+                ;
+            });
+            var a = $(this).val();
+            a=a.replace(/\,/g,'');
+            a=parseInt(a,10);
+            
+            $('#amountmax').val(a);
+
+            var nilai1=parseInt($("#amountmin").val());
+            var nilai2=parseInt($("#amountmax").val());
+            var maxharga=parseInt($('#maxharga').val());
+            if(nilai1>nilai2){
+                nilai2=nilai1;
+                $("#amountmax").val(nilai1);
+                var amountmax = $('#amountmax').val();
+                $('#tampilamountmax').val(amountmax.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                toastr.error("Max Price Can't Smaller Than Min Price");
+            }
+            if(nilai2>maxharga){
+                nilai2=maxharga;
+                $("#amountmax").val(nilai2);
+                
+                var amountmax = $('#amountmax').val();
+                $('#tampilamountmax').val(amountmax.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+            }
+
+            $("#slider-range").slider('values',1,nilai2);
+
         });
     });
 </script>

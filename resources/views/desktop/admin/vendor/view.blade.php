@@ -1,34 +1,5 @@
 @extends("layout.adminLayout")
-
-
-
 @section('content')
-
-<!-- <br>
-
-<div class="col-xs-12">
-
-  <div class="nav-tabs-custom">
-
-    <ul class="nav nav-pills">
-
-      <li class="active"><a href="{!! url('/admin/hotel') !!}">Hotel</a></li>
-
-      <li><a href="{!! url('/admin/room') !!}">Room</a></li>
-
-      <li><a href="{!! url('/admin/price') !!}">Room Price</a></li>
-
-    </ul>
-
-  </div>
-
-</div>
-
-<br>
-
-<br>
-
- -->
 
 <link rel="stylesheet" href="{{ URL::asset('theme/admin/plugins/select2/select2.min.css') }}">
 
@@ -37,8 +8,6 @@
     <h1>
 
       Vendor
-
-
 
     </h1>
 
@@ -75,13 +44,6 @@
           <div class="modal-body">
 
 
-
-
-
-
-
-
-
 <div>
 
               <div class="nav-tabs-custom">
@@ -102,22 +64,14 @@
 
                   <div class="tab-pane active" id="roomsetup">
 
-
-
-
-
                     <section id="new">
 
                     <div class="box box-primary">
 
                 <!-- form start -->
 
-
-
                     <div class="box-body">
-
                       
-
                                   <div class="row">
 
               <div class="col-md-6">
@@ -1451,51 +1405,51 @@
 
           ignore: "",
 
-          rules: {
+          // rules: {
 
-            mode_form: {
+          //   mode_form: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            country_hotel: {
+          //   country_hotel: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            city_hotel: {
+          //   city_hotel: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            name_hotel: {
+          //   name_hotel: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            email_hotel: {
+          //   email_hotel: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            telephone_hotel: {
+          //   telephone_hotel: {
 
-                required: true
+          //       required: true
 
-            },
+          //   },
 
-            area_hotel: {
+          //   area_hotel: {
 
-                required: true
+          //       required: true
 
-            }
+          //   }
 
-          },
+          // },
 
           invalidHandler: function (event, validator) { //display error alert on form submit
 

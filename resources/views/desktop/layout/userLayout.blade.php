@@ -30,7 +30,6 @@
 	<link href="{{ URL::asset('theme/users/pages/css/slider.css') }}" rel="stylesheet">
 	<link href="{{ URL::asset('theme/users/corporate/css/style.css') }}" rel="stylesheet"/>
 	<link href="{{ URL::asset('theme/users/corporate/css/style-responsive.css') }}" rel="stylesheet"/>
-	<link href="{{ URL::asset('theme/users/corporate/css/custom.css') }}" rel="stylesheet"/>
 	<!-- Theme styles END -->
 	<link href="{{ URL::asset('theme/users/plugins/toastr/toastr.min.css') }}" rel="stylesheet"/>
 	<link href="{{ URL::asset('theme/users/plugins/DataTables-1.10.12/media/css/dataTables.bootstrap.min.css') }}" rel="stylesheet"/>
@@ -38,10 +37,12 @@
 	<link href="{{ URL::asset('assets/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet">
 	<link href="{{ URL::asset('assets/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
 
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-
 	<!-- bxSlider CSS file -->
 	<link href="{{ URL::asset('theme/users/plugins/bxslider/jquery.bxslider.css') }}" rel="stylesheet" />
+
+    @yield('css')
+
+	<link href="{{ URL::asset('theme/users/corporate/css/custom.css') }}" rel="stylesheet"/>
 </head>
 <!-- Head END -->
 
@@ -67,7 +68,7 @@
 						<li class="langs-block">
 							<a href="javascript:void(0);" class="current">Rp - IDR</a>
 							<div class="langs-block-others-wrapper">
-								<div class="langs-block-others" style="background: #095668;">
+								<div class="langs-block-others">
 									<a href="javascript:void(0);">$ - USD</a>
 								</div>
 							</div>
@@ -77,7 +78,7 @@
 						<li class="langs-block">
 							<a href="javascript:void(0);" class="current"><span class="flag-icon flag-icon-us"></span> English</a>
 							<div class="langs-block-others-wrapper">
-								<div class="langs-block-others" style="background: #095668; min-width: 150px;">
+								<div class="langs-block-others">
 									<a href="javascript:void(0);"><span class="flag-icon flag-icon-id"></span> Indonesia</a>
 								</div>
 							</div>
@@ -85,7 +86,7 @@
 						<!-- END LANGS -->
 						@if(Auth::guard('web_users')->user())
 						<li><a href="{{ url('profile') }}" style="text-decoration: none;">Profile</a></li>
-						<li><a href="javascript:;" style="text-decoration: none;" data-toggle="modal" data-target="#myModal" data-keyboard="false" data-backdrop="static"><img src="{{ URL::asset('assets/images/help.png') }}" alt="How to use?" height="15px;"> TJ Point = <b>{{{number_format(Session::get('total_point'), 0, ',', '.')}}}</b></a></li>
+						<li><a href="javascript:;" style="text-decoration: none;" data-toggle="modal" data-target="#myModal" data-keyboard="false" data-backdrop="static"><i class="fa fa-question-circle"></i>TJ Point = <b>{{{number_format(Session::get('total_point'), 0, ',', '.')}}}</b></a></li>
 						<li><a href="{{ url('logout') }}">Log Out</a></li>
 						@else
 						<li><a href="{{ url('login') }}">Log In</a></li>
@@ -102,19 +103,16 @@
 	<div class="header">
 		<div class="container">
 			<a class="site-logo" href="{{ url('/') }}">
-				<img src="{{ URL::asset('assets/images/traveljinni-logo-icon.png') }}" alt="TraelJinni" style="height: 36px;">
+				<img class="logo-header" src="{{ URL::asset('assets/images/traveljinni-logo-icon.png') }}" alt="Travel Jinni">
 			</a>
-
 			<a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
-
 			<!-- BEGIN NAVIGATION -->
 			<div class="header-navigation pull-right font-transform-inherit">
 				<ul>
-					<li><a href="{{ url('/') }}"><font style="font-family: 'MontserratFont'">HOME</font></a></li>
-					<li><a href="{{ url('about-traveljinni') }}"><font style="font-family: 'MontserratFont'">ABOUT US</font></a></li>
-					<li><a href="{!! url('faq') !!}"><font style="font-family: 'MontserratFont'">FAQ</font></a></li>
-					<li><a href="{!! url('career-traveljinni') !!}"><font style="font-family: 'MontserratFont'">CAREER</font></a></li>
-					<li><a href="{!! url('contact-traveljinni') !!}"><font style="font-family: 'MontserratFont'">CONTACT US</font></a></li>
+					<li><a href="{{ url('/') }}">HOME</a></li>
+					<li><a href="{{ url('about') }}">ABOUT US</a></li>
+					<li><a href="{!! url('faq') !!}">FAQ</a></li>
+					<li><a href="{!! url('contact') !!}">CONTACT US</a></li>
 				</ul>
 			</div>
 			<!-- END NAVIGATION -->
@@ -244,6 +242,7 @@
 
 	<!-- bxSlider Javascript file -->
 	<script src="{{ URL::asset('theme/users/plugins/bxslider/jquery.bxslider.min.js') }}"></script>
+    @yield('jsfile')
 
     <script type="text/javascript">
     	$.ajaxSetup({
@@ -296,6 +295,7 @@
         });
     	$('.make-switch').bootstrapSwitch();
     </script>
+    @yield('jsload')
     <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

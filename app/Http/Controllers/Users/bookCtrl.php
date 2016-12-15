@@ -11,6 +11,7 @@ use App;
 use Auth;
 use DB;
 use Mail;
+use File;
 
 class bookCtrl extends Controller {    
     /**
@@ -29,117 +30,124 @@ class bookCtrl extends Controller {
     public function index(Request $request){
         $id = $request->input('id_hotel');
 
-        if($id==""){
-            return Redirect('/');
-        }
+        if($id=="") return Redirect('/');
 
-        $id_room = $request->input('id_room');
-        $night=$request->get('night');
-        $jml_kamar=$request->get('jml_kamar');
-        $checkin=date('Y-m-d',strtotime($request->get('checkin')));
-        $checkout = date('Y-m-d',strtotime($request->get('checkout')));
-        $breakfast=$request->input('breakfast');
-        $amenities=$request->input('amenities');
+        $id_room    = $request->input('id_room');
+        $night      = $request->get('night');
+        $jml_kamar  = $request->get('jml_kamar');
+        $checkin    = date('Y-m-d',strtotime($request->get('checkin')));
+        $checkout   = date('Y-m-d',strtotime($request->get('checkout')));
+        $breakfast  = $request->input('breakfast');
+        $amenities  = $request->input('amenities');
 
-        $data['room'] = $this->getInfoRoom($id_room);
-        $data['price'] = $this->getDataRoom($id, $id_room, $checkin);
-        $data['photo'] = $this->getPhoto($id);
-        $data['hotel'] = $this->getHotelDetail($id);
+        $data['room']   = $this->getInfoRoom($id_room);
+        $data['price']  = $this->getDataRoom($id, $id_room, $checkin);
+        $data['photo']  = $this->getPhoto($id);
+        $data['hotel']  = $this->getHotelDetail($id);
         $data['config'] = $this->getConfig();
+        $data['input']  = array(
+                            "id"        => $id,
+                            "id_room"   => $id_room,
+                            "night"     => $night,
+                            "jml_kamar" => $jml_kamar,
+                            "checkin"   => $checkin,
+                            "checkout"  => $checkout,
+                            "breakfast" => $breakfast,
+                            "amenities" => $amenities
+                        );
 
-        // echo "<pre>";
-        // print_r($data['config']);
-        // echo "</pre>";
-        // die;
+        $data['point']      = (Auth::guard('web_users')->user())?$this->getTotalPoint(Auth::guard('web_users')->user()->id):0;
 
-        $data['redeem'] = $data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value;
-        $data['redeemback'] = 'If You check you will use '.$data['hotel']->point_back.' TJ Point. If Not Check it will be add to your TJ Point ('.$data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value.')';
-        $data['get'] = 'This TJ Point get from total price. (IDR. '.$data['config']->point_value.' = '.$data['config']->point.' TJ Point)';
-        $data['getback'] = $data['hotel']->point_back.' TJ Point back get from this hotel ('.$data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value.')';
-        $data['link'] = "http://traveljinni.com/tj/public/detail-hotel?id_hotel=".$id."&destination=".$request->input('destination')."&checkin=".$request->input('checkin')."&checkout=".$request->input('checkout')."&breakfast=".$request->input('breakfast')."&amenities=".$request->input('amenities');
+        $data['redeem']     = $data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value; 
+
+        $data['redeemback'] = 'If You check you will use '.$data['hotel']->point_back.' TJ Point. If Not Check it will be add to your TJ Point ('.$data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value.')';  
+
+        $data['get']        = 'This TJ Point get from total price. (IDR. '.$data['config']->point_value.' = '.$data['config']->point.' TJ Point)';
+
+        $data['getback']    = $data['hotel']->point_back.' TJ Point back get from this hotel ('.$data['config']->redeem.' TJ Point = IDR. '.$data['config']->redeem_value.')';
                 
-        $best_value=$data['price']->best_value;
-        $hargabreakfast=0;
-        $hargaamenities=0;
+        $best_value         = $data['price']->best_value;
+        $hargabreakfast     = ($breakfast=="")?0:$hargabreakfast=$data['price']->breakfast;
+        $hargaamenities     = ($amenities=="")?0:$hargaamenities=$data['price']->amenities;
 
-        if($breakfast!=""){
-            $hargabreakfast=$data['price']->breakfast;
-        }
-        
-        if($amenities!=""){
-            $hargaamenities=$data['price']->amenities;
-        }
-
-        $bestprice=$best_value+$data['price']->breakfast+$data['price']->amenities;
-        $ambiljam=date('H:i:s');
-        $tanggallastminutesawal = date('H:i:s', strtotime($data['config']->vlm_from));
-        $tanggallastminutesakhir = date('H:i:s', strtotime($data['config']->vlm_to));
+        $bestprice                  = $best_value+$data['price']->breakfast+$data['price']->amenities;
+        $tanggallastminutesawal     = date('H:i:s', strtotime($data['config']->vlm_from));
+        $tanggallastminutesakhir    = date('H:i:s', strtotime($data['config']->vlm_to));
+        $HotelTimezone              = $this->getHotelTimezone($id);
         
         //checkbetween
-        $now=strtotime($ambiljam);
-        $from=strtotime($data['config']->vlm_from);
-        $to=strtotime($data['config']->vlm_to);
-        if($from>=$to){
-            if($now<=$from && $now<=$to){
-                $hargaambil=$data['price']->vlm_value;   
-            }
-            else{
-                $hargaambil=$best_value;    
-            }
-        }
-        else{
-            if($now>=$from && $now<=$to){
-                $hargaambil=$data['price']->vlm_value;    
-            }
-            else{
-                $hargaambil=$best_value;   
-            }   
-        }
+        $date       = new \DateTime("now", new \DateTimeZone($HotelTimezone->timezone));
+        $curtime    = $date->format("H:i:s");
+        $now        = strtotime($curtime);
+        $from       = strtotime($data['config']->vlm_from);
+        $to         = strtotime($data['config']->vlm_to);
 
-        if($breakfast!="" && $amenities!=""){
-            $total=$bestprice;
-        }
-        else{
-            $total=$hargaambil+$hargabreakfast+$hargaamenities;
-        }
+        if($from >= $to) $hargaambil    = ($now <= $from && $now <= $to) ? $data['price']->vlm_value : $best_value;
+        else $hargaambil                = ($now >= $from && $now <= $to) ? $data['price']->vlm_value : $best_value;
+
+        $total      = ($breakfast!="" && $amenities!="") ? $bestprice : $hargaambil+$hargabreakfast+$hargaamenities;
 
         if($night!=0){
-            $data['subtotal']=number_format($total*$night);
-            $data['total']=number_format($total*$jml_kamar*$night);
-            $data['subtotalnormal']=$total*$night;
-            $data['totalnormal']=$total*$jml_kamar*$night;
-            $totalakhir=$total*$jml_kamar*$night;
+            $data['subtotal']       = number_format($total*$night);
+            $data['total']          = number_format($total*$jml_kamar*$night);
+            $data['subtotalnormal'] = $total*$night;
+            $data['totalnormal']    = $total*$jml_kamar*$night;
+            $totalakhir             = $total*$jml_kamar*$night;
         }
         else{
-            $night=1;
-            $data['subtotal']=number_format($total);
-            $data['total']=number_format($total*$jml_kamar);
-            $data['subtotalnormal']=$total;
-            $data['totalnormal']=$total*$jml_kamar;   
-            $totalakhir=$total*$jml_kamar;
+            $night                  = 1;
+            $data['subtotal']       = number_format($total);
+            $data['total']          = number_format($total*$jml_kamar);
+            $data['subtotalnormal'] = $total;
+            $data['totalnormal']    = $total*$jml_kamar;   
+            $totalakhir             = $total*$jml_kamar;
         }
 
         if(!Auth::guest()){
-            $iduser=Auth::user()->id;
-            $data['jmlpoint'] = $this->getTotalPoint($iduser);         
-            $data['user'] = $this->getUser();
+            $iduser             = Auth::user()->id;
+            $data['jmlpoint']   = $this->getTotalPoint($iduser);         
+            $data['user']       = $this->getUser();
         }
         
-        $data['pointtotal']=intval($totalakhir/$data['config']->point_value);
+        $data['pointtotal']     = intval($totalakhir/$data['config']->point_value);
 
-        $act="";
-        $msg="";
-        if(!Auth::guard('web_users')->guest()){
-            $cekactivation = DB::table('m_user')
-                ->select('statusconfirm')
-                ->where('id', Auth::guard('web_users')->user()->id)
-                ->first();
-            $act=$cekactivation->statusconfirm;
-        }
+        return view('users/book/view', compact('data'));
+    }
 
-        if($act == 'need confirm') $msg="Your account hasn't been verified. Please check your email to verify your account.";
+    /**
+    * Programmer   : Ima
+    * Tanggal      : 08-12-2016
+    * Fungsi       : menampilkan info timezone dari hotel
+    * Tipe         : create
+    */
 
-        return view('users/book/view', compact('data', 'id', 'id_room', 'destination','checkin','checkout','night','breakfast','amenities','jml_kamar','id_room', 'msg'));
+    public function getHotelTimezone($id_hotel = ""){
+        $query = DB::table('m_vendor');
+        $query->select('m_timezones.timezone');
+        $query->join('m_area','m_area.id','=','m_vendor.area');
+        $query->join('m_city','m_city.id','=','m_area.city');
+        $query->join('m_timezones','m_city.timezones','=','m_timezones.id');
+        $query->where('m_vendor.id', '=', $id_hotel);
+
+        $data = $query->first();
+
+        return $data;
+    }
+
+    /**
+    * Programmer   : Ima
+    * Tanggal      : 08-12-2016
+    * Fungsi       : menampilkan info user
+    * Tipe         : update
+    */
+   
+    public function getUser(){
+        $query = DB::table('m_user');
+        $query->where('id','=',Auth::user()->id );
+
+        $data = $query->first();
+
+        return $data;
     }
 
     /**
@@ -293,60 +301,56 @@ class bookCtrl extends Controller {
 
     public function post_book(Request $request)
     {
-        $det_inv=array();
+        $det_inv        = array();
 
-        $id_hotel = $request->input('id_hotel');
-        $id_room = $request->input('id_room');
-        $checkin = $request->input('checkin');
-        $checkout = $request->input('checkout');
-        $breakfast = $request->input('breakfast');
-        $amenities = $request->input('amenities');
-        $jml_kamar = $request->input('jml_kamar');
-        $subtotal = $request->input('subtotal');
-        $total = $request->input('total');
-        $name = $request->input('loginName');
-        $email = $request->input('loginEmail');
-        $phoneNumber = $request->input('loginMobile');
-        $point = $request->input('point');
-        $point_back = $request->input('point_back');
-        $point_backstatus = $request->input('point_backstatus');
+        $id_hotel       = $request->input('id_hotel');
+        $id_room        = $request->input('id_room');
+        $checkin        = $request->input('checkin');
+        $checkout       = $request->input('checkout');
+        $breakfast      = $request->input('breakfast');
+        $amenities      = $request->input('amenities');
+        $jml_kamar      = $request->input('jml_kamar');
+        $subtotal       = $request->input('subtotal');
+        $total          = $request->input('total');
+        $name           = $request->input('loginName');
+        $email          = $request->input('loginEmail');
+        $phoneNumber    = $request->input('loginMobile');
+        $point          = $request->input('point');
+        $point_back     = $request->input('point_back');
+        $tjpb           = $request->input('TJPB');
 
-        $breakfast_price=0;
-        $pointtotal=0;
-        $amenities_price=0;
+        $point_backstatus   = ($tjpb > 0) ? 1 : 0;
 
-        if(Auth::guest()){
-            $iduser=0;
-        }
-        else{
-            $iduser=Auth::user()->id;
-        }        
+        $breakfast_price    = 0;
+        $amenities_price    = 0;
 
-        if($breakfast!=="" || $amenities!==""){
-            $getDataRoom=$this->getDataRoom($id_hotel, $id_room, $checkin);
+        $pointtotal         = 0;
+        $kurangpoint        = 0;
+        $kurangpointback    = 0;
+
+        $iduser     = (Auth::guest()) ? 0 : Auth::user()->id;
+
+        if($breakfast != "" || $amenities != ""){
+            $getDataRoom    = $this->getDataRoom($id_hotel, $id_room, $checkin);
 
             if(count($getDataRoom)>0){
-                if($breakfast!==""){
-                    $breakfast_price=$getDataRoom->breakfast;
-                }
-                if($amenities!==""){
-                    $amenities_price=$getDataRoom->amenities;
-                }
+                if($breakfast != "") $breakfast_price = $getDataRoom->breakfast;
+                if($amenities != "") $amenities_price = $getDataRoom->amenities;
             }
         }
 
         //insert m_booking
         DB::beginTransaction();
         try {
-            $checkallotment=$this->checkAllotment($id_room, $checkin);
-            if(count($checkallotment)>0){
-                $checkdailyallotment=$this->checkDailyAllotment($checkallotment->id, $checkin);
-                if(count($checkdailyallotment)>0){
-                    $dailyallotment=$checkdailyallotment->allotment;
-                    $total_allotment=$checkallotment->allotement;
+            $checkallotment = $this->checkAllotment($id_room, $checkin);
+            if(count($checkallotment) >= $jml_kamar){
+                $checkdailyallotment    = $this->checkDailyAllotment($checkallotment->id, $checkin);
+                if(count($checkdailyallotment) >= $jml_kamar){
+                    $dailyallotment     = $checkdailyallotment->allotment;
+                    $total_allotment    = $checkallotment->allotement;
 
-                    $newdailyallotment=$dailyallotment-$jml_kamar;
-                    $newtotal_allotment=$total_allotment-$jml_kamar;
+                    $newdailyallotment  = $dailyallotment-$jml_kamar;
+                    $newtotal_allotment = $total_allotment-$jml_kamar;
                     
                     //update table daily_allotment
                     $dataupdate = array(
@@ -364,19 +368,13 @@ class bookCtrl extends Controller {
                 }
             }
 
-            $kurangpoint=0;
-            $kurangpointback=0;
-            $id_inv = 0;
-
             //generate invoice code
             $cek_booking = DB::table('m_booking')->orderBy('id', 'desc')
                   ->first();
 
-            if(count($cek_booking)>0){
-                $id_inv = $cek_booking->id;  
-            } 
+            $id_inv     = (count($cek_booking)>0) ? $cek_booking->id : 0; 
+            $code_inv   = "TJB".date('Ym').substr(10001+$id_inv,1);
 
-            $code_inv="TJB".date('Ym').substr(10001+$id_inv,1);
             if($point_backstatus=="") $point_back = 0;
 
             $insert = array(
@@ -406,9 +404,6 @@ class bookCtrl extends Controller {
             $query = DB::table('m_booking');
             $query->where('invoice_code','=', $code_inv);
             $data = $query->first();
-
-            $kurangpoint=0;
-            $kurangpointback=0;
             
             for($i=1;$i<=$jml_kamar;$i++){
                 $insert = array(
@@ -423,20 +418,21 @@ class bookCtrl extends Controller {
             }
 
             if(!Auth::guest()){
-                $checkpoint=$this->getConfig(); //ambil nilai kelipatan untuk mengalikan poin jadi rupiah
+                $checkpoint = $this->getConfig(); //ambil nilai kelipatan untuk mengalikan poin jadi rupiah
                 $totalpoint = $this->getTotalPoint($iduser); //ambil total point user
                 
                 //dapat point back dari hotel
                 if($point_back>0 && $point_backstatus!=""){
-                    $kurangpointback=$point_back*$checkpoint->redeem_value; //poin dalam rupiah
+                    $kurangpointback = $point_back*$checkpoint->redeem_value; //poin dalam rupiah
                 }
 
                 if($point>0 && $point<=$totalpoint){ //menggunakan point sendiri
-                    if($point_backstatus=="") {
-                        $kurangpoint=$point*$checkpoint->redeem_value;
-                    } else { 
-                        $kurangpoint=($point+$point_back)*$checkpoint->redeem_value;
-                        $point_back=0;
+                    if($point_backstatus!="") { //jika tidak use point back
+                        $kurangpoint = $point*$checkpoint->redeem_value;
+                    } else { //jika use point back
+                        $kurangpoint = ($point+$point_back)*$checkpoint->redeem_value;
+                        $point_back  = 0;
+                        $point       = 0;
                     }
 
                     $insert = array(
@@ -451,8 +447,8 @@ class bookCtrl extends Controller {
                 }
                 else{//tidak menggunakan point sendiri dan use point back
                     if($point_backstatus!="") {
-                        $kurangpoint=($point_back)*$checkpoint->redeem_value;
-                        $point_back=0;
+                        $kurangpoint = ($point_back)*$checkpoint->redeem_value;
+                        $point_back  = 0;
                     }
                 }
 
@@ -473,7 +469,7 @@ class bookCtrl extends Controller {
                 DB::table('m_point')->insert($insert);
             }
 
-            $sell_price=$total-$kurangpoint;
+            $sell_price     = $total-$kurangpoint;
             if($sell_price!=$total || $kurangpoint>0){
                 $dataupdate = array(
                     "sell_price"    => floatval($sell_price),
@@ -486,10 +482,10 @@ class bookCtrl extends Controller {
 
         } catch (Exception $e) {
             DB::rollback();
-            $return["msgServer"] = "Sorry, Delete Data was failed.";
+            $return["msgServer"] = "Sorry, your transaction was failed.";
             $return["success"] = false;
         }
-        return Redirect('/transdone/'.$data->id);
+        return redirect('/transdone/'.$data->id);
     }
 
     /**
@@ -573,98 +569,91 @@ class bookCtrl extends Controller {
     */
    
     public function transdone($id = ""){
-        $invoice = $this->getTransaction($id);
+        $invoice    = $this->getTransaction($id);
 
-        $id_invoice=$invoice->id;
-        $id_room=$invoice->room;
-        $id_hotel=$invoice->id_hotel;
-        $checkin=$invoice->checkin;
-        $checkout=$invoice->checkout;
-        $breakfast=$invoice->breakfast;
-        $amenities=$invoice->amenities;
+        $id_invoice = $invoice->id;
+        $id_room    = $invoice->room;
+        $id_hotel   = $invoice->id_hotel;
+        $checkin    = $invoice->checkin;
+        $checkout   = $invoice->checkout;
+        $breakfast  = $invoice->breakfast;
+        $amenities  = $invoice->amenities;
+        $night = ((abs(strtotime (date("Y-m-d", strtotime($checkout))) - strtotime (date("Y-m-d", strtotime($checkin)))))/(60*60*24));
         
-        $hotellink = "http://traveljinni.com/tj/public/detail-hotel?id_hotel=".$id_hotel."&destination=bali&checkin=".$checkin."&checkout=".$checkout."&breakfast=".$breakfast."&amenities=".$amenities;
+        $hotellink  = "http://traveljinni.com/tj/public/detail-hotel?id_hotel=".$id_hotel."&destination=bali&checkin=".$checkin."&checkout=".$checkout."&breakfast=".$breakfast."&amenities=".$amenities;
 
-        $detail = $this->getTransactionDetail($id_invoice, $id_room);
-        $point = $this->useM_PointTransdone($id_invoice); //point yang digunakan untuk trx
-        $pointget = $this->getM_PointTransdone($id_invoice); //poin yang didapatkan dari trx
+        $detail     = $this->getTransactionDetail($id_invoice, $id_room);
+        $cekpoint   = $this->useM_PointTransdone($id_invoice);
+        $point      = ($cekpoint=="") ? 0 : $cekpoint->total_point; //point yang digunakan untuk trx
+        $pointget   = $this->getM_PointTransdone($id_invoice); //poin yang didapatkan dari trx
 
-        $data=array();
-        $config=$this->getConfig();
+        $getpoint   = (!empty($pointget)) ? $pointget->total_point : 0;
+
+        $data       = array();
+        $config     = $this->getConfig();
       
-        $data[] = [
+        $data = array(
             "payment_date"          => date('D, M d Y', strtotime($invoice->created_at)),
             "booking_invoice"       => $invoice->invoice_code,
             "fullname"              => $invoice->name_pemesan,
             "email"                 => $invoice->email_pemesan,
             "cellphone"             => $invoice->telp_pemesan,
             "total_sell_price"      => $invoice->sell_price,
+            "original_price"        => $invoice->original_price,
             "checkin"               => $invoice->checkin,
             "checkout"              => $invoice->checkout,
+            "night"                 => $night,
             "hotel_name"            => $invoice->hotel_name,
             "room_category_name"    => $invoice->room_category_name,
+            "breakfast"             => ($invoice->breakfast_price>0) ? "IDR ".number_format($invoice->breakfast_price) : "-",
+            "amenities"             => ($invoice->amenities_price>0) ? "IDR ".number_format($invoice->amenities_price) : "-",
             "id"                    => $invoice->id,
             "status"                => $invoice->status,
-            // "voucher"               => $invoice->voucher,
             "sell_price"            => $invoice->sell_price,
-            "qty"                   => $invoice->qty
-        ];
+            "qty"                   => $invoice->qty,
+            "hotel_name"            => $invoice->hotel_name,
+            "address"               => $invoice->address,
+            "telephone_hotel"       => $invoice->telephone_hotel,
+            "email_hotel"           => $invoice->email_hotel,
+            "website_hotel"         => $invoice->website_hotel,
+            "tjpoint"               => $point,
+            "tjpoint_back"          => $invoice->point_back,
+            "tjpoint_rp"            => $point*$config->redeem_value,
+            "tjpointback_rp"        => $invoice->point_back*$config->redeem_value,
+            "point_get"             => $getpoint
+        );
+
         $return['results'] = $data;
 
-        $act="";
-        $msg="";
-        if(!Auth::guard('web_users')->guest()){
-            $cekactivation = DB::table('m_user')
-                ->select('statusconfirm')
-                ->where('id', Auth::guard('web_users')->user()->id)
-                ->first();
-            $act=$cekactivation->statusconfirm;
-        }
-
-        if($act == 'need confirm') $msg="Your account hasn't been verified. Please check your email to verify your account.";
-
-        $hotel_name=$invoice->hotel_name;
-        $name_pemesan=$invoice->name_pemesan;
-        $email=$invoice->email_pemesan;
-
-        // $pdf = App::make('dompdf.wrapper');
-        // $pdf->loadView('users/invoice',compact('data','id','invoice','jinni','detail','voucher','point','pointget','hotellink', 'msg'));
-        // $pdf->setPaper('A4')->setOrientation('potrait');
-        // $pdf->save(storage_path()."/Invoice_".$booking_invoice.".pdf");
+        $hotel_name     = $invoice->hotel_name;
+        $email          = $invoice->email_pemesan;
+        $code_inv       = $invoice->invoice_code;
 
         $emaildata = array(
             'logo'      => 'http://traveljinni.com/tj/public/assets/images/traveljinni-logo-icon.png',
-            'login'     => 'http://traveljinni/tj/public/login',
-            'heading'   => 'TRAVEL JINNI Booking '.' '.$hotel_name,
             'data'      => $data,
-            'id'        => $id,
-            'invoice'   => $invoice,
-            'config'    => $config,
-            'detail'    => $detail,
             'hotellink' => $hotellink,
-            // 'voucher'   => $voucher,
-            'point'     => $point,
-            'pointget'  => $pointget,
-            'content'   => 'Hai '.$name_pemesan.',<br/><br/>
-                            Terima kasih atas kepercayaan Anda dalam menggunakan Booking Hotel Online Travel Jinni <br/>
-                            Mohon untuk tidak membalas email ini.<br/>
-                            Jika Anda memerlukan informasi lebih lanjut, silahkan hubungi Customer Service Travel Jinni di nomor telepon '.$config->office_phone.', atau kirimkan e-mail ke: '.$config->office_email.'<br/><br/>
-                            Hormat kami,<br/>
-                            Travel Jinni<br/><br/>
- 
-                            Hi '.$name_pemesan.',<br/><br/>
-                            We would like to thank you for using Travel Jinni Online Hotel Booking.<br/>
-                            Please do not reply to this email.<br/>
-                            Should you need more information or assistance, please call Travel Jinni Customer Service at '.$config->office_phone.', or email to: '.$config->office_email.'<br/><br/>
+            'content'   => 'Hi '.$invoice->name_pemesan.',<br/><br/>
+                            We would like to thank you for using Travel Jinni Online Hotel Booking.<br/>Please check the attached booking information.<br/>',
+            'footer'    =>'Please do not reply to this email.<br/>
+                            If you need more information or assistance, please call Travel Jinni Customer Service at '.$config->office_phone.', or email to: '.$config->office_email.'<br/><br/>
                             Yours Sincerely,<br/>
                             Travel Jinni'
         );
 
-        // Mail::send('users.invoice.view', $emaildata, function ($message) use ($email,$hotel_name) {
-        //     $message->from('info@traveljinni.com', 'Admin Travel Jinni');
-        //     $message->to('imasohibah@gmail.com')->subject('TRAVEL JINNI Booking '.' '.$hotel_name);
-        // });
+        $pdf = App::make('snappy.pdf.wrapper');
+        $pdf->loadView('users.book.invoice_pdf', compact('data', 'hotellink'));
+        //$pdf->setPaper('a4')->setOrientation('landscape');
+        $pdf->save(storage_path()."/Invoice_".$code_inv.".pdf");
+
+        Mail::send('users.book.invoice_mail', $emaildata, function ($message) use ($email,$code_inv) {
+            $message->from('info@traveljinni.com', 'Admin Travel Jinni');
+            $message->to($email)->subject('TRAVEL JINNI Booking '.$code_inv);
+            $message->attach(storage_path().'/Invoice_'.$code_inv.'.pdf');
+        });
+        
+        File::delete(storage_path()."/Invoice_".$code_inv.".pdf");
             
-        return view('users/book/transdone', compact('data','id','invoice','config','detail','voucher','point','pointget','hotellink', 'msg'));
+        return view('users/book/transdone', compact('data','hotellink'));
     }
 }

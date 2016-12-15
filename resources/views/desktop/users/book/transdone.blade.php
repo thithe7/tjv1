@@ -7,55 +7,35 @@
 		</div>
 
 	    <div class="row"><hr>
-	        <div class="col-xs-12">
+	        <div class="col-lg-12">
 	            <div class="text-center">
 	                <div class="row row-padding">
-	                    <div class="col-lg-6">
+	                    <div class="col-md-6">
 	                        <img src="{{ URL::asset('assets/images/traveljinni-logo-icon.png') }}" class="logo-inv">
 	                    </div>
-	                    <div class="col-lg-6 pull-right">
-	                        <h1 class="h1-inv">Invoice #{{{ $data[0]['booking_invoice'] }}}</h1>
+	                    <div class="col-md-6 text-right">
+	                        <strong>Travel Jinni</strong><br>
+                            Denpasar Bali<br>
+                            080000000 - 080000000
 	                    </div>
 	                </div>
 	            </div>
 	            
 	            <div class="row inv-header">
-	                <div class="col-xs-12 col-md-4 pull-left">
-	                    <div class="panel panel-default height">
-	                        <div class="panel-heading">
-	                        	<strong>Invoice Details</strong>
-	                        </div>
-	                        <div class="panel-body">
-	                            <strong>Invoice : </strong>#Invoice #{{{ $data[0]['booking_invoice'] }}}<br>
-	                            <strong>Issued : </strong>{{{ $data[0]['payment_date'] }}}<br>
-	                            <strong>Paid Using : </strong>Credit Card
-	                        </div>
-	                    </div>
+	                <div class="col-md-6">
+	                	<strong>Invoice : </strong>#{{{ $data['booking_invoice'] }}}<br>
+                        <strong>Issued : </strong>{{{ $data['payment_date'] }}}<br>
+                        <strong>Paid Using : </strong>Credit Card<br>
+                        <strong>Guest Name : </strong>{{{ $data['fullname'] }}}<br>
+                        <strong>Guest Email: </strong>{{{ $data['email'] }}}<br>
+                        <strong>Guest Phone: </strong>{{{ $data['cellphone'] }}}
 	                </div>
-	                <div class="col-xs-12 col-md-4">
-	                    <div class="panel panel-default height">
-	                        <div class="panel-heading">
-	                        	<strong>From</strong>
-	                        </div>
-	                        <div class="panel-body">
-	                            <strong>Travel Jinni</strong><br>
-	                            Denpasar Bali<br>
-	                            080000000<br>
-	                            080000000<br>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="col-xs-12 col-md-4">
-	                    <div class="panel panel-default height">
-	                        <div class="panel-heading">
-	                        	<strong>To</strong>
-	                        </div>
-	                        <div class="panel-body">
-	                            <strong>{{{ $data[0]['fullname'] }}}</strong><br>
-	                            {{{ $data[0]['email'] }}}<br>
-	                            {{{ $data[0]['cellphone'] }}}
-	                        </div>
-	                    </div>
+	                <div class="col-md-6 text-right">
+	                	<strong>Hotel : </strong><a href="{{{ $hotellink }}}" target="_BLANK">{{{ $data['hotel_name'] }}}</a><br>
+                        <strong>Address : </strong>{{{ $data['address'] }}}<br>
+                        <strong>Phone : </strong>{{{ $data['telephone_hotel'] }}} <br>
+                        <strong>Email : </strong>{{{ $data['email_hotel'] }}} <br>
+                        <strong>Website : </strong>{{{ $data['website_hotel'] }}}
 	                </div>
 	            </div>
 	        </div>
@@ -64,7 +44,7 @@
 	        <div class="col-md-12">
 	            <div class="panel panel-default">
 	                <div class="panel-heading">
-	                    <h3 class="text-center"><strong>Order summary</strong></h3>
+	                    <h3 class="text-center"><strong>Order Summary</strong></h3>
 	                </div>
 	                <div class="panel-body">
 	                    <div class="table-responsive">
@@ -72,7 +52,8 @@
 	                            <thead>
 	                                <tr>
 	                                    <td><strong>Room Type</strong></td>
-	                                    <td class="text-center"><strong>Meals</strong></td>
+	                                    <td class="text-center"><strong>Breakfast</strong></td>
+	                                    <td class="text-center"><strong>Amenities</strong></td>
 	                                    <td class="text-center"><strong>Quantity</strong></td>
 	                                    <td class="text-right"><strong>Rate</strong></td>
 	                                </tr>
@@ -80,74 +61,60 @@
 	                            <tbody>
 	                                <tr>
 	                                    <td>
-	                                        {{{ $data[0]['hotel_name'] }}} - {{{ $data[0]['room_category_name'] }}}<br>
-	                                        Check In : {{{ date("D, M d Y", strtotime($data[0]['checkin'])) }}}<br>
-	                                        Check Out : {{{ date("D, M d Y", strtotime($data[0]['checkout'])) }}}
+	                                        {{{ $data['hotel_name'] }}} - {{{ $data['room_category_name'] }}}<br>
+	                                        Check In : {{{ date("D, M d Y", strtotime($data['checkin'])) }}}<br>
+	                                        Check Out : {{{ date("D, M d Y", strtotime($data['checkout'])) }}}
 	                                    </td>
-	                                    <td class="text-center">Room Only</td>
-	                                    <td class="text-center">{{{ $data[0]['qty'] }}}</td>
-	                                    <td class="text-right">IDR. {{{ number_format($data[0]['sell_price']) }}}</td>
-	                                </tr><hr>
+	                                    <td class="text-center">{{{ $data['breakfast'] }}}</td>
+	                                    <td class="text-center">{{{ $data['amenities'] }}}</td>
+	                                    <td class="text-center">{{{ $data['qty'] }}}</td>
+	                                    <td class="text-right">IDR. {{{ number_format($data['sell_price']) }}}</td>
+	                                </tr>
 	                                <tr>
 	                                    <td></td>
 	                                    <td></td>
-	                                    <td class="text-center"><strong>Total</strong></td>
-	                                    <td class="text-right">IDR. {{{ number_format($data[0]['total_sell_price']) }}}</td>
+	                                    <td></td>
+	                                    <td class="text-right" colspan="2"><strong>Sub Total</strong></td>
+	                                    <td class="text-right">IDR. {{{ number_format($data['total_sell_price']) }}}</td>
 	                                </tr>
+	                                <tr>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td class="text-right" colspan="2"><strong>Use TJ Point ({{{ $data['tjpoint'] }}})</strong></td>
+	                                    <td class="text-right">- IDR. {{{ number_format($data['tjpoint_rp']) }}}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td class="text-right" colspan="2"><strong>Use TJ Point Back ({{{ $data['tjpoint_back'] }}})</strong></td>
+	                                    <td class="text-right">- IDR. {{{ number_format($data['tjpointback_rp']) }}}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td></td>
+	                                    <td class="text-right grand-total" colspan="2"><strong>GRAND TOTAL</strong></td>
+	                                    <td class="text-right grand-total">IDR. {{{ number_format($data['total_sell_price']) }}}</td>
+	                                </tr>
+	                                @if($data['point_get'] > 0)
+		                                <tr>
+		                                    <td></td>
+		                                    <td></td>
+		                                    <td></td>
+		                                    <td class="text-right" colspan="2"><strong>You get TJ Point :</strong></td>
+		                                    <td class="text-right">{{{ $data['point_get'] }}}</td>
+		                                </tr>
+		                            @endif
 	                            </tbody>
 	                        </table>
+	                        <label class="span-required">*Tax included <br>
+							*Please checkin before 2PM at Thu, Dec 15 2016 and checkout before 12pm at Fri, Dec 16 2016 </label>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
 	    </div>
 	</div>
-
-	<style>
-	    .height {
-	        min-height: 150px;
-	    }
-
-	    .icon {
-	        font-size: 47px;
-	        color: #5CB85C;
-	    }
-
-	    .iconbig {
-	        font-size: 77px;
-	        color: #5CB85C;
-	    }
-
-	    .table > tbody > tr > .emptyrow {
-	        border-top: none;
-	    }
-
-	    .table > thead > tr > .emptyrow {
-	        border-bottom: none;
-	    }
-
-	    .table > tbody > tr > .highrow {
-	        border-top: 3px solid;
-	    }
-	    .row-padding {
-	        padding-top: 20px;
-	    }
-	    .logo-inv {
-	        width: 200px; 
-	        float: left;
-	    }
-	    .h1-inv {
-	        float: right; 
-	        margin-top: 0
-	    }
-	    .msg-done {
-	    	text-align: center;
-	    	padding-top: 20px;
-	    	padding-bottom: 20px;
-	    	color: #000;
-	    }
-	    .inv-header {
-	    	padding-top: 20px;
-	    }
-	</style>
 @endsection

@@ -95,7 +95,7 @@ class faqListCtrl extends adminCtrl {
                     '<center>'
                     . '<a href="javascript:;" data-id="' . $Fields->id . '" data-name="' . $Fields->id . '" class="btn btn-xs btn-info btn-flat btn-editable" data-toggle="modal" data-target="#myModal" data-backdrop="static"><i class="fa fa-pencil"></i> Edit</a> '
                     . '<a href="javascript:;" data-id="' . $Fields->id . '" data-name="' . $Fields->id . '" class="btn btn-xs btn-danger btn-flat btn-removable"><i class="fa fa-times"></i> Delete</a></center>'
-                );
+                    );
             }
         }
         echo json_encode($records);
@@ -123,7 +123,7 @@ class faqListCtrl extends adminCtrl {
                 "answer_id" => $Fields->answer_id,
                 "question_en" => $Fields->question_en,
                 "answer_en" => $Fields->answer_en
-            );
+                );
             $itemList[] = $item;
 
             $return["success"] = TRUE;
@@ -153,38 +153,44 @@ class faqListCtrl extends adminCtrl {
         $answer_id = ($request->input("answer_id") != "") ? $request->input("answer_id") : "";
         $question_en = ($request->input("question_en") != "") ? $request->input("question_en") : "";
         $answer_en = ($request->input("answer_en") != "") ? $request->input("answer_en") : "";
-
-        if ($mode_form == "tambah") {
-            if ($this->Chek_Data($id) == 0) {
-                DB::beginTransaction();
-                try {
-                    $this->insert($category, $question_id, $answer_id, $question_en, $answer_en);
-                    DB::commit();
-                    $return["msgServer"] = "Save FAQ success.";
-                    $return["success"] = TRUE;
-                } catch (Exception $e) {                    
-                    DB::rollback();
-                    $return["msgServer"] = "Save FAQ failed. !!!";
-                    $return["success"] = FALSE;
+        
+        //  Check kondisi inputan
+        if ($mode_form == "" || $mode_form == null || $category == "" || $category == null || $question_id == "" || $question_id == null || $answer_id == "" || $answer_id == null || $question_en == "" || $question_en == null || $answer_en == "" || $answer_en == null) {
+            $return["msgServer"] = "Please fill the blank field.";
+            $return["success"] = FALSE;
+        } else {
+            if ($mode_form == "tambah") {
+                if ($this->Chek_Data($id) == 0) {
+                    DB::beginTransaction();
+                    try {
+                        $this->insert($category, $question_id, $answer_id, $question_en, $answer_en);
+                        DB::commit();
+                        $return["msgServer"] = "Save FAQ success.";
+                        $return["success"] = TRUE;
+                    } catch (Exception $e) {                    
+                        DB::rollback();
+                        $return["msgServer"] = "Save FAQ failed. !!!";
+                        $return["success"] = FALSE;
+                    }
+                } else {
+                    $error = "Sorry, FAQ already exists. !!!";
                 }
-            } else {
-                $error = "Sorry, FAQ already exists. !!!";
-            }
-        } else if ($mode_form == "ubah") {
-            if ($this->Chek_Data($id) > 0) {
-                DB::beginTransaction();
-                try {
-                    $this->update($id, $category, $question_id, $answer_id, $question_en, $answer_en);
-                    DB::commit();
-                    $return["msgServer"] = "Update FAQ success.";
-                    $return["success"] = TRUE;
-                } catch (Exception $e) {                    
-                    DB::rollback();
-                    $return["msgServer"] = "Update FAQ failed. !!!";
-                    $return["success"] = FALSE;
+            } else if ($mode_form == "ubah") {
+                if ($this->Chek_Data($id) > 0) {
+                    DB::beginTransaction();
+                    try {
+                        $this->update($id, $category, $question_id, $answer_id, $question_en, $answer_en);
+                        DB::commit();
+                        $return["msgServer"] = "Update FAQ success.";
+                        $return["success"] = TRUE;
+                    } catch (Exception $e) {                    
+                        DB::rollback();
+                        $return["msgServer"] = "Update FAQ failed. !!!";
+                        $return["success"] = FALSE;
+                    }
+                } else {
+                    $error = "Sorry, FAQ not found. !!!";
                 }
-            } else {
-                $error = "Sorry, FAQ not found. !!!";
             }
         }
 
@@ -339,7 +345,7 @@ class faqListCtrl extends adminCtrl {
             "answer_en"     => $answer_en,
             "created_at"    => date("Y-m-d H:i:s"),
             "created_by"    => Auth::guard('web_admin')->user()->id
-        );
+            );
 
         DB::table('t_faq')->insert($data);
     }
@@ -359,7 +365,7 @@ class faqListCtrl extends adminCtrl {
             "answer_en"     => $answer_en,
             "updated_at"    => date("Y-m-d H:i:s"),
             "updated_by"    => Auth::guard('web_admin')->user()->id
-        );
+            );
 
         DB::table('t_faq')->where('id', $id)->update($data);
     }

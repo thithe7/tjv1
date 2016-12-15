@@ -182,8 +182,8 @@ class HotelCtrl extends adminCtrl
     */
     function List_Data($id_hotel= "") {
         $query = DB::table('m_vendor');
-        $query->select(DB::raw('m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_hotel.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_hotel.valid_from as valid_from, m_contract_hotel.valid_to as valid_to'));
-        $query->join('m_contract_hotel','m_contract_hotel.hotel','=','m_vendor.id');
+        $query->select(DB::raw('m_vendor.id as id_hotel, m_vendor.code as hotel_code,m_contract_vendor.cut_of_date as cod_hotel, m_vendor.name as name_hotel, m_city.name as name_city, m_vendor.star_rate as star_hotel, m_country.name as name_country, m_vendor.address, m_vendor.phone as telephone_hotel, m_vendor.email as email_hotel, m_vendor.lat as latitude_hotel, m_vendor.long as longitude_hotel, m_vendor.code as hotel_code, m_vendor.cp_name, m_vendor.cp_phone, m_vendor.cp_mail, m_vendor.cp_title, m_vendor.cp_department, m_vendor.area as area_hotel, m_area.name as name_area, m_area.city as id_city, m_city.country as id_country, m_contract_vendor.valid_from as valid_from, m_contract_vendor.valid_to as valid_to'));
+        $query->join('m_contract_vendor','m_contract_vendor.vendor','=','m_vendor.id');
         $query->join('m_area','m_area.id','=','m_vendor.area');
         $query->join('m_city','m_city.id','=','m_area.city');
         $query->join('m_country','m_country.id','=','m_city.country');
@@ -340,7 +340,7 @@ class HotelCtrl extends adminCtrl
                 $codehotel=$city_code.$date.str_pad(base_convert(base_convert((count($idc)+1),36,10),10,36),4,0,STR_PAD_LEFT);
             }
 
-            if($idc == 0){
+            if(count($idc) == 0){
                 $userid = "H".$date."0001";
                 $passwd = "H0001";
             }else{
@@ -366,7 +366,8 @@ class HotelCtrl extends adminCtrl
                         "cp_mail"       => $request->input('cp_mail'),
                         "cp_title"      => $request->input('cp_title'),
                         "cp_department" => $request->input('cp_department'),
-                        "created_at"    => date("Y-M-d H:i:s")
+                        "created_at"    => date("Y-M-d H:i:s"),
+                        "vendor_type"   => '1'
                     );
                     DB::table('m_vendor')->insert($data);
 
@@ -376,30 +377,30 @@ class HotelCtrl extends adminCtrl
                     $validto = date('t', strtotime($request->input('validity_to')));
 
                     $data_contract = array(
-                        "hotel"         => $id_hotel,
+                        "vendor"         => $id_hotel,
                         "cut_of_date"   => $request->input('cod_hotel'),
                         "valid_from"    => date("Y-M-d", strtotime($request->input('validity_from')."-01")),
                         "valid_to"      => date("Y-M-d", strtotime($request->input('validity_to')."-".$validto)),
                         "created_at"    => date("Y-M-d H:i:s")
                     );
-                    DB::table('m_contract_hotel')->insert($data_contract);
+                    DB::table('m_contract_vendor')->insert($data_contract);
 
                     $data2 = array(
                         "email"     => $request->input('email_hotel'),
                         "status"    => "active",
                         "password"  => bcrypt($passwd),
                         "username"    => $userid,
-                        "hotel"    => $id_hotel,
+                        "vendor"    => $id_hotel,
                         "created_at"=> date('Y-m-d H:i:s'),
                     );
                     DB::table('m_vendor_user')->insert($data2);
 
                     if ($request->hasFile('hotel_photo')){
                         $file = $request->file('hotel_photo');
-                        $destinationPath = 'assets/hotel_img';
+                        $destinationPath = 'assets/images/hotel';
                         $filename = date("ymdHis").$file->getClientOriginalName();
                         Input::file('hotel_photo')->move($destinationPath, $filename);
-                        $photo=array('hotel'=>$id_hotel,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
+                        $photo=array('vendor'=>$id_hotel,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
                         DB::table('m_photo')->insert($photo);
                     }
 
@@ -429,10 +430,10 @@ class HotelCtrl extends adminCtrl
                             Yours Sincerely,<br/>
                             TRAVEL JINNI'
                     );
-                    Mail::send('users.emailreg', $emaildata, function ($message) use ($email) {
-                        $message->from('info@traveljinni.com', 'Admin Travel Jinni');
-                        $message->to($email)->subject('TRAVEL JINNI Hotel Activation');
-                    });
+                    // Mail::send('users.emailreg', $emaildata, function ($message) use ($email) {
+                    //     $message->from('info@traveljinni.com', 'Admin Travel Jinni');
+                    //     $message->to($email)->subject('TRAVEL JINNI Hotel Activation');
+                    // });
                     DB::commit();
                     $return["msgServer"] = "Save Hotel success.";
                     $return["success"] = TRUE;
@@ -474,18 +475,18 @@ class HotelCtrl extends adminCtrl
                         "valid_to"      => date("Y-M-d", strtotime($request->input('validity_to')."-".$validto)),
                         "updated_at"    => date("Y-M-d H:i:s")
                     );
-                    DB::table('m_contract_hotel')->where('hotel', $id)->update($data_contract);
+                    DB::table('m_contract_vendor')->where('vendor', $id)->update($data_contract);
                     $data2 = array(
                         "email"     => $request->input('email_hotel'),
                         "updated_at"=> date('Y-m-d H:i:s')
                     );
-                    DB::table('m_vendor_user')->where('hotel', $id)->update($data2);
+                    DB::table('m_vendor_user')->where('vendor', $id)->update($data2);
                     if ($request->hasFile('hotel_photo')){
                         $file = $request->file('hotel_photo');
-                        $destinationPath = 'assets/hotel_img';
+                        $destinationPath = 'assets/images/hotel';
                         $filename = date("ymdHis").$file->getClientOriginalName();
                         Input::file('hotel_photo')->move($destinationPath, $filename);
-                        $photo=array('hotel'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
+                        $photo=array('vendor'=>$id,'photo'=>$filename, 'created_at'=>date('Y-m-d H:i:s'));
                         DB::table('m_photo')->insert($photo);
                     }
                     $email = $request->input('email_hotel');
@@ -603,7 +604,7 @@ class HotelCtrl extends adminCtrl
         foreach ($data as $foto) {
           $a .= "<tr>
                     <td align='center'>
-                        <img style='height: 80px; display: block;' src='". URL::to('/assets/hotel_img/'.$foto->photo)."'></td>
+                        <img style='height: 80px; display: block;' src='". URL::to('/assets/images/hotel/'.$foto->photo)."'></td>
                     <td align='center' width='40%'>
                         <button type='button' class='btn-delphoto' data-name-photo='".$foto->photo."' data-id-photo='".$foto->id_photo."'><i class='fa fa-trash-o' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='Delete $foto->photo'></i></button>
                     </td>
@@ -627,7 +628,7 @@ class HotelCtrl extends adminCtrl
     */
     public function deletePhotos($id=null){
         $photo=DB::table('m_photo')->where('id','=', $id)->first();
-        File::delete('assets/hotel_img/'.$photo->photo);
+        File::delete('assets/images/hotel/'.$photo->photo);
         DB::table('m_photo')->where('id','=', $id)->delete();
 
         $return["msgServer"] = "Photo has been deleted";

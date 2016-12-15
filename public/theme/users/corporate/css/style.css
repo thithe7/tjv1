@@ -16,6 +16,17 @@ Font Settings
 	src: url('font_tj/Montserrat-Bold.otf') format('opentype');
 }
 
+@font-face{
+	font-family: 'SourceSansPro';
+	src: url('font_tj/SourceSansPro-Regular.otf') format('opentype');
+}
+
+@font-face{
+	font-family: 'SourceSansPro';
+	font-weight: bold;
+	src: url('font_tj/SourceSansPro-Bold.otf') format('opentype');
+}
+
 /* General body settings */
 body { 
 	color: #3e4d5c;
@@ -1396,7 +1407,7 @@ div.content-form-page .checkbox-list {
 	margin-bottom: 0;
 }
 .nav-tabs > li > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
-	background: #F4F4F4;
+	background: #F7F7F7;
 	color: #647484;
 	border-radius: 0;
 	padding: 5px 15px 4px;

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Http\Controllers\Users\usersCtrl;
-// use App\Http\Controllers\Controller;
 use DB;
 use Auth;
 use Session;
@@ -108,7 +107,7 @@ class profileCtrl extends usersCtrl {
         return count($data);
     }
 
-    function update($id = "", $name = "", $email = "", $phone = "", $city = "", $postcode = "", $address = "", $birthdate = "", $statusnya = ""){
+    function update($id = "", $name = "", $email = "", $phone = "", $city = "", $postcode = "", $address = "", $birthdate = "", $statusnya = "") {
         $data = [];
         $data = array(
             "name" => $name,

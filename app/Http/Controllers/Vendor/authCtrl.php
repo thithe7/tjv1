@@ -11,7 +11,7 @@ class authCtrl extends Controller {
     use AuthenticatesUsers;
 
     protected $guard = 'web_vendor';
-    protected $redirectTo = 'vendor';
+    protected $redirectTo = 'tjvendor';
 
     public function index() {
     	return view('vendor/auth/view');

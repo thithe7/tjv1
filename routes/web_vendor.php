@@ -2,7 +2,6 @@
 
 $router->group(['middleware' => ['auth:web_vendor']], function ($router) {
     Route::get('/', 'homeCtrl@index');
-
     //hotel
     $router->get('/home', 'homeCtrl@index');
     $router->get('/list-hotel', 'HotelCtrl@index');
@@ -30,7 +29,6 @@ $router->group(['middleware' => ['auth:web_vendor']], function ($router) {
     $router->get('/room/deletestopsale/{id}', 'stopSellCtrl@deleteStopSale');
     $router->get('/room/cancelstopsale', 'stopSellCtrl@cancelStopSale');
     $router->get('/room/stopsale', 'roomCtrl@stopsale');
-
 });
 
 $router->get('/login', 'authCtrl@index');

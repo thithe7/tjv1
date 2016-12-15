@@ -1,6 +1,46 @@
 @extends("layout.adminLayout")
 
 @section('content')
+
+<script type="text/javascript">
+function validAngka(a)
+{
+    if(!/^[0-9]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1000);
+    }
+}
+function validAngkaMaps(a)
+{
+    if(!/^[0-9.-]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1000);
+    }
+}
+function validAngkaVlm(a)
+{
+    if(!/^[0-9:]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1000);
+    }
+}
+function validAngkaIp(a)
+{
+    if(!/^[0-9.,]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1000);
+    }
+}
+function validInv(a)
+{
+    if(!/^[a-zA-Z%]+$/.test(a.value))
+    {
+    a.value = a.value.substring(0,a.value.length-1000);
+    }
+}
+</script>
+
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -93,7 +133,7 @@
                                                 <input class="minimal" type="checkbox" id="maintenance_status" name="maintenance_status" value="true"></input>
                                                 @endif
                                             </label>
-                                            <input type="text" class="form-control" id="maintenance_ip" name="maintenance_ip" value="{{{$data['config']->maintenance_ip}}}"></input>
+                                            <input type="text" onkeyup="validAngkaIp(this)" class="form-control" id="maintenance_ip" name="maintenance_ip" value="{{{$data['config']->maintenance_ip}}}"></input>
                                         </div><!-- /.form-group -->
                                         <small>IP addresses allowed to access the website even if the website is disabled. Please use a comma to separate them</small>
                                     </div><!-- /.col -->
@@ -172,7 +212,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Smtp Port</label>
-                                            <input type="text" class="form-control" id="smtp_port" name="smtp_port" value="{{{$data['config']->smtp_port}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="smtp_port" name="smtp_port" value="{{{$data['config']->smtp_port}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
@@ -249,7 +289,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Smtp Port</label>
-                                            <input type="text" class="form-control" id="news_smtp_port" name="news_smtp_port" value="{{{$data['config']->news_smtp_port}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="news_smtp_port" name="news_smtp_port" value="{{{$data['config']->news_smtp_port}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
@@ -283,13 +323,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Phone</label>
-                                            <input type="text" class="form-control" id="office_phone" name="office_phone" value="{{{$data['config']->office_phone}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="office_phone" name="office_phone" value="{{{$data['config']->office_phone}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Fax</label>
-                                            <input type="text" class="form-control" id="office_fax" name="office_fax" value="{{{$data['config']->office_fax}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="office_fax" name="office_fax" value="{{{$data['config']->office_fax}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
@@ -359,7 +399,7 @@
                                         <hr/>
                                         <div class="form-group">
                                             <label>Invoice <font color="red">*</font></label>
-                                            <input type="text" class="form-control" id="inv_prefix" name="inv_prefix" value="{{{$data['config']->inv_prefix}}}"></input>
+                                            <input type="text" onkeyup="validInv(this)" class="form-control" id="inv_prefix" name="inv_prefix" value="{{{$data['config']->inv_prefix}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
@@ -367,7 +407,7 @@
                                         <hr/>
                                         <div class="form-group">
                                             <label>Invoice</label>
-                                            <input type="text" class="form-control" id="inv_code" name="inv_code" value="{{{$data['config']->inv_code}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="inv_code" name="inv_code" value="{{{$data['config']->inv_code}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                 </div><!-- /.row -->
@@ -378,13 +418,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Latitude</label>
-                                            <input type="text" class="form-control" id="maps_lat" name="maps_lat" value="{{{$data['config']->maps_lat}}}"></input>
+                                            <input type="text" onkeyup="validAngkaMaps(this)" class="form-control" id="maps_lat" name="maps_lat" value="{{{$data['config']->maps_lat}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Longitude</label>
-                                            <input type="text" class="form-control" id="maps_long" name="maps_long" value="{{{$data['config']->maps_long}}}"></input>
+                                            <input type="text" onkeyup="validAngkaMaps(this)" class="form-control" id="maps_long" name="maps_long" value="{{{$data['config']->maps_long}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
@@ -412,13 +452,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Point Value / 1 point</label>
-                                            <input type="text" class="form-control" id="point_value" name="point_value" value="{{{$data['config']->point_value}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="point_value" name="point_value" value="{{{$data['config']->point_value}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Point Redeem / 1 point</label>
-                                            <input type="text" class="form-control" id="redeem_value" name="redeem_value" value="{{{$data['config']->redeem_value}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="redeem_value" name="redeem_value" value="{{{$data['config']->redeem_value}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                 </div><!-- /.row -->
@@ -428,13 +468,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>From</label>
-                                            <input type="text" class="form-control" id="vlm_from" name="vlm_from" value="{{{$data['config']->vlm_from}}}"></input>
+                                            <input type="text" onkeyup="validAngkaVlm(this)" class="form-control" id="vlm_from" name="vlm_from" value="{{{$data['config']->vlm_from}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>To</label>
-                                            <input type="text" class="form-control" id="vlm_to" name="vlm_to" value="{{{$data['config']->vlm_to}}}"></input>
+                                            <input type="text" onkeyup="validAngkaVlm(this)" class="form-control" id="vlm_to" name="vlm_to" value="{{{$data['config']->vlm_to}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                 </div><!-- /.row -->
@@ -444,7 +484,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Max Allotment</label>
-                                            <input type="text" class="form-control" id="max_allotment_default" name="max_allotment_default" value="{{{$data['config']->max_allotment_default}}}"></input>
+                                            <input type="text" onkeyup="validAngka(this)" class="form-control" id="max_allotment_default" name="max_allotment_default" value="{{{$data['config']->max_allotment_default}}}"></input>
                                         </div><!-- /.form-group -->
                                     </div><!-- /.col -->
                                 </div><!-- /.row -->
@@ -460,13 +500,6 @@
 </section><!-- /.content -->
     <!-- jQuery 2.1.4 -->
         <script src="{{ URL::asset('theme/admin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
-    
-    /**
-    * Programmer   : Ory
-    * Tanggal      : 08-12-2016
-    * Fungsi       : Update data
-    * Tipe         : Edit
-    */
     <script>
         $(document).ready(function(){
             $(document).on("click", ".btn-auto-td", function(){
@@ -542,7 +575,7 @@
                     }
                 },
                 invalidHandler: function (event, validator) { //display error alert on form submit              
-                    toastr.error("Maaf, Inputkan data dengan lengkap");
+                    toastr.error("Maaf, Inputkan data dengan benar dan lengkap");
                 },
                 errorPlacement: function (error, element) { // render error placement for each input type
                     var icon = $(element).parent('.input-icon').children('i');

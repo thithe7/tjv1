@@ -1,0 +1,162 @@
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+body {
+	position: relative;
+	margin: 0;
+	padding-bottom: 6rem;
+	min-height: 100%;
+}
+
+label {
+	font-weight: 500;
+}
+
+.nav-tabs {
+	border-color: #095668;
+	font-size: 20px;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	background: #095668;
+	color: #fff;
+	padding: 5px 15px 4px;
+}
+
+.pre-header {
+	background: #095668;
+	color: #fff;
+}
+
+.pre-header a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.pre-header a:hover {
+	color: #FF8A0B;
+}
+
+.pre-footer {
+	background: #095668;
+	color: #fff;
+}
+
+.pre-footer h2 {
+	color: #fff;
+}
+
+.pre-footer ul {
+	list-style: none;
+	padding: 0;
+}
+
+.pre-footer a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.pre-footer a:hover {
+	color: #FF8A0B;
+}
+
+.footer {
+	background: #FFFFFF;
+	color: #095668;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+
+.footer ul.social-footer a, .padding-top-10 {
+	opacity: 1 !important;
+}
+
+.footer a {
+	color: #095668;
+}
+
+.footer a:hover {
+	color: #FF8A0B;
+}
+
+.sosmed {
+	background: #095668;
+	padding: 2px !important;
+}
+
+.sosmed a {
+	color: #FFFFFF;
+	font-size: 20px !important;
+}
+
+.tjbutton {
+	background: #FF8A0B;
+}
+
+.btn-tj {
+	background: #095668;
+	color: #FFFFFF;
+}
+
+.btn-tj:hover, .btn-tj:focus {
+	background: #FF8A0B;
+	color: #FFFFFF;
+}
+
+table {
+	width: 100%;
+}
+
+table tr th, table tr td {
+	padding: 10px;
+}
+
+blockquote {
+	border-left: solid 4px #FF8A0B;
+	background: #095668;
+	color: #fff;
+}
+
+div .blog-sidebar .panel{
+	border: solid 2px #095668;
+}
+
+div .blog-sidebar .panel .header-panel{
+	background: #095668;
+	padding: 10px;
+	color: #fff;
+}
+
+div .blog-sidebar .panel .body-panel{
+	/**/
+}
+
+div .blog-sidebar .panel .nav li a{
+	color: #3e4d5c;
+}
+
+div .blog-sidebar .panel .nav li:hover a, div .blog-sidebar .panel .nav .active a{
+	background: #095668;
+	border-top: solid 1px #fff;
+	color: #fff;
+}
+
+.input-group {
+	width: 100%;
+}
+
+.bootstrap-switch-handle-on {
+	background: #095668 !important;
+}
+
+.bootstrap-switch-handle-off {
+	background: #FF8A0B !important;
+}
+
+input, select, textarea, .bootstrap-switch {
+	border-color: #095668 !important;
+}

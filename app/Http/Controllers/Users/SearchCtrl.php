@@ -36,6 +36,7 @@ class SearchCtrl extends Controller {
         $amount=$request->get('amount');
         $amount2=$request->get('amount2');
         $inputstar=$request->get('star');
+
         $star=explode(",",substr($inputstar,0,strlen($inputstar)-1));
         if($inputstar==""){
             $star=$inputstar;
@@ -43,7 +44,8 @@ class SearchCtrl extends Controller {
         $ketdbprice='';
 
         $page = $request->input('page');
-        $getdata=$this->getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page);
+        $tipe="search";
+        $getdata=$this->getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page, $tipe);
 
         return view('users/search/view',compact('harga','totalPages','data','records','night','cekin','cekout','destination','breakfast','amenities', 'getdata','when'));
     }
@@ -71,7 +73,8 @@ class SearchCtrl extends Controller {
         $cekout = date('Y-m-d',strtotime(str_replace('/', '-', $request->get('checkout'))));
         $night = ((abs(strtotime ($cekout) - strtotime ($cekin)))/(60*60*24));
         $page = $request->input('page');
-        $getdata=$this->getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page);
+        $tipe=$request->get('tipe');
+        $getdata=$this->getDataSearch($destination, $breakfast, $amenities, $hotel_name, $star, $cekin, $cekout, $amount, $amount2, $ketdbprice, $night, $page, $tipe);
         return view('users/search/search',compact('data','night','cekin','cekout','destination','breakfast','amenities','getdata'));
     }
         
